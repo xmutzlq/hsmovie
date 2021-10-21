@@ -1,0 +1,21 @@
+import 'package:ble_project/base/theme/app_theme.dart';
+import 'package:ble_project/ui/ranking/ranking/logic.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+
+Widget rankingTabBarView() {
+  final logic = Get.find<RankingLogic>();
+  return Container(
+    color: commBgColor,
+    child: TabBar(
+      controller: logic.tabController,
+      indicatorSize: TabBarIndicatorSize.label,
+      indicatorColor: appThemeData.tabBarTheme.labelColor,
+      labelColor: appThemeData.tabBarTheme.labelColor,
+      unselectedLabelColor: appThemeData.tabBarTheme.unselectedLabelColor,
+      labelStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+      unselectedLabelStyle: TextStyle(color: kPrimaryLightColor),
+      tabs: logic.rankingTabs,
+    )
+  );
+}

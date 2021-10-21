@@ -1,0 +1,712 @@
+2021-10-18 10:13:12.396 [I][37011,7f8f805054d0*]1:[bifrost]bifrost.coll : app_platform:IOT_Linux,app_client_version:1.0.0.0001,app_user_id:-,app_utdid:my_test_device,app_appid:adbctrl_dragonfly,app_sn:-,item_id:-,cpu:-
+2021-10-18 10:13:12.400 [I][37011,7f8f805054d0*]2:[bifrost]bifrost.comm : create messageqeue id:123145420988416
+2021-10-18 10:13:12.400 [I][37011,7f8f805054d0*]3:[bifrost]bifrost.coll : handler:(123145420451840,10)
+2021-10-18 10:13:12.400 [I][37011,7f8f805054d0*]5:[bifrost]bifrost.coll : handler:(123145420451840,12)
+2021-10-18 10:13:12.400 [I][37011,7f8f80608570]4:[bifrost]bifrost.comm : -> Run messagequeue id:123145420988416
+2021-10-18 10:13:12.400 [I][37011,7f8f805054d0*]6:[bifrost]bifrost.coll : handler:(123145420451840,14)
+2021-10-18 10:13:12.400 [I][37011,7f8f805054d0*]7:[bifrost]bifrost.comm : alarm id:140254309820248, after:30000, seq:2, po.reg.q:123145420451840,po.reg.s:0,po.s:16
+2021-10-18 10:13:12.400 [I][37011,7f8f805054d0*]8:[bifrost]bifrost.comm : alarm id:140254309820440, after:1000, seq:3, po.reg.q:123145420451840,po.reg.s:0,po.s:17
+2021-10-18 10:13:12.400 [I][37011,7f8f805054d0*]9:[bifrost]bifrost.comm : alarm id:140254309820056, after:60000, seq:4, po.reg.q:123145420451840,po.reg.s:0,po.s:18
+2021-10-18 10:13:12.401 [I][37011,7f8f805054d0*]10:[bifrost]bifrost.coll : handler:(123145420451840,22)
+2021-10-18 10:13:12.401 [I][37011,7f8f805054d0*]11:[bifrost]bifrost.comm : alarm id:140254309822832, after:1800000, seq:5, po.reg.q:123145420451840,po.reg.s:0,po.s:24
+2021-10-18 10:13:12.401 [I][37011,7f8f805054d0*]12:[bifrost]bifrost.coll : log_dir:.//uplog,use_mmap:true,mmap_file_path:.//uplog/uplog.mmap,log host:mdap.alipay.com,ca_len:9482,ca_name:mdap.alipay.com,use_mtls:true
+2021-10-18 10:13:12.401 [I][37011,7f8f80607aa0]13:[bifrost]bifrost.ext : activating 12345678 "" ""
+2021-10-18 10:13:12.401 [I][37011,7f8f80607aa0]14:[bifrost]bifrost.ext : <140254310857376> handler:(123145420451840,26)
+2021-10-18 10:13:12.401 [I][37011,7f8f80607aa0]15:[bifrost]bifrost.ext : <140254310857376> handler:(123145420451840,28)
+2021-10-18 10:13:12.401 [I][37011,7f8f80607aa0]16:[bifrost]bifrost.ext : <140254310857376> Ready? Go!
+2021-10-18 10:13:12.402 [I][37011,7f8f80607aa0]17:[bifrost]bifrost.stn : <140254310857376> stn oncreate
+2021-10-18 10:13:12.402 [I][37011,7f8f80607aa0]18:[bifrost]bifrost.comm : <140254310857376> create messageqeue id:123145421524992
+2021-10-18 10:13:12.402 [I][37011,7f8f80607aa0]19:[bifrost]bifrost.baseevent : <140254310857376> handler:(123145421524992,31)
+2021-10-18 10:13:12.402 [I][37011,7f8f80607aa0]21:[bifrost]bifrost.baseevent : <140254310857376> -> ActiveLogic 
+2021-10-18 10:13:12.402 [I][37011,7f8f8050c520]20:[bifrost]bifrost.comm : <140254309827872> -> Run messagequeue id:123145421524992
+2021-10-18 10:13:12.402 [I][37011,7f8f80607aa0]22:[bifrost]bifrost.baseevent : <140254310857376> <- ActiveLogic +0, 
+2021-10-18 10:13:12.402 [I][37011,7f8f80607aa0]23:[bifrost]bifrost.comm : <140254310857376> create messageqeue id:123145422061568
+2021-10-18 10:13:12.402 [I][37011,7f8f8050c7d0]24:[bifrost]bifrost.comm : <140254309828560> -> Run messagequeue id:123145422061568
+2021-10-18 10:13:12.404 [I][37011,7f8f80607aa0]25:[bifrost]bifrost.stn : <140254310857376> -> ShortLinkTaskManager handler:(123145422061568,36)
+2021-10-18 10:13:12.404 [I][37011,7f8f80607aa0]26:[bifrost]bifrost.stn : <140254310857376> ShortLinkTaskManager messagequeue_id=123145422061568
+2021-10-18 10:13:12.404 [I][37011,7f8f80607aa0]27:[bifrost]bifrost.stn : <140254310857376> <- ShortLinkTaskManager +0, 
+2021-10-18 10:13:12.404 [I][37011,7f8f80607aa0]28:[bifrost]bifrost.stn : <140254310857376> handler:(123145422061568,37)
+2021-10-18 10:13:12.404 [I][37011,7f8f80607aa0]29:[bifrost]bifrost.stn : <140254310857376> handler:(123145422061568,39)
+2021-10-18 10:13:12.404 [I][37011,7f8f80607aa0]30:[bifrost]bifrost.stn : <140254310857376> handler:(123145422061568,41)
+2021-10-18 10:13:12.404 [I][37011,7f8f80607aa0]31:[bifrost]bifrost.stn : <140254310857376> LongLinkConnectMonitor handler:(123145422061568,40)
+2021-10-18 10:13:12.404 [I][37011,7f8f80607aa0]32:[bifrost]bifrost.stn : <140254310857376> -> LongLinkTaskManager handler:(123145422061568,38)
+2021-10-18 10:13:12.404 [I][37011,7f8f80607aa0]33:[bifrost]bifrost.stn : <140254310857376> <- LongLinkTaskManager +0, 
+2021-10-18 10:13:12.404 [I][37011,7f8f80607aa0]34:[bifrost]bifrost.stn : <140254310857376> -> MultiplexLinkTaskManager 
+2021-10-18 10:13:12.404 [I][37011,7f8f80607aa0]35:[bifrost]bifrost.stn : <140254310857376> <- MultiplexLinkTaskManager +0, 
+2021-10-18 10:13:12.404 [I][37011,7f8f80607aa0]36:[bifrost]bifrost.stn : <140254310857376> SignallingKeeper messagequeue_id=123145422061568
+2021-10-18 10:13:12.405 [I][37011,7f8f80607aa0]37:[bifrost]bifrost.stn : <140254310857376> handler:(123145422061568,44)
+2021-10-18 10:13:12.405 [I][37011,7f8f80607aa0]38:[bifrost]bifrost.stn : <140254310857376> handler:(123145420451840,46)
+2021-10-18 10:13:12.405 [I][37011,7f8f80607aa0]39:[bifrost]bifrost.comm : <140254310857376> alarm id:140254310878992, after:90000, seq:6, po.reg.q:123145420451840,po.reg.s:0,po.s:49
+2021-10-18 10:13:12.405 [W][37011,7f8f80607aa0]40:[bifrost]bifrost.stn : <140254310857376> publiccomponent version: Jul 12 2019 15:02:34
+2021-10-18 10:13:12.405 [I][37011,7f8f80607aa0]41:[bifrost]bifrost.stn : <140254310857376> netcore messagequeue_id=123145422061568, handler:(123145422061568,35)
+2021-10-18 10:13:12.405 [W][37011,7f8f80607aa0]42:[bifrost]bifrost.stn : <140254310857376> 
+Uin :12345
+UserName :12345
+ClientVersion :0x2
+2021-10-18 10:13:12.405 [I][37011,7f8f80607aa0]43:[bifrost]bifrost.stn : <140254310857376> -> NetCore 
+2021-10-18 10:13:12.405 [I][37011,7f8f80607aa0]44:[bifrost]bifrost.stn : <140254310857376> <- NetCore +0, 
+2021-10-18 10:13:12.405 [W][37011,7f8f80607aa0]45:[bifrost]bifrost.ext : <140254310857376> Empty long-link address!
+2021-10-18 10:13:12.405 [W][37011,7f8f80607aa0]46:[bifrost]bifrost.ext : <140254310857376> Empty short-link address!
+2021-10-18 10:13:12.405 [W][37011,7f8f80607aa0]47:[bifrost]bifrost.ext : <140254310857376> Bad long-link address! ("")
+2021-10-18 10:13:12.405 [W][37011,7f8f80607aa0]48:[bifrost]bifrost.ext : <140254310857376> Bad short-link address! ("")
+2021-10-18 10:13:12.405 [I][37011,7f8f80607aa0]49:[bifrost]bifrost.stn : <140254310857376> task set backup server addr, host:iotapi.alipay.com, 
+2021-10-18 10:13:12.405 [I][37011,7f8f80607aa0]50:[bifrost]bifrost.stn : <140254310857376> task set multiplexlink server addr, port:443, debugip:
+2021-10-18 10:13:12.405 [I][37011,7f8f80607aa0]51:[bifrost]bifrost.ext : <140254310857376> The network is switched to UNKNOWN (UNKNOW). (UNKNOW).
+2021-10-18 10:13:12.405 [I][37011,7f8f8050c520]52:[bifrost]bifrost.baseevent : <140254309827872> OnForeground:true, change:true, 
+2021-10-18 10:13:12.405 [I][37011,7f8f80607aa0]53:[bifrost]bifrost.iot : OK to activate.
+2021-10-18 10:13:12.405 [I][37011,7f8f80607aa0]54:[bifrost]bifrost.coll : <140254310857376> coll bifrost init:true,coll_opened:true
+2021-10-18 10:13:12.406 [I][37011,7f8f80607aa0]55:[bifrost]bifrost.ext : <140254310857376> posting 12345678 1 4
+2021-10-18 10:13:12.406 [I][37011,7f8f807072c0]56:[bifrost]bifrost.coll : <140254311903936> requrl:http://iot.alipay.com:80/api/v1/time/utc?rt=138775660
+2021-10-18 10:13:12.406 [I][37011,7f8f80607aa0]57:[bifrost]bifrost.ext : <140254310857376> Something to be sent. (receipt=1, important=false, secret=true, nearing=false, shortcut=false, nolong=false, multiplex=true, channel=1, forward_ip="", trace_id="", head_count=13, body_length=700, mqtt_pkg_id=-1, mqtt_msg_id=-1)
+2021-10-18 10:13:12.406 [I][37011,7f8f8050c7d0]58:[bifrost]bifrost.stn : <140254309828560> task network change instance current network:wifi, ssid:YLZ, bssid:, ipstack:ELocalIPStack_IPv4
+ispname:, ispcode: 
+defaultgateway6:::12.0.0.0
+defaultgateway:192.168.106.1
+dns server0:AF_INET, 218.85.152.99
+dns server1:AF_INET, 218.85.157.99
+interface name:en0, AF_INET, ip:192.168.106.115
+interface name:en0, AF_INET6, ip:fe80::a2:e6a1:c9ca:6154
+interface name:awdl0, AF_INET6, ip:fe80::c838:1ff:fe8f:f9b7
+interface name:llw0, AF_INET6, ip:fe80::c838:1ff:fe8f:f9b7
+interface name:utun0, AF_INET6, ip:fe80::d2a4:24e9:e8b3:7231
+interface name:utun1, AF_INET6, ip:fe80::bc3f:81dd:8e52:57d1
+have_ipv4:1 have_ipv6:0
+local_ipstack_detect have_ipv4:1 have_ipv6:0 
+2021-10-18 10:13:12.406 [I][37011,7f8f80607aa0]59:[bifrost]bifrost.ext : <140254310857376> A data-frame is committed. (task_id=1, channel=1, receipt=1, sequence=0, mqtt_pkg_id=-1, mqtt_msg_id=-1)
+2021-10-18 10:13:12.406 [I][37011,7f8f8050c7d0]60:[bifrost]bifrost.stn : <140254309828560> -> operator() 
+2021-10-18 10:13:12.406 [I][37011,7f8f8050c7d0]61:[bifrost]bifrost.stn : <140254309828560> made interval connect interval:15000, posttime:138775661, newone:false, connectstatus:0
+2021-10-18 10:13:12.406 [I][37011,7f8f8050c7d0]62:[bifrost]bifrost.stn : <140254309828560> start auto connect after:15000
+2021-10-18 10:13:12.406 [I][37011,7f8f8050c7d0]63:[bifrost]bifrost.comm : <140254309828560> alarm id:140254310873632, after:15000, seq:7, po.reg.q:123145420451840,po.reg.s:0,po.s:54
+2021-10-18 10:13:12.406 [I][37011,7f8f8050c7d0]64:[bifrost]bifrost.stn : <140254309828560> <- operator() +0, 
+2021-10-18 10:13:12.407 [I][37011,7f8f80607aa0]65:[bifrost]bifrost.iot : OK to post.
+2021-10-18 10:13:12.407 [I][37011,7f8f807072c0]66:[bifrost]bifrost.coll : <140254311903936> handler:(123145420451840,56)
+2021-10-18 10:13:12.407 [I][37011,7f8f807072c0]67:[bifrost]bifrost.comm : <140254311903936> alarm id:123145423134080, after:30000, seq:8, po.reg.q:123145420451840,po.reg.s:0,po.s:58
+2021-10-18 10:13:12.408 [I][37011,7f8f807072c0]68:[bifrost]bifrost.comm : <140254311903936> _vecaddr size:1, m_timeout:5000, m_interval:4000, m_error_interval:4000, m_max_connect:3, @0x700007339CC0
+2021-10-18 10:13:12.408 [I][37011,7f8f807072c0]69:[bifrost]bifrost.comm : <140254311903936> complex.conn 203.209.245.120:80
+2021-10-18 10:13:12.408 [I][37011,7f8f807072c0]70:[bifrost]bifrost.comm : <140254311903936> index:0, @0x700007339CC0, addr:(203.209.245.120:80), socket:25, connect
+2021-10-18 10:13:12.408 [I][37011,7f8f8050c7d0]71:[bifrost]bifrost.stn : <140254309828560> task start long short taskid:1, cmdid:1, need_authed:false, cgi:/mgw.htm, channel_select:4, limit_flow:false, host:iotapi.alipay.com, send_only:false, cmdid:1, server_process_cost:-1, retrycount:0,  channel_strategy:0,  total_timetout:30000, network_status_sensitive:false, priority:3, report_arg:, user_context:0x7F8F805252C0
+2021-10-18 10:13:12.408 [I][37011,7f8f8050c7d0]72:[bifrost]bifrost.stn : <140254309828560> no task mng for multiplex, host:iotapi.alipay.com
+2021-10-18 10:13:12.408 [I][37011,7f8f8050c7d0]73:[bifrost]bifrost.stn : <140254309828560> handler:(123145422061568,60)
+2021-10-18 10:13:12.408 [I][37011,7f8f8050c7d0]74:[bifrost]bifrost.stn : <140254309828560> -> SingleHostTaskManager 
+2021-10-18 10:13:12.408 [I][37011,7f8f8050c7d0]75:[bifrost]bifrost.stn : <140254309828560> <- SingleHostTaskManager +0, 
+2021-10-18 10:13:12.409 [I][37011,7f8f8050c7d0]76:[bifrost]bifrost.ext : <140254309828560> on_req_2_buf(task_id=1, user_context=0x7F8F805252C0)
+2021-10-18 10:13:12.410 [I][37011,7f8f80524ea0]77:[bifrost]bifrost.stn : <140254309928608> -> __Run Link Rebuild span:0, net:YLZ
+2021-10-18 10:13:12.410 [I][37011,7f8f80524ea0]78:[bifrost]bifrost.stn : <140254309928608> connect status from:0 to:1, nettype:1
+2021-10-18 10:13:12.410 [I][37011,7f8f80608700]79:[bifrost]bifrost.ext : <140254310860544> on_new_dns(host="iotapi.alipay.com")
+2021-10-18 10:13:12.411 [I][37011,7f8f80524ea0]80:[bifrost]bifrost.comm : <140254309928608> dns get ip status:4 host:iotapi.alipay.com
+2021-10-18 10:13:12.411 [I][37011,7f8f80524ea0]81:[bifrost]bifrost.ext : <140254309928608> on_rpt_dns_profile(profile={ start_time=138775665, end_time=138775665, host="iotapi.alipay.com", err_type=9, err_code=-1, DNS_type=1 })
+2021-10-18 10:13:12.415 [I][37011,7f8f80524ea0]82:[bifrost]bifrost.ext : <140254309928608> on_rpt_dns_profile(profile={ start_time=138775665, end_time=138775669, host="", err_type=0, err_code=0, DNS_type=2 })
+2021-10-18 10:13:12.415 [I][37011,7f8f80524ea0]83:[bifrost]bifrost.stn : <140254309928608> link host:iotapi.alipay.com, new dns ret:false, size:0 dns ret:true, size:8,
+2021-10-18 10:13:12.416 [I][37011,7f8f80524ea0]84:[bifrost]bifrost.stn : <140254309928608> link host:iotapi.alipay.com, backup ips size:0
+2021-10-18 10:13:12.417 [I][37011,7f8f80524ea0]85:[bifrost]bifrost.stn : <140254309928608> task socket dns ip:203.209.255.193:443:iotapi.alipay.com:DNSIP|203.209.245.82:443:iotapi.alipay.com:DNSIP|203.209.255.212:443:iotapi.alipay.com:DNSIP|203.209.250.19:443:iotapi.alipay.com:DNSIP|203.209.250.18:443:iotapi.alipay.com:DNSIP|203.209.245.139:443:iotapi.alipay.com:BackupIP
+2021-10-18 10:13:12.417 [I][37011,7f8f80524ea0]86:[bifrost]bifrost.comm : <140254309928608> _vecaddr size:6, m_timeout:10000, m_interval:4000, m_error_interval:4000, m_max_connect:3, @0x7000073BB6D8
+2021-10-18 10:13:12.417 [I][37011,7f8f80524ea0]87:[bifrost]bifrost.comm : <140254309928608> complex.conn 203.209.255.193:443
+2021-10-18 10:13:12.417 [I][37011,7f8f80524ea0]88:[bifrost]bifrost.comm : <140254309928608> complex.conn 203.209.245.82:443
+2021-10-18 10:13:12.417 [I][37011,7f8f80524ea0]89:[bifrost]bifrost.comm : <140254309928608> complex.conn 203.209.255.212:443
+2021-10-18 10:13:12.417 [I][37011,7f8f80524ea0]90:[bifrost]bifrost.comm : <140254309928608> complex.conn 203.209.250.19:443
+2021-10-18 10:13:12.417 [I][37011,7f8f80524ea0]91:[bifrost]bifrost.comm : <140254309928608> complex.conn 203.209.250.18:443
+2021-10-18 10:13:12.417 [I][37011,7f8f80524ea0]92:[bifrost]bifrost.comm : <140254309928608> complex.conn 203.209.245.139:443
+2021-10-18 10:13:12.418 [I][37011,7f8f80524ea0]93:[bifrost]bifrost.comm : <140254309928608> index:0, @0x7000073BB6D8, addr:(203.209.255.193:443), socket:30, connect
+2021-10-18 10:13:12.435 [I][37011,7f8f807072c0]94:[bifrost]bifrost.comm : <140254311903936> index:0, @0x700007339CC0, sock:25, (203.209.245.120:80), connected Rtt:27, 
+2021-10-18 10:13:12.435 [I][37011,7f8f807072c0]95:[bifrost]bifrost.comm : <140254311903936> index:0, sock:25, suc ConnectImpatient:203.209.245.120:80, RTT:(27, 27), @0x700007339CC0
+2021-10-18 10:13:12.435 [I][37011,7f8f807072c0]96:[bifrost]bifrost.comm : <140254311903936> retsocket:25, connrtt:27, conntotalrtt:27, totalcost:28, @0x700007339CC0
+2021-10-18 10:13:12.436 [I][37011,7f8f807072c0]97:[bifrost]bifrost.coll : <140254311903936> task socket send sock:25,http len:182
+2021-10-18 10:13:12.449 [I][37011,7f8f80524ea0]98:[bifrost]bifrost.comm : <140254309928608> index:0, @0x7000073BB6D8, sock:30, (203.209.255.193:443), connected Rtt:31, 
+2021-10-18 10:13:12.449 [I][37011,7f8f80524ea0]99:[bifrost]bifrost.comm : <140254309928608> index:0, sock:30, suc ConnectImpatient:203.209.255.193:443, RTT:(31, 31), @0x7000073BB6D8
+2021-10-18 10:13:12.449 [I][37011,7f8f80524ea0]100:[bifrost]bifrost.comm : <140254309928608> retsocket:30, connrtt:31, conntotalrtt:31, totalcost:31, @0x7000073BB6D8
+2021-10-18 10:13:12.450 [I][37011,7f8f80524ea0]101:[bifrost]bifrost.stn : <140254309928608> connect status from:1 to:2, nettype:1
+2021-10-18 10:13:12.450 [I][37011,7f8f80524ea0]102:[bifrost]bifrost.stn : <140254309928608> multiplexLink task socket connect suc sock:30, host:iotapi.alipay.com, ip:(203.209.255.193:443:DNSIP), local_ip:(192.168.106.115:53618), index:0, time:(31/31, all:31), net:YLZ
+2021-10-18 10:13:12.450 [I][37011,7f8f80524ea0]104:[bifrost]bifrost.stn : <140254309928608> handler:(123145420451840,70)
+2021-10-18 10:13:12.450 [I][37011,7f8f8050c7d0]103:[bifrost]bifrost.ext : <140254309828560> on_req_2_buf(task_id=1, user_context=0x7F8F805252C0)
+2021-10-18 10:13:12.450 [I][37011,7f8f80524ea0]105:[bifrost]bifrost.comm : <140254309928608> alarm id:123145423666144, after:75000, seq:9, po.reg.q:123145420451840,po.reg.s:0,po.s:72
+2021-10-18 10:13:12.450 [I][37011,7f8f8050c7d0]106:[bifrost]bifrost.stn : <140254309828560> task add into multiplex readwrite suc cgi:/mgw.htm, cmdid:1, taskid:1, size:990, timeout(firstpkg:12, rw:17, task:30, c:0, dyn:1), retry:0
+2021-10-18 10:13:12.450 [I][37011,7f8f8050c7d0]107:[bifrost]bifrost.ext : <140254309828560> on_rpt_begin_conn(profile[1/2]={ net=1, net_name_0="YLZ", net_name_1="", tid=140254309928608, start_time=138775664ms, DNS_time=138775664ms, DNS_end_time=138775672ms, conn_reason=0, conn_time=138775703ms, conn_err_code=0, conn_rtt=31, conn_cost=31 })
+2021-10-18 10:13:12.450 [I][37011,7f8f80524ea0]108:[bifrost]MTLS::client : <140254309928608> Create 0x7f8f80611b00. (protocol=1, host=1, CA=1)
+2021-10-18 10:13:12.451 [I][37011,7f8f8050c7d0]109:[bifrost]bifrost.ext : <140254309828560> on_rpt_begin_conn(profile[2/2]={ try_IP_count=1, remote_IP="203.209.255.193", remote_port=443, server_host="iotapi.alipay.com", IP_type=2, local_IP="192.168.106.115", local_port=53618, IP_index=0, last_rcv_time=138775664ms, last_send_time=138775664ms, nat64=false })
+2021-10-18 10:13:12.451 [I][37011,7f8f80607aa0]110:[bifrost]bifrost.ext : <140254310857376> state changes to 3
+2021-10-18 10:13:12.451 [I][37011,7f8f80524ea0]111:[bifrost]bifrost.stn : <140254309928608> multiplexlink_control: 0, 76
+2021-10-18 10:13:12.452 [I][37011,7f8f80524ea0]112:[bifrost]bifrost.http2 : <140254309928608> send http1 succ, stream:3,stream stat:ClosedLocal,h1 request:
+	POST /mgw.htm 1.1
+	:method: POST
+	:scheme: https
+	:path: /mgw.htm
+	host: iotapi.alipay.com
+	appid: adbctrl_dragonfly
+	content-type: application/protobuf
+	did: my_test_device
+	operation-type: com.alipay.sdarttool.adb.login
+	rpcid: 1
+	sign: 5510F3A77C0197E2A56D28718CD0E150BA037BD601E3DDBB6C828FACE77422B2
+	ts: NoHB9nI
+	version: 2
+	bifrostplatform: iOS
+	clientversion: 1.0.0.0001
+	signtype: 0
+	x-mgs-ldc-uid: 79
+	content-encoding: gzip
+	accept-encoding: gzip, deflate
+	content-length: 594
+	Body Length: 594,h2 buffer len:877
+2021-10-18 10:13:12.452 [I][37011,7f8f80524ea0]113:[bifrost]bifrost.stn : <140254309928608> multiplex: A frame is encoded. (type=1, taskid=1, buffer_len=877)
+2021-10-18 10:13:12.453 [I][37011,7f8f80524ea0]114:[bifrost]bifrost.comm : <140254309928608> alarm cancel id:123145423666144, seq:9, after:75000
+2021-10-18 10:13:12.453 [I][37011,7f8f80524ea0]115:[bifrost]bifrost.comm : <140254309928608> alarm id:123145423666144, after:75000, seq:10, po.reg.q:123145420451840,po.reg.s:0,po.s:78
+2021-10-18 10:13:12.454 [I][37011,7f8f80524ea0]116:[bifrost]bifrost.ext : <140254309928608> Traffic report: in=0, out=419
+2021-10-18 10:13:12.454 [I][37011,7f8f80524ea0]117:[bifrost]bifrost.stn : <140254309928608> task socket send sock:30, all send tls:(nw:0/0), sock:(419, nw:419), 
+2021-10-18 10:13:12.456 [I][37011,7f8f807072c0]118:[bifrost]bifrost.coll : <140254311903936> task socket recv sock:25,recv len:259,@0x7F8F8060D8B0,headers size:7,contend-length:10,Finish body:10,Via:spanner-internet-5056.stl[200]
+2021-10-18 10:13:12.456 [I][37011,7f8f807072c0]119:[bifrost]bifrost.comm : <140254311903936> alarm cancel id:123145423134080, seq:8, after:30000
+2021-10-18 10:13:12.456 [I][37011,7f8f807072c0]120:[bifrost]bifrost.coll : <140254311903936> task socket close,sock:25
+2021-10-18 10:13:12.456 [I][37011,7f8f807072c0]121:[bifrost]bifrost.coll : <140254311903936> sntptime err_type:0 err_code:0
+2021-10-18 10:13:12.457 [I][37011,7f8f807072c0]122:[bifrost]bifrost.coll : <140254311903936> sntptime:1634523192 time64:1634523192 airTime:25 realSyncTime:1634523192
+2021-10-18 10:13:12.484 [I][37011,7f8f80524ea0]123:[bifrost]bifrost.ext : <140254309928608> Traffic report: in=4096, out=0
+2021-10-18 10:13:12.484 [I][37011,7f8f80524ea0]124:[bifrost]bifrost.stn : <140254309928608> task socket recv sock:30, recv len:(4096 -> 4096) -> tls:(4096 -> 0), nwrite:0
+2021-10-18 10:13:12.515 [I][37011,7f8f80524ea0]125:[bifrost]bifrost.comm : <140254309928608> >>>>> begin certificate stack <<<<<
+2021-10-18 10:13:12.515 [I][37011,7f8f80524ea0]126:[bifrost]bifrost.comm : <140254309928608> subject[1]: C=CN, ST=Shanghai, O=Alipay.com Co.,Ltd, CN=*.alipay.com
+2021-10-18 10:13:12.515 [I][37011,7f8f80524ea0]127:[bifrost]bifrost.comm : <140254309928608> issuer[1]: C=US, O=DigiCert Inc, CN=DigiCert Global G2 TLS RSA SHA256 2020 CA1
+2021-10-18 10:13:12.515 [I][37011,7f8f80524ea0]128:[bifrost]bifrost.comm : <140254309928608> begin_time[1]: 2021-04-22+00:00:00
+2021-10-18 10:13:12.515 [I][37011,7f8f80524ea0]129:[bifrost]bifrost.comm : <140254309928608> end_time[1]: 2022-04-27+23:59:59
+2021-10-18 10:13:12.515 [I][37011,7f8f80524ea0]130:[bifrost]bifrost.comm : <140254309928608> subject[2]: C=US, O=DigiCert Inc, CN=DigiCert Global G2 TLS RSA SHA256 2020 CA1
+2021-10-18 10:13:12.515 [I][37011,7f8f80524ea0]131:[bifrost]bifrost.comm : <140254309928608> issuer[2]: C=US, O=DigiCert Inc, OU=www.digicert.com, CN=DigiCert Global Root G2
+2021-10-18 10:13:12.515 [I][37011,7f8f80524ea0]132:[bifrost]bifrost.comm : <140254309928608> begin_time[2]: 2020-09-24+00:00:00
+2021-10-18 10:13:12.515 [I][37011,7f8f80524ea0]133:[bifrost]bifrost.comm : <140254309928608> end_time[2]: 2030-09-23+23:59:59
+2021-10-18 10:13:12.515 [I][37011,7f8f80524ea0]134:[bifrost]bifrost.comm : <140254309928608> subject[3]: C=US, O=DigiCert Inc, OU=www.digicert.com, CN=DigiCert Global Root G2
+2021-10-18 10:13:12.515 [I][37011,7f8f80524ea0]135:[bifrost]bifrost.comm : <140254309928608> issuer[3]: C=US, O=VeriSign, Inc., OU=VeriSign Trust Network, OU=(c) 2006 VeriSign, Inc. - For authorized use only, CN=VeriSign Class 3 Public Primary Certification Authority - G5
+2021-10-18 10:13:12.515 [I][37011,7f8f80524ea0]136:[bifrost]bifrost.comm : <140254309928608> begin_time[3]: 2017-11-06+00:00:00
+2021-10-18 10:13:12.516 [I][37011,7f8f80524ea0]137:[bifrost]bifrost.comm : <140254309928608> end_time[3]: 2022-11-05+23:59:59
+2021-10-18 10:13:12.516 [I][37011,7f8f80524ea0]138:[bifrost]bifrost.comm : <140254309928608> <<<<<  end certificate stack  >>>>>
+2021-10-18 10:13:12.523 [I][37011,7f8f80524ea0]139:[bifrost]bifrost.ext : <140254309928608> Traffic report: in=602, out=0
+2021-10-18 10:13:12.523 [I][37011,7f8f80524ea0]140:[bifrost]bifrost.stn : <140254309928608> task socket recv sock:30, recv len:(602 -> 602) -> tls:(602 -> 0), nwrite:0
+2021-10-18 10:13:12.523 [I][37011,7f8f80524ea0]141:[bifrost]bifrost.comm : <140254309928608> alarm cancel id:123145423666144, seq:10, after:75000
+2021-10-18 10:13:12.523 [I][37011,7f8f80524ea0]142:[bifrost]bifrost.comm : <140254309928608> alarm id:123145423666144, after:75000, seq:11, po.reg.q:123145420451840,po.reg.s:0,po.s:82
+2021-10-18 10:13:12.523 [I][37011,7f8f80524ea0]143:[bifrost]bifrost.ext : <140254309928608> Traffic report: in=0, out=126
+2021-10-18 10:13:12.523 [I][37011,7f8f80524ea0]144:[bifrost]bifrost.stn : <140254309928608> task socket send sock:30, all send tls:(nw:0/0), sock:(126, nw:126), sub send taskid:1, cmdid:(1, /mgw.htm), len(S:126/877), 
+2021-10-18 10:13:12.557 [I][37011,7f8f80524ea0]145:[bifrost]bifrost.comm : <140254309928608> cb_notify_alpn, protocol:h2
+2021-10-18 10:13:12.557 [I][37011,7f8f80524ea0]146:[bifrost]bifrost.comm : <140254309928608> alpn ok, server select:h2
+2021-10-18 10:13:12.557 [I][37011,7f8f80524ea0]147:[bifrost]bifrost.comm : <140254309928608> The handshake is OK. (standard, ticket=false, fast=false)
+2021-10-18 10:13:12.557 [I][37011,7f8f80607aa0]148:[bifrost]bifrost.ext : <140254310857376> state changes to 4
+2021-10-18 10:13:12.557 [I][37011,7f8f80524ea0]149:[bifrost]bifrost.ext : <140254309928608> Traffic report: in=327, out=0
+2021-10-18 10:13:12.558 [I][37011,7f8f80524ea0]150:[bifrost]bifrost.stn : <140254309928608> task socket recv sock:30, recv len:(327 -> 327) -> tls:(327 -> 40), nwrite:0
+2021-10-18 10:13:12.558 [I][37011,7f8f80524ea0]151:[bifrost]bifrost.http2 : <140254309928608> frame header rcv, length=18, type=SETTINGS, flags=, stream=0
+2021-10-18 10:13:12.558 [I][37011,7f8f80524ea0]152:[bifrost]bifrost.http2 : <140254309928608> frame header rcv, length=4, type=WINDOW_UPDATE, flags=, stream=0
+2021-10-18 10:13:12.558 [I][37011,7f8f80524ea0]153:[bifrost]bifrost.stn : <140254309928608> task socket recv sock:30, pack recv finish taskid:0, cmdid:(0, ), packlen:(0/0)
+2021-10-18 10:13:12.558 [I][37011,7f8f80524ea0]154:[bifrost]bifrost.stn : <140254309928608> task socket recv sock:30, pack recv finish taskid:0, cmdid:(0, ), packlen:(40/40)
+2021-10-18 10:13:12.558 [I][37011,7f8f80524ea0]155:[bifrost]bifrost.stn : <140254309928608> multiplexlink_control: 0, 9
+2021-10-18 10:13:12.558 [I][37011,7f8f80524ea0]156:[bifrost]bifrost.comm : <140254309928608> alarm cancel id:123145423666144, seq:11, after:75000
+2021-10-18 10:13:12.558 [I][37011,7f8f80524ea0]157:[bifrost]bifrost.comm : <140254309928608> alarm id:123145423666144, after:75000, seq:12, po.reg.q:123145420451840,po.reg.s:0,po.s:87
+2021-10-18 10:13:12.558 [I][37011,7f8f80524ea0]158:[bifrost]bifrost.ext : <140254309928608> Traffic report: in=0, out=1020
+2021-10-18 10:13:12.558 [I][37011,7f8f80524ea0]159:[bifrost]bifrost.stn : <140254309928608> task socket send sock:30, all send tls:(nw:0/0), sock:(1020, nw:1020), sub send taskid:1, cmdid:(1, /mgw.htm), len(S:877/877), sub send taskid:0, cmdid:(0, ), len(S:38/38), 
+2021-10-18 10:13:12.589 [I][37011,7f8f80524ea0]160:[bifrost]bifrost.ext : <140254309928608> Traffic report: in=51, out=0
+2021-10-18 10:13:12.589 [I][37011,7f8f80524ea0]161:[bifrost]bifrost.stn : <140254309928608> task socket recv sock:30, recv len:(51 -> 51) -> tls:(51 -> 22), nwrite:0
+2021-10-18 10:13:12.589 [I][37011,7f8f80524ea0]162:[bifrost]bifrost.http2 : <140254309928608> frame header rcv, length=0, type=SETTINGS, flags=ACK, stream=0
+2021-10-18 10:13:12.589 [I][37011,7f8f80524ea0]163:[bifrost]bifrost.http2 : <140254309928608> frame header rcv, length=4, type=WINDOW_UPDATE, flags=, stream=3
+2021-10-18 10:13:12.589 [I][37011,7f8f80524ea0]164:[bifrost]bifrost.stn : <140254309928608> task socket recv sock:30, pack recv finish taskid:0, cmdid:(0, ), packlen:(0/0)
+2021-10-18 10:13:12.589 [I][37011,7f8f80524ea0]165:[bifrost]bifrost.stn : <140254309928608> task socket recv sock:30, pack recv finish taskid:0, cmdid:(0, ), packlen:(22/22)
+2021-10-18 10:13:12.649 [I][37011,7f8f80524ea0]166:[bifrost]bifrost.ext : <140254309928608> Traffic report: in=346, out=0
+2021-10-18 10:13:12.649 [I][37011,7f8f80524ea0]167:[bifrost]bifrost.stn : <140254309928608> task socket recv sock:30, recv len:(346 -> 346) -> tls:(346 -> 317), nwrite:0
+2021-10-18 10:13:12.649 [I][37011,7f8f80524ea0]168:[bifrost]bifrost.http2 : <140254309928608> frame header rcv, length=235, type=HEADERS, flags=END_HEADERS, stream=3
+2021-10-18 10:13:12.649 [I][37011,7f8f80524ea0]169:[bifrost]bifrost.http2 : <140254309928608> h1 headers resp, resp complete:0,headers:Status: 200
+:status: 200
+server: nginx/1.6.2
+date: Mon, 18 Oct 2021 02:13:12 GMT
+content-type: application/protobuf
+content-length: 64
+mgw-traceid: 21bb0db7163452319258064351533
+result-status: 1000
+server-time: 1634523192639
+rpcid: 1
+x-cip: 110.80.15.82
+x-http-version: 2.0
+mmtp-ext-utc: 60
+set-cookie: spanner=Rd1PmC2JLV4ycJ3GZ6poNLcRP6FRJfa7fUlaVq8URW4=;path=/;secure;
+Body Length: 0
+2021-10-18 10:13:12.649 [I][37011,7f8f80524ea0]170:[bifrost]bifrost.http2 : <140254309928608> frame header rcv, length=64, type=DATA, flags=END_STREAM, stream=3
+2021-10-18 10:13:12.650 [I][37011,7f8f80524ea0]171:[bifrost]bifrost.http2 : <140254309928608> h1 resp,Status: 200
+:status: 200
+server: nginx/1.6.2
+date: Mon, 18 Oct 2021 02:13:12 GMT
+content-type: application/protobuf
+content-length: 64
+mgw-traceid: 21bb0db7163452319258064351533
+result-status: 1000
+server-time: 1634523192639
+rpcid: 1
+x-cip: 110.80.15.82
+x-http-version: 2.0
+mmtp-ext-utc: 60
+set-cookie: spanner=Rd1PmC2JLV4ycJ3GZ6poNLcRP6FRJfa7fUlaVq8URW4=;path=/;secure;
+Body Length: 64
+2021-10-18 10:13:12.650 [I][37011,7f8f80524ea0]172:[bifrost]bifrost.stn : <140254309928608> task socket recv sock:30, pack recv finish taskid:0, cmdid:(0, ), packlen:(0/0)
+2021-10-18 10:13:12.650 [I][37011,7f8f80524ea0]173:[bifrost]bifrost.stn : <140254309928608> multiplex: A frame is got. (type=1, taskid=1, header_size=13, body=64)
+2021-10-18 10:13:12.650 [I][37011,7f8f80524ea0]174:[bifrost]bifrost.stn : <140254309928608> task socket recv sock:30, pack recv finish taskid:1, cmdid:(1, /mgw.htm), packlen:(317/317)
+2021-10-18 10:13:12.650 [I][37011,7f8f8050c7d0]175:[bifrost]bifrost.ext : <140254309828560> on_buf_2_rsp(task_id=1, user_context=0x7F8F805252C0)
+2021-10-18 10:13:12.650 [I][37011,7f8f8050c7d0]176:[bifrost]bifrost.stn : <140254309828560> task end callback multiplex err(0, 0, 0), svr(203.209.255.193:443, DNSIP, iotapi.alipay.com), cli(, 192.168.106.115, n:YLZ, sig:0), cost(s:877, r:436, c:31, rw:127), all:241, retry:0, cmdid:1, cgi:/mgw.htm, taskid:1, tid:140254309928608
+2021-10-18 10:13:12.650 [I][37011,7f8f8050c7d0]177:[bifrost]bifrost.ext : <140254309828560> on_rpt_task_profile(profile[1/3]={ task_id=1, frame=1, link_type=4, loop_start_task_time=138775704ms, first_start_send_time=138775777ms, last_send_time=138775812ms, last_receive_pkg_time=138775904ms, read_write_timeout=17381ms, first_pkg_timeout=12048ms, snd_size=877 })
+2021-10-18 10:13:12.650 [I][37011,7f8f8050c7d0]178:[bifrost]bifrost.ext : <140254309828560> on_rpt_task_profile(profile[2/3]={ snd_data_size=877, rcv_size=436, rcv_data_size=436, err_type=0, err_code=0, running_id=1, task_timeout=30000ms, start_task_time=138775663ms, end_task_time=138775904ms, retry_start_time=0ms })
+2021-10-18 10:13:12.650 [I][37011,7f8f8050c7d0]179:[bifrost]bifrost.ext : <140254309828560> on_rpt_task_profile(profile[3/3]={ remain_retry_count=0, last_failed_dyntime_status=0, current_dyntime_status=1, antiavalanche_checked=true, use_proxy=false, retry_time_interval=0ms })
+2021-10-18 10:13:12.651 [I][37011,7f8f8050c7d0]180:[bifrost]bifrost.ext : <140254309828560> on_task_end(task_id=1, user_context=0x7F8F805252C0, type=0, code=0)
+2021-10-18 10:13:12.651 [I][37011,7f8f8050c7d0]181:[bifrost]bifrost.ext : <140254309828560> A data-frame is received. (response=false, channel=1, receipt=1, seq_up=0, seq_down=0, head_count=13, body_length=64)
+2021-10-18 10:13:12.651 [I][37011,7f8f80607aa0]182:[bifrost]bifrsot_RpcClient : rpc errcode:0, errtype:0, format errorcode:0, 0x0
+2021-10-18 10:13:12.651 [I][37011,7f8f80607aa0]183:[bifrost]bifrost.ext : <140254310857376> No.0 is responded. (task_id=1, receipt=1, channel=1)
+2021-10-18 10:13:12.651 [I][37011,7f8f80607aa0]184:[bifrost]bifrost.ext : <140254310857376> Remove a data record. (task_id=1, err_type=0, err_code=0, receipt=1, sequence=0, channel=1, mqtt_pkg_id=-1, mqtt_msg_id=-1)
+2021-10-18 10:13:12.651 [I][37011,7f8f80607aa0]185:[bifrost]bifrost.ext : <140254310857376> amnet_alert=;;1;-1
+2021-10-18 10:13:12.651 [I][37011,7f8f80607aa0]186:[bifrost]bifrost.iot : OK to alert.
+2021-10-18 10:13:13.402 [I][37011,7f8f80706170]187:[bifrost]bifrost.comm : <140254311899504> OnAlarm id:140254309820440, seq:3, elapsed:1001, after:1000, miss:1, android alarm:false, runing
+2021-10-18 10:13:13.402 [I][37011,7f8f80410c60]188:[bifrost]bifrost.coll : <140254308797536> requrl:https://mdap.alipay.com:443/loggw/logConfig.do?utdid=my_test_device&productVersion=5&productId=IOT_Linux&templateId=2
+2021-10-18 10:13:13.402 [I][37011,7f8f80608570]189:[bifrost]bifrost.comm : <140254310860144> alarm id:140254309820440, after:86400000, seq:13, po.reg.q:123145420451840,po.reg.s:0,po.s:100
+2021-10-18 10:13:13.403 [I][37011,7f8f80607aa0]190:[bifrost]bifrost.ext : <140254310857376> inactivating 12345678
+2021-10-18 10:13:13.403 [I][37011,7f8f8050c7d0]191:[bifrost]bifrost.stn : <140254309828560> _scene:10021
+2021-10-18 10:13:13.403 [I][37011,7f8f8050c7d0]192:[bifrost]bifrost.stn : <140254309828560> -> ~NetCore 
+2021-10-18 10:13:13.403 [I][37011,7f8f8050c7d0]193:[bifrost]bifrost.stn : <140254309828560> stop signalling
+2021-10-18 10:13:13.403 [I][37011,7f8f8050c7d0]194:[bifrost]bifrost.stn : <140254309828560> -> ~LongLinkTaskManager 
+2021-10-18 10:13:13.403 [I][37011,7f8f8050c7d0]195:[bifrost]bifrost.comm : <140254309828560> alarm cancel id:140254310873632, seq:7, after:15000
+2021-10-18 10:13:13.404 [I][37011,7f8f8050c7d0]196:[bifrost]bifrost.stn : <140254309828560> _scene:10021
+2021-10-18 10:13:13.404 [I][37011,7f8f8050c7d0]197:[bifrost]bifrost.stn : <140254309828560> <- ~LongLinkTaskManager +0, 
+2021-10-18 10:13:13.404 [I][37011,7f8f8050c7d0]198:[bifrost]bifrost.comm : <140254309828560> alarm cancel id:140254310878992, seq:6, after:90000
+2021-10-18 10:13:13.404 [I][37011,7f8f8050c7d0]199:[bifrost]bifrost.stn : <140254309828560> -> ~ShortLinkTaskManager 
+2021-10-18 10:13:13.404 [I][37011,7f8f8050c7d0]200:[bifrost]bifrost.stn : <140254309828560> lst_cmd_ count=0
+2021-10-18 10:13:13.404 [I][37011,7f8f8050c7d0]201:[bifrost]bifrost.stn : <140254309828560> <- ~ShortLinkTaskManager +0, 
+2021-10-18 10:13:13.404 [I][37011,7f8f8050c7d0]202:[bifrost]bifrost.stn : <140254309828560> -> ~MultiplexLinkTaskManager 
+2021-10-18 10:13:13.404 [I][37011,7f8f8050c7d0]203:[bifrost]bifrost.stn : <140254309828560> -> ~SingleHostTaskManager 
+2021-10-18 10:13:13.404 [I][37011,7f8f8050c7d0]204:[bifrost]bifrost.stn : <140254309828560> _scene:10000
+2021-10-18 10:13:13.404 [I][37011,7f8f80524ea0]205:[bifrost]MTLS::client : <140254309928608> Destroy 0x7f8f80611b00. (protocol=1)
+2021-10-18 10:13:13.404 [I][37011,7f8f80410c60]206:[bifrost]bifrost.coll : <140254308797536> handler:(123145420451840,106)
+2021-10-18 10:13:13.404 [W][37011,7f8f80524ea0]207:[bifrost]bifrost.stn : <140254309928608> task socket close sock:30, user disconnect:10000, nwrite:0, nread:0; getsocktcpinfo:tcpi_state:4, tcpi_snd_wscale:7, tcpi_rcv_wscale:6, tcpi_options:14, tcpi_flags:0, tcpi_rto:0, tcpi_maxseg:1300, tcpi_snd_ssthresh:1073725440, tcpi_snd_cwnd:5945, tcpi_snd_wnd:32384, tcpi_snd_sbbytes:0, tcpi_rcv_wnd:262144, tcpi_rttcur:30, tcpi_srtt:29, tcpi_rttvar:7, tcpi_txpackets:3, tcpi_txbytes:1565, tcpi_txretransmitbytes:0, tcpi_rxpackets:9, tcpi_rxbytes:5422, tcpi_rxoutoforderbytes:
+2021-10-18 10:13:13.404 [I][37011,7f8f80410c60]208:[bifrost]bifrost.comm : <140254308797536> alarm id:123145424207232, after:30000, seq:14, po.reg.q:123145420451840,po.reg.s:0,po.s:108
+2021-10-18 10:13:13.404 [I][37011,7f8f80410c60]209:[bifrost]bifrost.comm : <140254308797536> _vecaddr size:1, m_timeout:5000, m_interval:4000, m_error_interval:4000, m_max_connect:3, @0x70000743FCC0
+2021-10-18 10:13:13.404 [I][37011,7f8f80524ea0]210:[bifrost]bifrost.comm : <140254309928608> alarm cancel id:123145423666144, seq:12, after:75000
+2021-10-18 10:13:13.405 [I][37011,7f8f80410c60]211:[bifrost]bifrost.comm : <140254308797536> complex.conn 110.76.30.93:443
+2021-10-18 10:13:13.405 [I][37011,7f8f80524ea0]212:[bifrost]bifrost.stn : <140254309928608> connect status from:2 to:3, nettype:1
+2021-10-18 10:13:13.405 [I][37011,7f8f80524ea0]213:[bifrost]bifrost.stn : <140254309928608> <- __Run +995, 
+2021-10-18 10:13:13.405 [I][37011,7f8f80410c60]214:[bifrost]bifrost.comm : <140254308797536> index:0, @0x70000743FCC0, addr:(110.76.30.93:443), socket:12, connect
+2021-10-18 10:13:13.405 [I][37011,7f8f8050c7d0]215:[bifrost]bifrost.stn : <140254309828560> _scene:10021
+2021-10-18 10:13:13.405 [I][37011,7f8f8050c7d0]216:[bifrost]bifrost.stn : <140254309828560> <- ~SingleHostTaskManager +1, 
+2021-10-18 10:13:13.405 [I][37011,7f8f8050c7d0]217:[bifrost]bifrost.stn : <140254309828560> <- ~MultiplexLinkTaskManager +1, 
+2021-10-18 10:13:13.406 [I][37011,7f8f8050c7d0]218:[bifrost]bifrost.stn : <140254309828560> <- ~NetCore +2, 
+2021-10-18 10:13:13.406 [I][37011,7f8f8050c7d0]219:[bifrost]bifrost.comm : <140254309828560> <- Run +1003, 
+2021-10-18 10:13:13.406 [I][37011,7f8f805054d0*]220:[bifrost]bifrost.stn : <140254309799120> stn onDestroy
+2021-10-18 10:13:13.406 [I][37011,7f8f805054d0*]221:[bifrost]bifrost.baseevent : <140254309799120> -> ~ActiveLogic 
+2021-10-18 10:13:13.406 [I][37011,7f8f805054d0*]222:[bifrost]bifrost.baseevent : <140254309799120> <- ~ActiveLogic +0, 
+2021-10-18 10:13:13.406 [I][37011,7f8f8050c520]223:[bifrost]bifrost.comm : <140254309827872> <- Run +1004, 
+2021-10-18 10:13:13.428 [I][37011,7f8f80410c60]224:[bifrost]bifrost.comm : <140254308797536> index:0, @0x70000743FCC0, sock:12, (110.76.30.93:443), connected Rtt:23, 
+2021-10-18 10:13:13.428 [I][37011,7f8f80410c60]225:[bifrost]bifrost.comm : <140254308797536> index:0, sock:12, suc ConnectImpatient:110.76.30.93:443, RTT:(23, 23), @0x70000743FCC0
+2021-10-18 10:13:13.428 [I][37011,7f8f80410c60]226:[bifrost]bifrost.comm : <140254308797536> retsocket:12, connrtt:23, conntotalrtt:23, totalcost:23, @0x70000743FCC0
+2021-10-18 10:13:13.428 [I][37011,7f8f80410c60]227:[bifrost]MTLS::client : <140254308797536> Create 0x7f8f80527ba0. (protocol=1, host=1, CA=1)
+2021-10-18 10:13:13.428 [I][37011,7f8f80410c60]228:[bifrost]bifrost.coll : <140254308797536> task socket send sock:12,http len:408
+2021-10-18 10:13:13.452 [I][37011,7f8f80410c60]229:[bifrost]bifrost.coll : <140254308797536> task socket recv sock:12,recv len:4096,tls read ret:4096, plain_text_read_buf:0,but no plain data, continue to read
+2021-10-18 10:13:13.474 [I][37011,7f8f80410c60]230:[bifrost]bifrost.comm : <140254308797536> >>>>> begin certificate stack <<<<<
+2021-10-18 10:13:13.474 [I][37011,7f8f80410c60]231:[bifrost]bifrost.comm : <140254308797536> subject[1]: C=CN, ST=Shanghai, O=Alipay.com Co.,Ltd, CN=*.alipay.com
+2021-10-18 10:13:13.474 [I][37011,7f8f80410c60]232:[bifrost]bifrost.comm : <140254308797536> issuer[1]: C=US, O=DigiCert Inc, CN=DigiCert Global G2 TLS RSA SHA256 2020 CA1
+2021-10-18 10:13:13.474 [I][37011,7f8f80410c60]233:[bifrost]bifrost.comm : <140254308797536> begin_time[1]: 2021-04-22+00:00:00
+2021-10-18 10:13:13.474 [I][37011,7f8f80410c60]234:[bifrost]bifrost.comm : <140254308797536> end_time[1]: 2022-04-27+23:59:59
+2021-10-18 10:13:13.474 [I][37011,7f8f80410c60]235:[bifrost]bifrost.comm : <140254308797536> subject[2]: C=US, O=DigiCert Inc, CN=DigiCert Global G2 TLS RSA SHA256 2020 CA1
+2021-10-18 10:13:13.474 [I][37011,7f8f80410c60]236:[bifrost]bifrost.comm : <140254308797536> issuer[2]: C=US, O=DigiCert Inc, OU=www.digicert.com, CN=DigiCert Global Root G2
+2021-10-18 10:13:13.474 [I][37011,7f8f80410c60]237:[bifrost]bifrost.comm : <140254308797536> begin_time[2]: 2020-09-24+00:00:00
+2021-10-18 10:13:13.474 [I][37011,7f8f80410c60]238:[bifrost]bifrost.comm : <140254308797536> end_time[2]: 2030-09-23+23:59:59
+2021-10-18 10:13:13.474 [I][37011,7f8f80410c60]239:[bifrost]bifrost.comm : <140254308797536> subject[3]: C=US, O=DigiCert Inc, OU=www.digicert.com, CN=DigiCert Global Root G2
+2021-10-18 10:13:13.474 [I][37011,7f8f80410c60]240:[bifrost]bifrost.comm : <140254308797536> issuer[3]: C=US, O=VeriSign, Inc., OU=VeriSign Trust Network, OU=(c) 2006 VeriSign, Inc. - For authorized use only, CN=VeriSign Class 3 Public Primary Certification Authority - G5
+2021-10-18 10:13:13.475 [I][37011,7f8f80410c60]241:[bifrost]bifrost.comm : <140254308797536> begin_time[3]: 2017-11-06+00:00:00
+2021-10-18 10:13:13.475 [I][37011,7f8f80410c60]242:[bifrost]bifrost.comm : <140254308797536> end_time[3]: 2022-11-05+23:59:59
+2021-10-18 10:13:13.475 [I][37011,7f8f80410c60]243:[bifrost]bifrost.comm : <140254308797536> <<<<<  end certificate stack  >>>>>
+2021-10-18 10:13:13.482 [I][37011,7f8f80410c60]244:[bifrost]bifrost.coll : <140254308797536> task socket recv sock:12,recv len:593,tls read ret:593, plain_text_read_buf:0,but no plain data, continue to read
+2021-10-18 10:13:13.482 [I][37011,7f8f80410c60]245:[bifrost]bifrost.coll : <140254308797536> task socket send sock:12,http len:126
+2021-10-18 10:13:13.504 [I][37011,7f8f80410c60]246:[bifrost]bifrost.comm : <140254308797536> The handshake is OK. (standard, ticket=false, fast=false)
+2021-10-18 10:13:13.505 [I][37011,7f8f80410c60]247:[bifrost]bifrost.coll : <140254308797536> task socket recv sock:12,recv len:258,tls read ret:258, plain_text_read_buf:0,but no plain data, continue to read
+2021-10-18 10:13:13.505 [I][37011,7f8f80410c60]248:[bifrost]bifrost.coll : <140254308797536> task socket send sock:12,http len:276
+2021-10-18 10:13:13.528 [W][37011,7f8f80410c60]249:[bifrost]MTLS::client::std_1_2 : <140254308797536> (../mars-ext/src/mbedtls/ssl_tls.c:3878) mbedtls_ssl_handle_message_type() returned -30848 (-0x7880)
+2021-10-18 10:13:13.528 [W][37011,7f8f80410c60]250:[bifrost]MTLS::client::std_1_2 : <140254308797536> (../mars-ext/src/mbedtls/ssl_tls.c:6728) mbedtls_ssl_read_record() returned -30848 (-0x7880)
+2021-10-18 10:13:13.528 [E][37011,7f8f80410c60]251:[bifrost]MTLS::client::std_1_2 : <140254308797536> Fail to input. (-0x7880 - SSL - The peer notified us that the connection is going to be closed)
+2021-10-18 10:13:13.529 [I][37011,7f8f80410c60]252:[bifrost]bifrost.coll : <140254308797536> task socket recv sock:12,recv len:1775,@0x7F8F80707150,headers size:9,contend-length:1267,Finish body:1267,Via:mdap-40-48657[200], metds-40-19782[200]
+2021-10-18 10:13:13.529 [I][37011,7f8f80410c60]253:[bifrost]MTLS::client : <140254308797536> Destroy 0x7f8f80527ba0. (protocol=1)
+2021-10-18 10:13:13.529 [I][37011,7f8f80410c60]254:[bifrost]bifrost.comm : <140254308797536> alarm cancel id:123145424207232, seq:14, after:30000
+2021-10-18 10:13:13.529 [I][37011,7f8f80410c60]255:[bifrost]bifrost.coll : <140254308797536> task socket close,sock:12
+2021-10-18 10:13:13.530 [I][37011,7f8f80608570]256:[bifrost]bifrost.coll : <140254310860144> cfg result:{"code":"200","content":{"positiveDiagnoseLog":{"send":["none"],"write":"yes"},"delayConfig":{"minDelay":60,"maxDelay":360,"delayDesc":"2021-03-01_v2","tStart":["1614556790"],"abdBizTypes":[]},"config":{"D_IOC":{"IOT-Crash":{"event":["none"],"send":["2g","3g","4g","wifi"],"write":"yes"}},"D_IOT":{"IoT-ISP":{"event":["none"],"send":["2g","3g","4g","wifi"],"write":"yes"},"IOT-rtdump":{"event":["none"],"send":["2g","3g","4g","wifi"],"write":"yes"},"iot-common":{"event":["none"],"send":["2g","3g","4g","wifi"],"write":"yes"},"IOT-Performance":{"event":["none"],"send":["2g","3g","4g","wifi"],"write":"yes"},"iot-count":{"event":["none"],"send":["2g","3g","4g","wifi"],"write":"yes"},"IoT-CHB":{"event":["none"],"send":["2g","3g","4g","wifi"],"write":"yes"},"IOT-Network":{"event":["none"],"send":["2g","3g","4g","wifi"],"write":"yes"},"IoT-IPC":{"event":["none"],"send":["2g","3g","4g","wifi"],"write":"yes"}},"D_IOB_E":{"IOT-Behavior-Ext":{"event":["none"],"send":["2g","3g","4g","wifi"],"write":"yes"}},"D_IOB":{"IOT-Behavior":{"event":["none"],"send":["2g","3g","4g","wifi"],"write":"yes"}},"D-VM":{"ad":{"event":["none"],"send":["2g","3g","4g","wifi"],"write":"yes"}}},"bizGroupConfig":{"logmonitor_poc":{"qos":1}},"realtimeConfig":{"enable":"no","interval":5}}}
+2021-10-18 10:13:13.530 [I][37011,7f8f80608570]257:[bifrost]bifrost.coll : <140254310860144> onResponse,req_type:1,err_type:0,err_code:0
+2021-10-18 10:13:23.413 [I][37011,7f8f805054d0*]258:[bifrost]bifrost.dtn : <140254309799120> FileContinusManager init,path: ./continus_download_cache
+2021-10-18 10:13:23.413 [I][37011,7f8f805054d0*]260:[bifrost]bifrost.coll : <140254309799120> appender has already be open
+2021-10-18 10:13:23.413 [I][37011,7f8f80607aa0]261:[bifrost]bifrost.iot : registering ok
+2021-10-18 10:13:23.413 [I][37011,7f8f80607aa0]262:[bifrost]bifrost.ext : <140254310857376> activating 12345678 "" ""
+2021-10-18 10:13:23.413 [W][37011,7f8f80607aa0]263:[bifrost]bifrost.ext : <140254310857376> Empty long-link address!
+2021-10-18 10:13:23.413 [W][37011,7f8f80607aa0]264:[bifrost]bifrost.ext : <140254310857376> Empty short-link address!
+2021-10-18 10:13:23.413 [W][37011,7f8f80607aa0]265:[bifrost]bifrost.ext : <140254310857376> Bad long-link address! ("")
+2021-10-18 10:13:23.413 [W][37011,7f8f80607aa0]266:[bifrost]bifrost.ext : <140254310857376> Bad short-link address! ("")
+2021-10-18 10:13:23.413 [I][37011,7f8f80607aa0]267:[bifrost]bifrost.stn : <140254310857376> task set backup server addr, host:iotapi.alipay.com, 
+2021-10-18 10:13:23.413 [I][37011,7f8f80607aa0]268:[bifrost]bifrost.stn : <140254310857376> task set multiplexlink server addr, port:443, debugip:
+2021-10-18 10:13:23.413 [I][37011,7f8f80607aa0]269:[bifrost]bifrost.comm : <140254310857376> create messageqeue id:123145421524992
+2021-10-18 10:13:23.413 [I][37011,7f8f80607aa0]270:[bifrost]bifrost.comm : <140254310857376> create messageqeue id:123145422061568
+2021-10-18 10:13:23.414 [I][37011,7f8f80705f50]271:[bifrost]bifrost.comm : <140254311898960> -> Run messagequeue id:123145421524992
+2021-10-18 10:13:23.414 [I][37011,7f8f80707ec0]272:[bifrost]bifrost.comm : <140254311907008> -> Run messagequeue id:123145422061568
+2021-10-18 10:13:23.414 [I][37011,7f8f80607aa0]273:[bifrost]bifrost.baseevent : <140254310857376> handler:(123145422061568,121)
+2021-10-18 10:13:23.414 [I][37011,7f8f80607aa0]274:[bifrost]bifrost.baseevent : <140254310857376> -> ActiveLogic 
+2021-10-18 10:13:23.414 [I][37011,7f8f80607aa0]275:[bifrost]bifrost.baseevent : <140254310857376> <- ActiveLogic +0, 
+2021-10-18 10:13:23.414 [W][37011,7f8f80607aa0]276:[bifrost]bifrost.stn : <140254310857376> netinfoChr:YLZ, curr_netinfo.c_str():YLZ
+2021-10-18 10:13:23.414 [I][37011,7f8f80607aa0]277:[bifrost]bifrost.stn : <140254310857376> -> ShortLinkTaskManager handler:(123145421524992,123)
+2021-10-18 10:13:23.414 [I][37011,7f8f80607aa0]278:[bifrost]bifrost.stn : <140254310857376> ShortLinkTaskManager messagequeue_id=123145421524992
+2021-10-18 10:13:23.414 [I][37011,7f8f80607aa0]279:[bifrost]bifrost.stn : <140254310857376> <- ShortLinkTaskManager +0, 
+2021-10-18 10:13:23.414 [I][37011,7f8f80607aa0]280:[bifrost]bifrost.stn : <140254310857376> handler:(123145421524992,124)
+2021-10-18 10:13:23.414 [I][37011,7f8f80607aa0]281:[bifrost]bifrost.stn : <140254310857376> handler:(123145421524992,126)
+2021-10-18 10:13:23.414 [I][37011,7f8f80607aa0]282:[bifrost]bifrost.stn : <140254310857376> handler:(123145421524992,128)
+2021-10-18 10:13:23.414 [I][37011,7f8f80607aa0]283:[bifrost]bifrost.stn : <140254310857376> LongLinkConnectMonitor handler:(123145421524992,127)
+2021-10-18 10:13:23.415 [I][37011,7f8f80607aa0]284:[bifrost]bifrost.stn : <140254310857376> -> LongLinkTaskManager handler:(123145421524992,125)
+2021-10-18 10:13:23.415 [I][37011,7f8f80607aa0]285:[bifrost]bifrost.stn : <140254310857376> <- LongLinkTaskManager +0, 
+2021-10-18 10:13:23.415 [I][37011,7f8f80607aa0]286:[bifrost]bifrost.stn : <140254310857376> -> MultiplexLinkTaskManager 
+2021-10-18 10:13:23.415 [I][37011,7f8f80607aa0]287:[bifrost]bifrost.stn : <140254310857376> <- MultiplexLinkTaskManager +0, 
+2021-10-18 10:13:23.415 [I][37011,7f8f80607aa0]288:[bifrost]bifrost.stn : <140254310857376> SignallingKeeper messagequeue_id=123145421524992
+2021-10-18 10:13:23.415 [I][37011,7f8f80607aa0]289:[bifrost]bifrost.stn : <140254310857376> handler:(123145421524992,131)
+2021-10-18 10:13:23.415 [I][37011,7f8f80607aa0]290:[bifrost]bifrost.stn : <140254310857376> handler:(123145420451840,133)
+2021-10-18 10:13:23.415 [I][37011,7f8f80607aa0]291:[bifrost]bifrost.comm : <140254310857376> alarm id:140254310906912, after:90000, seq:15, po.reg.q:123145420451840,po.reg.s:0,po.s:136
+2021-10-18 10:13:23.415 [W][37011,7f8f80607aa0]292:[bifrost]bifrost.stn : <140254310857376> publiccomponent version: Jul 12 2019 15:02:34
+2021-10-18 10:13:23.415 [I][37011,7f8f80607aa0]293:[bifrost]bifrost.stn : <140254310857376> netcore messagequeue_id=123145421524992, handler:(123145421524992,119)
+2021-10-18 10:13:23.415 [W][37011,7f8f80607aa0]294:[bifrost]bifrost.stn : <140254310857376> 
+Uin :12345
+UserName :12345
+ClientVersion :0x2
+2021-10-18 10:13:23.415 [I][37011,7f8f80607aa0]295:[bifrost]bifrost.stn : <140254310857376> -> NetCore 
+2021-10-18 10:13:23.415 [I][37011,7f8f80607aa0]296:[bifrost]bifrost.stn : <140254310857376> <- NetCore +0, 
+2021-10-18 10:13:23.415 [I][37011,7f8f80707ec0]297:[bifrost]bifrost.baseevent : <140254311907008> OnForeground:true, change:true, 
+2021-10-18 10:13:23.415 [I][37011,7f8f80607aa0]298:[bifrost]bifrost.iot : OK to activate.
+2021-10-18 10:13:23.416 [I][37011,7f8f80607aa0]299:[bifrost]bifrost.coll : <140254310857376> coll bifrost init:true,coll_opened:true
+2021-10-18 10:13:23.416 [I][37011,7f8f80607aa0]300:[bifrost]bifrost.ext : <140254310857376> posting 12345678 2 3
+2021-10-18 10:13:23.416 [I][37011,7f8f80607aa0]301:[bifrost]bifrost.ext : <140254310857376> Something to be sent. (receipt=2, important=false, secret=true, nearing=false, shortcut=false, nolong=false, multiplex=true, channel=1, forward_ip="", trace_id="", head_count=13, body_length=700, mqtt_pkg_id=-1, mqtt_msg_id=-1)
+2021-10-18 10:13:23.416 [I][37011,7f8f80607aa0]302:[bifrost]bifrost.ext : <140254310857376> A data-frame is committed. (task_id=2, channel=1, receipt=2, sequence=0, mqtt_pkg_id=-1, mqtt_msg_id=-1)
+2021-10-18 10:13:23.416 [I][37011,7f8f804110a0]303:[bifrost]bifrost.coll : <140254308798624> requrl:https://iot.alipay.com:443/api/v1/time/utc?rt=138786670
+2021-10-18 10:13:23.416 [I][37011,7f8f80607aa0]304:[bifrost]bifrost.iot : OK to post.
+2021-10-18 10:13:23.416 [I][37011,7f8f80705f50]305:[bifrost]bifrost.stn : <140254311898960> task network change instance current network:wifi, ssid:YLZ, bssid:, ipstack:ELocalIPStack_IPv4
+ispname:, ispcode: 
+defaultgateway6:::12.0.0.0
+defaultgateway:192.168.106.1
+dns server0:AF_INET, 218.85.152.99
+dns server1:AF_INET, 218.85.157.99
+interface name:en0, AF_INET, ip:192.168.106.115
+interface name:en0, AF_INET6, ip:fe80::a2:e6a1:c9ca:6154
+interface name:awdl0, AF_INET6, ip:fe80::c838:1ff:fe8f:f9b7
+interface name:llw0, AF_INET6, ip:fe80::c838:1ff:fe8f:f9b7
+interface name:utun0, AF_INET6, ip:fe80::d2a4:24e9:e8b3:7231
+interface name:utun1, AF_INET6, ip:fe80::bc3f:81dd:8e52:57d1
+have_ipv4:1 have_ipv6:0
+local_ipstack_detect have_ipv4:1 have_ipv6:0 
+2021-10-18 10:13:23.417 [I][37011,7f8f80705f50]306:[bifrost]bifrost.stn : <140254311898960> task start long short taskid:2, cmdid:1, need_authed:false, cgi:/mgw.htm, channel_select:4, limit_flow:false, host:iotapi.alipay.com, send_only:false, cmdid:1, server_process_cost:-1, retrycount:0,  channel_strategy:0,  total_timetout:30000, network_status_sensitive:false, priority:3, report_arg:, user_context:0x7F8F8050C670
+2021-10-18 10:13:23.417 [I][37011,7f8f80705f50]307:[bifrost]bifrost.stn : <140254311898960> no task mng for multiplex, host:iotapi.alipay.com
+2021-10-18 10:13:23.417 [I][37011,7f8f80705f50]308:[bifrost]bifrost.stn : <140254311898960> handler:(123145421524992,142)
+2021-10-18 10:13:23.417 [I][37011,7f8f80705f50]309:[bifrost]bifrost.stn : <140254311898960> -> SingleHostTaskManager 
+2021-10-18 10:13:23.417 [I][37011,7f8f80705f50]310:[bifrost]bifrost.stn : <140254311898960> <- SingleHostTaskManager +0, 
+2021-10-18 10:13:23.417 [I][37011,7f8f80705f50]311:[bifrost]bifrost.ext : <140254311898960> on_req_2_buf(task_id=2, user_context=0x7F8F8050C670)
+2021-10-18 10:13:23.417 [I][37011,7f8f804110a0]312:[bifrost]bifrost.coll : <140254308798624> handler:(123145420451840,144)
+2021-10-18 10:13:23.417 [I][37011,7f8f8051edf0]313:[bifrost]bifrost.stn : <140254309903856> -> __Run Link Rebuild span:0, net:YLZ
+2021-10-18 10:13:23.417 [I][37011,7f8f804110a0]314:[bifrost]bifrost.comm : <140254308798624> alarm id:123145423670656, after:30000, seq:16, po.reg.q:123145420451840,po.reg.s:0,po.s:147
+2021-10-18 10:13:23.417 [I][37011,7f8f8051edf0]315:[bifrost]bifrost.stn : <140254309903856> connect status from:0 to:1, nettype:1
+2021-10-18 10:13:23.417 [I][37011,7f8f804110a0]316:[bifrost]bifrost.comm : <140254308798624> _vecaddr size:1, m_timeout:5000, m_interval:4000, m_error_interval:4000, m_max_connect:3, @0x7000073BCCC0
+2021-10-18 10:13:23.418 [I][37011,7f8f804110a0]317:[bifrost]bifrost.comm : <140254308798624> complex.conn 203.209.245.74:443
+2021-10-18 10:13:23.418 [I][37011,7f8f804110a0]318:[bifrost]bifrost.comm : <140254308798624> index:0, @0x7000073BCCC0, addr:(203.209.245.74:443), socket:27, connect
+2021-10-18 10:13:23.418 [I][37011,7f8f80410ae0]319:[bifrost]bifrost.ext : <140254308797152> on_new_dns(host="iotapi.alipay.com")
+2021-10-18 10:13:23.418 [I][37011,7f8f8051edf0]320:[bifrost]bifrost.comm : <140254309903856> dns get ip status:4 host:iotapi.alipay.com
+2021-10-18 10:13:23.418 [I][37011,7f8f8051edf0]321:[bifrost]bifrost.ext : <140254309903856> on_rpt_dns_profile(profile={ start_time=138786672, end_time=138786672, host="iotapi.alipay.com", err_type=9, err_code=-1, DNS_type=1 })
+2021-10-18 10:13:23.419 [I][37011,7f8f8051edf0]322:[bifrost]bifrost.ext : <140254309903856> on_rpt_dns_profile(profile={ start_time=138786672, end_time=138786673, host="", err_type=0, err_code=0, DNS_type=2 })
+2021-10-18 10:13:23.419 [I][37011,7f8f8051edf0]323:[bifrost]bifrost.stn : <140254309903856> link host:iotapi.alipay.com, new dns ret:false, size:0 dns ret:true, size:8,
+2021-10-18 10:13:23.419 [I][37011,7f8f8051edf0]324:[bifrost]bifrost.stn : <140254309903856> link host:iotapi.alipay.com, backup ips size:0
+2021-10-18 10:13:23.420 [I][37011,7f8f8051edf0]325:[bifrost]bifrost.stn : <140254309903856> task socket dns ip:203.209.247.77:443:iotapi.alipay.com:DNSIP|203.209.250.18:443:iotapi.alipay.com:DNSIP|203.209.245.81:443:iotapi.alipay.com:DNSIP|203.209.250.19:443:iotapi.alipay.com:DNSIP|203.209.245.139:443:iotapi.alipay.com:DNSIP|203.209.245.81:443:iotapi.alipay.com:BackupIP
+2021-10-18 10:13:23.420 [I][37011,7f8f8051edf0]326:[bifrost]bifrost.comm : <140254309903856> _vecaddr size:6, m_timeout:10000, m_interval:4000, m_error_interval:4000, m_max_connect:3, @0x7000074C16D8
+2021-10-18 10:13:23.420 [I][37011,7f8f8051edf0]327:[bifrost]bifrost.comm : <140254309903856> complex.conn 203.209.247.77:443
+2021-10-18 10:13:23.420 [I][37011,7f8f8051edf0]328:[bifrost]bifrost.comm : <140254309903856> complex.conn 203.209.250.18:443
+2021-10-18 10:13:23.420 [I][37011,7f8f8051edf0]329:[bifrost]bifrost.comm : <140254309903856> complex.conn 203.209.245.81:443
+2021-10-18 10:13:23.420 [I][37011,7f8f8051edf0]330:[bifrost]bifrost.comm : <140254309903856> complex.conn 203.209.250.19:443
+2021-10-18 10:13:23.420 [I][37011,7f8f8051edf0]331:[bifrost]bifrost.comm : <140254309903856> complex.conn 203.209.245.139:443
+2021-10-18 10:13:23.420 [I][37011,7f8f8051edf0]332:[bifrost]bifrost.comm : <140254309903856> complex.conn 203.209.245.81:443
+2021-10-18 10:13:23.420 [I][37011,7f8f8051edf0]333:[bifrost]bifrost.comm : <140254309903856> index:0, @0x7000074C16D8, addr:(203.209.247.77:443), socket:32, connect
+2021-10-18 10:13:23.442 [I][37011,7f8f804110a0]334:[bifrost]bifrost.comm : <140254308798624> index:0, @0x7000073BCCC0, sock:27, (203.209.245.74:443), connected Rtt:24, 
+2021-10-18 10:13:23.442 [I][37011,7f8f8051edf0]335:[bifrost]bifrost.comm : <140254309903856> index:0, @0x7000074C16D8, sock:32, (203.209.247.77:443), connected Rtt:22, 
+2021-10-18 10:13:23.442 [I][37011,7f8f804110a0]336:[bifrost]bifrost.comm : <140254308798624> index:0, sock:27, suc ConnectImpatient:203.209.245.74:443, RTT:(24, 24), @0x7000073BCCC0
+2021-10-18 10:13:23.442 [I][37011,7f8f8051edf0]337:[bifrost]bifrost.comm : <140254309903856> index:0, sock:32, suc ConnectImpatient:203.209.247.77:443, RTT:(22, 22), @0x7000074C16D8
+2021-10-18 10:13:23.442 [I][37011,7f8f8051edf0]339:[bifrost]bifrost.comm : <140254309903856> retsocket:32, connrtt:22, conntotalrtt:22, totalcost:22, @0x7000074C16D8
+2021-10-18 10:13:23.442 [I][37011,7f8f804110a0]338:[bifrost]bifrost.comm : <140254308798624> retsocket:27, connrtt:24, conntotalrtt:24, totalcost:24, @0x7000073BCCC0
+2021-10-18 10:13:23.442 [I][37011,7f8f8051edf0]340:[bifrost]bifrost.stn : <140254309903856> connect status from:1 to:2, nettype:1
+2021-10-18 10:13:23.442 [I][37011,7f8f804110a0]341:[bifrost]MTLS::client : <140254308798624> Create 0x7f8f80708620. (protocol=1, host=1, CA=0)
+2021-10-18 10:13:23.442 [I][37011,7f8f8051edf0]342:[bifrost]bifrost.stn : <140254309903856> multiplexLink task socket connect suc sock:32, host:iotapi.alipay.com, ip:(203.209.247.77:443:DNSIP), local_ip:(192.168.106.115:53810), index:0, time:(22/22, all:22), net:YLZ
+2021-10-18 10:13:23.443 [I][37011,7f8f80705f50]343:[bifrost]bifrost.ext : <140254311898960> on_req_2_buf(task_id=2, user_context=0x7F8F8050C670)
+2021-10-18 10:13:23.443 [I][37011,7f8f8051edf0]344:[bifrost]bifrost.stn : <140254309903856> handler:(123145420451840,156)
+2021-10-18 10:13:23.443 [I][37011,7f8f8051edf0]346:[bifrost]bifrost.comm : <140254309903856> alarm id:123145424739296, after:75000, seq:17, po.reg.q:123145420451840,po.reg.s:0,po.s:158
+2021-10-18 10:13:23.443 [I][37011,7f8f804110a0]345:[bifrost]bifrost.coll : <140254308798624> task socket send sock:27,http len:407
+2021-10-18 10:13:23.443 [I][37011,7f8f80607aa0]347:[bifrost]bifrost.ext : <140254310857376> state changes to 3
+2021-10-18 10:13:23.443 [I][37011,7f8f80705f50]348:[bifrost]bifrost.stn : <140254311898960> task add into multiplex readwrite suc cgi:/mgw.htm, cmdid:1, taskid:2, size:990, timeout(firstpkg:12, rw:17, task:30, c:0, dyn:1), retry:0
+2021-10-18 10:13:23.443 [I][37011,7f8f80705f50]349:[bifrost]bifrost.ext : <140254311898960> on_rpt_begin_conn(profile[1/2]={ net=1, net_name_0="YLZ", net_name_1="", tid=140254309903856, start_time=138786671ms, DNS_time=138786671ms, DNS_end_time=138786674ms, conn_reason=0, conn_time=138786696ms, conn_err_code=0, conn_rtt=22, conn_cost=22 })
+2021-10-18 10:13:23.443 [I][37011,7f8f80705f50]350:[bifrost]bifrost.ext : <140254311898960> on_rpt_begin_conn(profile[2/2]={ try_IP_count=1, remote_IP="203.209.247.77", remote_port=443, server_host="iotapi.alipay.com", IP_type=2, local_IP="192.168.106.115", local_port=53810, IP_index=0, last_rcv_time=138786671ms, last_send_time=138786671ms, nat64=false })
+2021-10-18 10:13:23.443 [I][37011,7f8f8051edf0]351:[bifrost]MTLS::client : <140254309903856> Create 0x7f8f8060d650. (protocol=1, host=1, CA=1)
+2021-10-18 10:13:23.443 [I][37011,7f8f80607aa0]352:[bifrost]bifrost.ext : <140254310857376> state changes to 3
+2021-10-18 10:13:23.443 [I][37011,7f8f8051edf0]353:[bifrost]bifrost.stn : <140254309903856> multiplexlink_control: 0, 76
+2021-10-18 10:13:23.444 [I][37011,7f8f8051edf0]354:[bifrost]bifrost.http2 : <140254309903856> send http1 succ, stream:3,stream stat:ClosedLocal,h1 request:
+	POST /mgw.htm 1.1
+	:method: POST
+	:scheme: https
+	:path: /mgw.htm
+	host: iotapi.alipay.com
+	appid: adbctrl_dragonfly
+	content-type: application/protobuf
+	did: my_test_device
+	operation-type: com.alipay.sdarttool.adb.login
+	rpcid: 2
+	sign: 3BFE80D0A9833FB0699F38DBA84A6FEE6F039CE8AAA8E66C2977C7FADA2E4E65
+	ts: NoHBCTL
+	version: 2
+	bifrostplatform: iOS
+	clientversion: 1.0.0.0001
+	signtype: 0
+	x-mgs-ldc-uid: 79
+	content-encoding: gzip
+	accept-encoding: gzip, deflate
+	content-length: 594
+	Body Length: 594,h2 buffer len:878
+2021-10-18 10:13:23.444 [I][37011,7f8f8051edf0]355:[bifrost]bifrost.stn : <140254309903856> multiplex: A frame is encoded. (type=1, taskid=2, buffer_len=878)
+2021-10-18 10:13:23.444 [I][37011,7f8f8051edf0]356:[bifrost]bifrost.comm : <140254309903856> alarm cancel id:123145424739296, seq:17, after:75000
+2021-10-18 10:13:23.444 [I][37011,7f8f8051edf0]357:[bifrost]bifrost.comm : <140254309903856> alarm id:123145424739296, after:75000, seq:18, po.reg.q:123145420451840,po.reg.s:0,po.s:164
+2021-10-18 10:13:23.444 [I][37011,7f8f8051edf0]358:[bifrost]bifrost.ext : <140254309903856> Traffic report: in=0, out=419
+2021-10-18 10:13:23.444 [I][37011,7f8f8051edf0]359:[bifrost]bifrost.stn : <140254309903856> task socket send sock:32, all send tls:(nw:0/0), sock:(419, nw:419), 
+2021-10-18 10:13:23.472 [I][37011,7f8f804110a0]361:[bifrost]bifrost.coll : <140254308798624> task socket recv sock:27,recv len:4096,tls read ret:4096, plain_text_read_buf:0,but no plain data, continue to read
+2021-10-18 10:13:23.472 [I][37011,7f8f8051edf0]360:[bifrost]bifrost.ext : <140254309903856> Traffic report: in=4096, out=0
+2021-10-18 10:13:23.472 [I][37011,7f8f8051edf0]362:[bifrost]bifrost.stn : <140254309903856> task socket recv sock:32, recv len:(4096 -> 4096) -> tls:(4096 -> 0), nwrite:0
+2021-10-18 10:13:23.493 [I][37011,7f8f8051edf0]363:[bifrost]bifrost.comm : <140254309903856> >>>>> begin certificate stack <<<<<
+2021-10-18 10:13:23.493 [I][37011,7f8f8051edf0]364:[bifrost]bifrost.comm : <140254309903856> subject[1]: C=CN, ST=Shanghai, O=Alipay.com Co.,Ltd, CN=*.alipay.com
+2021-10-18 10:13:23.493 [I][37011,7f8f8051edf0]365:[bifrost]bifrost.comm : <140254309903856> issuer[1]: C=US, O=DigiCert Inc, CN=DigiCert Global G2 TLS RSA SHA256 2020 CA1
+2021-10-18 10:13:23.493 [I][37011,7f8f8051edf0]366:[bifrost]bifrost.comm : <140254309903856> begin_time[1]: 2021-04-22+00:00:00
+2021-10-18 10:13:23.493 [I][37011,7f8f8051edf0]367:[bifrost]bifrost.comm : <140254309903856> end_time[1]: 2022-04-27+23:59:59
+2021-10-18 10:13:23.493 [I][37011,7f8f8051edf0]368:[bifrost]bifrost.comm : <140254309903856> subject[2]: C=US, O=DigiCert Inc, CN=DigiCert Global G2 TLS RSA SHA256 2020 CA1
+2021-10-18 10:13:23.493 [I][37011,7f8f8051edf0]369:[bifrost]bifrost.comm : <140254309903856> issuer[2]: C=US, O=DigiCert Inc, OU=www.digicert.com, CN=DigiCert Global Root G2
+2021-10-18 10:13:23.493 [I][37011,7f8f8051edf0]370:[bifrost]bifrost.comm : <140254309903856> begin_time[2]: 2020-09-24+00:00:00
+2021-10-18 10:13:23.493 [I][37011,7f8f8051edf0]371:[bifrost]bifrost.comm : <140254309903856> end_time[2]: 2030-09-23+23:59:59
+2021-10-18 10:13:23.494 [I][37011,7f8f8051edf0]372:[bifrost]bifrost.comm : <140254309903856> subject[3]: C=US, O=DigiCert Inc, OU=www.digicert.com, CN=DigiCert Global Root G2
+2021-10-18 10:13:23.494 [I][37011,7f8f8051edf0]373:[bifrost]bifrost.comm : <140254309903856> issuer[3]: C=US, O=VeriSign, Inc., OU=VeriSign Trust Network, OU=(c) 2006 VeriSign, Inc. - For authorized use only, CN=VeriSign Class 3 Public Primary Certification Authority - G5
+2021-10-18 10:13:23.494 [I][37011,7f8f8051edf0]374:[bifrost]bifrost.comm : <140254309903856> begin_time[3]: 2017-11-06+00:00:00
+2021-10-18 10:13:23.494 [I][37011,7f8f8051edf0]375:[bifrost]bifrost.comm : <140254309903856> end_time[3]: 2022-11-05+23:59:59
+2021-10-18 10:13:23.494 [I][37011,7f8f8051edf0]376:[bifrost]bifrost.comm : <140254309903856> <<<<<  end certificate stack  >>>>>
+2021-10-18 10:13:23.494 [I][37011,7f8f804110a0]377:[bifrost]bifrost.comm : <140254308798624> >>>>> begin certificate stack <<<<<
+2021-10-18 10:13:23.494 [I][37011,7f8f804110a0]378:[bifrost]bifrost.comm : <140254308798624> subject[1]: C=CN, ST=Shanghai, O=Alipay.com Co.,Ltd, CN=*.alipay.com
+2021-10-18 10:13:23.494 [I][37011,7f8f804110a0]379:[bifrost]bifrost.comm : <140254308798624> issuer[1]: C=US, O=DigiCert Inc, OU=www.digicert.com, CN=Secure Site CA G2
+2021-10-18 10:13:23.494 [I][37011,7f8f804110a0]380:[bifrost]bifrost.comm : <140254308798624> begin_time[1]: 2021-06-08+00:00:00
+2021-10-18 10:13:23.494 [I][37011,7f8f804110a0]381:[bifrost]bifrost.comm : <140254308798624> end_time[1]: 2022-07-09+23:59:59
+2021-10-18 10:13:23.494 [I][37011,7f8f804110a0]382:[bifrost]bifrost.comm : <140254308798624> subject[2]: C=US, O=DigiCert Inc, OU=www.digicert.com, CN=Secure Site CA G2
+2021-10-18 10:13:23.494 [I][37011,7f8f804110a0]383:[bifrost]bifrost.comm : <140254308798624> issuer[2]: C=US, O=DigiCert Inc, OU=www.digicert.com, CN=DigiCert Global Root CA
+2021-10-18 10:13:23.494 [I][37011,7f8f804110a0]384:[bifrost]bifrost.comm : <140254308798624> begin_time[2]: 2019-06-20+12:21:35
+2021-10-18 10:13:23.494 [I][37011,7f8f804110a0]385:[bifrost]bifrost.comm : <140254308798624> end_time[2]: 2029-06-20+12:21:35
+2021-10-18 10:13:23.494 [I][37011,7f8f804110a0]386:[bifrost]bifrost.comm : <140254308798624> subject[3]: C=US, O=DigiCert Inc, OU=www.digicert.com, CN=DigiCert Global Root CA
+2021-10-18 10:13:23.494 [I][37011,7f8f804110a0]387:[bifrost]bifrost.comm : <140254308798624> issuer[3]: C=IE, O=Baltimore, OU=CyberTrust, CN=Baltimore CyberTrust Root
+2021-10-18 10:13:23.494 [I][37011,7f8f804110a0]388:[bifrost]bifrost.comm : <140254308798624> begin_time[3]: 2016-12-07+12:17:34
+2021-10-18 10:13:23.495 [I][37011,7f8f804110a0]389:[bifrost]bifrost.comm : <140254308798624> end_time[3]: 2025-05-10+12:00:00
+2021-10-18 10:13:23.495 [I][37011,7f8f804110a0]390:[bifrost]bifrost.comm : <140254308798624> <<<<<  end certificate stack  >>>>>
+2021-10-18 10:13:23.495 [W][37011,7f8f804110a0]391:[bifrost]MTLS::client::std_1_2 : <140254308798624> (../mars-ext/src/mbedtls/ssl_tls.c:4575) got no CA chain
+2021-10-18 10:13:23.499 [I][37011,7f8f804110a0]392:[bifrost]bifrost.coll : <140254308798624> task socket recv sock:27,recv len:1220,tls read ret:1220, plain_text_read_buf:0,but no plain data, continue to read
+2021-10-18 10:13:23.499 [I][37011,7f8f804110a0]393:[bifrost]bifrost.coll : <140254308798624> task socket send sock:27,http len:126
+2021-10-18 10:13:23.501 [I][37011,7f8f8051edf0]394:[bifrost]bifrost.ext : <140254309903856> Traffic report: in=602, out=0
+2021-10-18 10:13:23.501 [I][37011,7f8f8051edf0]395:[bifrost]bifrost.stn : <140254309903856> task socket recv sock:32, recv len:(602 -> 602) -> tls:(602 -> 0), nwrite:0
+2021-10-18 10:13:23.501 [I][37011,7f8f8051edf0]396:[bifrost]bifrost.comm : <140254309903856> alarm cancel id:123145424739296, seq:18, after:75000
+2021-10-18 10:13:23.501 [I][37011,7f8f8051edf0]397:[bifrost]bifrost.comm : <140254309903856> alarm id:123145424739296, after:75000, seq:19, po.reg.q:123145420451840,po.reg.s:0,po.s:169
+2021-10-18 10:13:23.502 [I][37011,7f8f8051edf0]398:[bifrost]bifrost.ext : <140254309903856> Traffic report: in=0, out=126
+2021-10-18 10:13:23.502 [I][37011,7f8f8051edf0]399:[bifrost]bifrost.stn : <140254309903856> task socket send sock:32, all send tls:(nw:0/0), sock:(126, nw:126), sub send taskid:2, cmdid:(1, /mgw.htm), len(S:126/878), 
+2021-10-18 10:13:23.521 [I][37011,7f8f804110a0]400:[bifrost]bifrost.comm : <140254308798624> The handshake is OK. (standard, ticket=false, fast=false)
+2021-10-18 10:13:23.521 [I][37011,7f8f80607aa0]401:[bifrost]bifrost.ext : <140254310857376> state changes to 4
+2021-10-18 10:13:23.522 [I][37011,7f8f804110a0]402:[bifrost]bifrost.coll : <140254308798624> task socket recv sock:27,recv len:242,tls read ret:242, plain_text_read_buf:0,but no plain data, continue to read
+2021-10-18 10:13:23.522 [I][37011,7f8f804110a0]403:[bifrost]bifrost.coll : <140254308798624> task socket send sock:27,http len:213
+2021-10-18 10:13:23.523 [I][37011,7f8f8051edf0]404:[bifrost]bifrost.comm : <140254309903856> cb_notify_alpn, protocol:h2
+2021-10-18 10:13:23.523 [I][37011,7f8f8051edf0]405:[bifrost]bifrost.comm : <140254309903856> alpn ok, server select:h2
+2021-10-18 10:13:23.523 [I][37011,7f8f8051edf0]406:[bifrost]bifrost.comm : <140254309903856> The handshake is OK. (standard, ticket=false, fast=false)
+2021-10-18 10:13:23.523 [I][37011,7f8f80607aa0]407:[bifrost]bifrost.ext : <140254310857376> state changes to 4
+2021-10-18 10:13:23.523 [I][37011,7f8f8051edf0]408:[bifrost]bifrost.ext : <140254309903856> Traffic report: in=327, out=0
+2021-10-18 10:13:23.523 [I][37011,7f8f8051edf0]409:[bifrost]bifrost.stn : <140254309903856> task socket recv sock:32, recv len:(327 -> 327) -> tls:(327 -> 40), nwrite:0
+2021-10-18 10:13:23.523 [I][37011,7f8f8051edf0]410:[bifrost]bifrost.http2 : <140254309903856> frame header rcv, length=18, type=SETTINGS, flags=, stream=0
+2021-10-18 10:13:23.523 [I][37011,7f8f8051edf0]411:[bifrost]bifrost.http2 : <140254309903856> frame header rcv, length=4, type=WINDOW_UPDATE, flags=, stream=0
+2021-10-18 10:13:23.523 [I][37011,7f8f8051edf0]412:[bifrost]bifrost.stn : <140254309903856> task socket recv sock:32, pack recv finish taskid:0, cmdid:(0, ), packlen:(0/0)
+2021-10-18 10:13:23.523 [I][37011,7f8f8051edf0]413:[bifrost]bifrost.stn : <140254309903856> task socket recv sock:32, pack recv finish taskid:0, cmdid:(0, ), packlen:(40/40)
+2021-10-18 10:13:23.523 [I][37011,7f8f8051edf0]414:[bifrost]bifrost.stn : <140254309903856> multiplexlink_control: 0, 9
+2021-10-18 10:13:23.523 [I][37011,7f8f8051edf0]415:[bifrost]bifrost.comm : <140254309903856> alarm cancel id:123145424739296, seq:19, after:75000
+2021-10-18 10:13:23.523 [I][37011,7f8f8051edf0]416:[bifrost]bifrost.comm : <140254309903856> alarm id:123145424739296, after:75000, seq:20, po.reg.q:123145420451840,po.reg.s:0,po.s:175
+2021-10-18 10:13:23.523 [I][37011,7f8f8051edf0]417:[bifrost]bifrost.ext : <140254309903856> Traffic report: in=0, out=1021
+2021-10-18 10:13:23.524 [I][37011,7f8f8051edf0]418:[bifrost]bifrost.stn : <140254309903856> task socket send sock:32, all send tls:(nw:0/0), sock:(1021, nw:1021), sub send taskid:2, cmdid:(1, /mgw.htm), len(S:878/878), sub send taskid:0, cmdid:(0, ), len(S:38/38), 
+2021-10-18 10:13:23.546 [W][37011,7f8f804110a0]419:[bifrost]MTLS::client::std_1_2 : <140254308798624> (../mars-ext/src/mbedtls/ssl_tls.c:3878) mbedtls_ssl_handle_message_type() returned -30848 (-0x7880)
+2021-10-18 10:13:23.546 [I][37011,7f8f8051edf0]420:[bifrost]bifrost.ext : <140254309903856> Traffic report: in=51, out=0
+2021-10-18 10:13:23.546 [W][37011,7f8f804110a0]421:[bifrost]MTLS::client::std_1_2 : <140254308798624> (../mars-ext/src/mbedtls/ssl_tls.c:6728) mbedtls_ssl_read_record() returned -30848 (-0x7880)
+2021-10-18 10:13:23.546 [E][37011,7f8f804110a0]423:[bifrost]MTLS::client::std_1_2 : <140254308798624> Fail to input. (-0x7880 - SSL - The peer notified us that the connection is going to be closed)
+2021-10-18 10:13:23.546 [I][37011,7f8f8051edf0]422:[bifrost]bifrost.stn : <140254309903856> task socket recv sock:32, recv len:(51 -> 51) -> tls:(51 -> 22), nwrite:0
+2021-10-18 10:13:23.546 [I][37011,7f8f804110a0]424:[bifrost]bifrost.coll : <140254308798624> task socket recv sock:27,recv len:331,@0x7F8F80411D10,headers size:7,contend-length:10,Finish body:10,Via:spanner-internet-5432.stl[200]
+2021-10-18 10:13:23.546 [I][37011,7f8f8051edf0]425:[bifrost]bifrost.http2 : <140254309903856> frame header rcv, length=0, type=SETTINGS, flags=ACK, stream=0
+2021-10-18 10:13:23.546 [I][37011,7f8f8051edf0]427:[bifrost]bifrost.http2 : <140254309903856> frame header rcv, length=4, type=WINDOW_UPDATE, flags=, stream=3
+2021-10-18 10:13:23.546 [I][37011,7f8f804110a0]426:[bifrost]MTLS::client : <140254308798624> Destroy 0x7f8f80708620. (protocol=1)
+2021-10-18 10:13:23.546 [I][37011,7f8f8051edf0]428:[bifrost]bifrost.stn : <140254309903856> task socket recv sock:32, pack recv finish taskid:0, cmdid:(0, ), packlen:(0/0)
+2021-10-18 10:13:23.546 [I][37011,7f8f8051edf0]429:[bifrost]bifrost.stn : <140254309903856> task socket recv sock:32, pack recv finish taskid:0, cmdid:(0, ), packlen:(22/22)
+2021-10-18 10:13:23.546 [I][37011,7f8f804110a0]430:[bifrost]bifrost.comm : <140254308798624> alarm cancel id:123145423670656, seq:16, after:30000
+2021-10-18 10:13:23.546 [I][37011,7f8f804110a0]431:[bifrost]bifrost.coll : <140254308798624> task socket close,sock:27
+2021-10-18 10:13:23.546 [I][37011,7f8f804110a0]432:[bifrost]bifrost.coll : <140254308798624> sntptime err_type:0 err_code:0
+2021-10-18 10:13:23.546 [I][37011,7f8f804110a0]433:[bifrost]bifrost.coll : <140254308798624> sntptime:1634523203 time64:1634523203 airTime:65 realSyncTime:1634523203
+2021-10-18 10:13:23.580 [I][37011,7f8f8051edf0]434:[bifrost]bifrost.ext : <140254309903856> Traffic report: in=347, out=0
+2021-10-18 10:13:23.580 [I][37011,7f8f8051edf0]435:[bifrost]bifrost.stn : <140254309903856> task socket recv sock:32, recv len:(347 -> 347) -> tls:(347 -> 318), nwrite:0
+2021-10-18 10:13:23.581 [I][37011,7f8f8051edf0]436:[bifrost]bifrost.http2 : <140254309903856> frame header rcv, length=236, type=HEADERS, flags=END_HEADERS, stream=3
+2021-10-18 10:13:23.581 [I][37011,7f8f8051edf0]437:[bifrost]bifrost.http2 : <140254309903856> h1 headers resp, resp complete:0,headers:Status: 200
+:status: 200
+server: nginx/1.6.2
+date: Mon, 18 Oct 2021 02:13:23 GMT
+content-type: application/protobuf
+content-length: 64
+mgw-traceid: 218fb875163452320354086231538
+result-status: 1000
+server-time: 1634523203574
+rpcid: 2
+x-cip: 110.80.15.82
+x-http-version: 2.0
+mmtp-ext-utc: 35
+set-cookie: spanner=hmDKxgFn9FdKF84KcYLCQcacjKOw0Y0G5mvR6nZ1REU=;path=/;secure;
+Body Length: 0
+2021-10-18 10:13:23.581 [I][37011,7f8f8051edf0]438:[bifrost]bifrost.http2 : <140254309903856> frame header rcv, length=64, type=DATA, flags=END_STREAM, stream=3
+2021-10-18 10:13:23.581 [I][37011,7f8f8051edf0]439:[bifrost]bifrost.http2 : <140254309903856> h1 resp,Status: 200
+:status: 200
+server: nginx/1.6.2
+date: Mon, 18 Oct 2021 02:13:23 GMT
+content-type: application/protobuf
+content-length: 64
+mgw-traceid: 218fb875163452320354086231538
+result-status: 1000
+server-time: 1634523203574
+rpcid: 2
+x-cip: 110.80.15.82
+x-http-version: 2.0
+mmtp-ext-utc: 35
+set-cookie: spanner=hmDKxgFn9FdKF84KcYLCQcacjKOw0Y0G5mvR6nZ1REU=;path=/;secure;
+Body Length: 64
+2021-10-18 10:13:23.581 [I][37011,7f8f8051edf0]440:[bifrost]bifrost.stn : <140254309903856> task socket recv sock:32, pack recv finish taskid:0, cmdid:(0, ), packlen:(0/0)
+2021-10-18 10:13:23.581 [I][37011,7f8f8051edf0]441:[bifrost]bifrost.stn : <140254309903856> multiplex: A frame is got. (type=1, taskid=2, header_size=13, body=64)
+2021-10-18 10:13:23.581 [I][37011,7f8f8051edf0]442:[bifrost]bifrost.stn : <140254309903856> task socket recv sock:32, pack recv finish taskid:2, cmdid:(1, /mgw.htm), packlen:(318/318)
+2021-10-18 10:13:23.581 [I][37011,7f8f80705f50]443:[bifrost]bifrost.ext : <140254311898960> on_buf_2_rsp(task_id=2, user_context=0x7F8F8050C670)
+2021-10-18 10:13:23.581 [I][37011,7f8f80705f50]444:[bifrost]bifrost.stn : <140254311898960> task end callback multiplex err(0, 0, 0), svr(203.209.247.77:443, DNSIP, iotapi.alipay.com), cli(, 192.168.106.115, n:YLZ, sig:0), cost(s:878, r:436, c:22, rw:80), all:164, retry:0, cmdid:1, cgi:/mgw.htm, taskid:2, tid:140254309903856
+2021-10-18 10:13:23.581 [I][37011,7f8f80705f50]445:[bifrost]bifrost.ext : <140254311898960> on_rpt_task_profile(profile[1/3]={ task_id=2, frame=1, link_type=4, loop_start_task_time=138786697ms, first_start_send_time=138786755ms, last_send_time=138786777ms, last_receive_pkg_time=138786835ms, read_write_timeout=17381ms, first_pkg_timeout=12048ms, snd_size=878 })
+2021-10-18 10:13:23.581 [I][37011,7f8f80705f50]446:[bifrost]bifrost.ext : <140254311898960> on_rpt_task_profile(profile[2/3]={ snd_data_size=878, rcv_size=436, rcv_data_size=436, err_type=0, err_code=0, running_id=1, task_timeout=30000ms, start_task_time=138786671ms, end_task_time=138786835ms, retry_start_time=0ms })
+2021-10-18 10:13:23.582 [I][37011,7f8f80705f50]447:[bifrost]bifrost.ext : <140254311898960> on_rpt_task_profile(profile[3/3]={ remain_retry_count=0, last_failed_dyntime_status=0, current_dyntime_status=1, antiavalanche_checked=true, use_proxy=false, retry_time_interval=0ms })
+2021-10-18 10:13:23.582 [I][37011,7f8f80705f50]448:[bifrost]bifrost.ext : <140254311898960> on_task_end(task_id=2, user_context=0x7F8F8050C670, type=0, code=0)
+2021-10-18 10:13:23.582 [I][37011,7f8f80705f50]449:[bifrost]bifrost.ext : <140254311898960> A data-frame is received. (response=false, channel=1, receipt=2, seq_up=0, seq_down=0, head_count=13, body_length=64)
+2021-10-18 10:13:23.582 [I][37011,7f8f80607aa0]450:[bifrost]bifrsot_RpcClient : rpc errcode:0, errtype:0, format errorcode:0, 0x0
+2021-10-18 10:13:23.582 [I][37011,7f8f80607aa0]451:[bifrost]bifrost.ext : <140254310857376> No.0 is responded. (task_id=2, receipt=2, channel=1)
+2021-10-18 10:13:23.582 [I][37011,7f8f80607aa0]452:[bifrost]bifrost.ext : <140254310857376> Remove a data record. (task_id=2, err_type=0, err_code=0, receipt=2, sequence=0, channel=1, mqtt_pkg_id=-1, mqtt_msg_id=-1)
+2021-10-18 10:13:23.582 [I][37011,7f8f80607aa0]453:[bifrost]bifrost.ext : <140254310857376> amnet_alert=;;2;-1
+2021-10-18 10:13:23.582 [I][37011,7f8f80607aa0]454:[bifrost]bifrost.iot : OK to alert.
+2021-10-18 10:13:24.416 [I][37011,7f8f80607aa0]455:[bifrost]bifrost.ext : <140254310857376> inactivating 12345678
+2021-10-18 10:13:24.417 [I][37011,7f8f80705f50]456:[bifrost]bifrost.stn : <140254311898960> _scene:10021
+2021-10-18 10:13:24.417 [I][37011,7f8f80705f50]457:[bifrost]bifrost.stn : <140254311898960> -> ~NetCore 
+2021-10-18 10:13:24.417 [I][37011,7f8f80705f50]458:[bifrost]bifrost.stn : <140254311898960> stop signalling
+2021-10-18 10:13:24.417 [I][37011,7f8f80705f50]459:[bifrost]bifrost.stn : <140254311898960> -> ~LongLinkTaskManager 
+2021-10-18 10:13:24.417 [I][37011,7f8f80705f50]460:[bifrost]bifrost.stn : <140254311898960> _scene:10021
+2021-10-18 10:13:24.417 [I][37011,7f8f80705f50]461:[bifrost]bifrost.stn : <140254311898960> <- ~LongLinkTaskManager +0, 
+2021-10-18 10:13:24.417 [I][37011,7f8f80705f50]462:[bifrost]bifrost.comm : <140254311898960> alarm cancel id:140254310906912, seq:15, after:90000
+2021-10-18 10:13:24.417 [I][37011,7f8f80705f50]463:[bifrost]bifrost.stn : <140254311898960> -> ~ShortLinkTaskManager 
+2021-10-18 10:13:24.417 [I][37011,7f8f80705f50]464:[bifrost]bifrost.stn : <140254311898960> lst_cmd_ count=0
+2021-10-18 10:13:24.417 [I][37011,7f8f80705f50]465:[bifrost]bifrost.stn : <140254311898960> <- ~ShortLinkTaskManager +0, 
+2021-10-18 10:13:24.418 [I][37011,7f8f80705f50]466:[bifrost]bifrost.stn : <140254311898960> -> ~MultiplexLinkTaskManager 
+2021-10-18 10:13:24.418 [I][37011,7f8f80705f50]467:[bifrost]bifrost.stn : <140254311898960> -> ~SingleHostTaskManager 
+2021-10-18 10:13:24.418 [I][37011,7f8f80705f50]468:[bifrost]bifrost.stn : <140254311898960> _scene:10000
+2021-10-18 10:13:24.418 [I][37011,7f8f8051edf0]469:[bifrost]MTLS::client : <140254309903856> Destroy 0x7f8f8060d650. (protocol=1)
+2021-10-18 10:13:24.418 [W][37011,7f8f8051edf0]470:[bifrost]bifrost.stn : <140254309903856> task socket close sock:32, user disconnect:10000, nwrite:0, nread:0; getsocktcpinfo:tcpi_state:4, tcpi_snd_wscale:7, tcpi_rcv_wscale:6, tcpi_options:14, tcpi_flags:0, tcpi_rto:0, tcpi_maxseg:1300, tcpi_snd_ssthresh:1073725440, tcpi_snd_cwnd:5946, tcpi_snd_wnd:32384, tcpi_snd_sbbytes:0, tcpi_rcv_wnd:262144, tcpi_rttcur:22, tcpi_srtt:21, tcpi_rttvar:5, tcpi_txpackets:3, tcpi_txbytes:1566, tcpi_txretransmitbytes:0, tcpi_rxpackets:9, tcpi_rxbytes:5423, tcpi_rxoutoforderbytes:
+2021-10-18 10:13:24.418 [I][37011,7f8f8051edf0]471:[bifrost]bifrost.comm : <140254309903856> alarm cancel id:123145424739296, seq:20, after:75000
+2021-10-18 10:13:24.418 [I][37011,7f8f8051edf0]472:[bifrost]bifrost.stn : <140254309903856> connect status from:2 to:3, nettype:1
+2021-10-18 10:13:24.418 [I][37011,7f8f8051edf0]473:[bifrost]bifrost.stn : <140254309903856> <- __Run +1000, 
+2021-10-18 10:13:24.418 [I][37011,7f8f80705f50]474:[bifrost]bifrost.stn : <140254311898960> _scene:10021
+2021-10-18 10:13:24.418 [I][37011,7f8f80705f50]475:[bifrost]bifrost.stn : <140254311898960> <- ~SingleHostTaskManager +0, 
+2021-10-18 10:13:24.419 [I][37011,7f8f80705f50]476:[bifrost]bifrost.stn : <140254311898960> <- ~MultiplexLinkTaskManager +0, 
+2021-10-18 10:13:24.420 [I][37011,7f8f80705f50]477:[bifrost]bifrost.stn : <140254311898960> <- ~NetCore +3, 
+2021-10-18 10:13:24.422 [I][37011,7f8f80705f50]478:[bifrost]bifrost.comm : <140254311898960> <- Run +1007, 
+2021-10-18 10:13:24.422 [I][37011,7f8f805054d0*]479:[bifrost]bifrost.stn : <140254309799120> stn onDestroy
+2021-10-18 10:13:24.422 [I][37011,7f8f805054d0*]480:[bifrost]bifrost.baseevent : <140254309799120> -> ~ActiveLogic 
+2021-10-18 10:13:24.422 [I][37011,7f8f805054d0*]481:[bifrost]bifrost.baseevent : <140254309799120> <- ~ActiveLogic +0, 
+2021-10-18 10:13:24.423 [I][37011,7f8f80707ec0]482:[bifrost]bifrost.comm : <140254311907008> <- Run +1008, 
+2021-10-18 10:13:42.403 [I][37011,7f8f80706170]483:[bifrost]bifrost.comm : <140254311899504> OnAlarm id:140254309820248, seq:2, elapsed:30001, after:30000, miss:1, android alarm:false, runing
+2021-10-18 10:13:42.403 [I][37011,7f8f80608570]484:[bifrost]bifrost.coll : <140254310860144> uplog onhistoryalarm
+2021-10-18 10:13:42.403 [I][37011,7f8f80608570]485:[bifrost]bifrost.comm : <140254310860144> alarm id:140254309820248, after:3600000, seq:21, po.reg.q:123145420451840,po.reg.s:0,po.s:193
+2021-10-18 10:13:47.237 [I][37011,7f8f805054d0*]486:[bifrost]bifrost.dtn : <140254309799120> FileContinusManager init,path: ./continus_download_cache
+2021-10-18 10:13:47.237 [I][37011,7f8f805054d0*]488:[bifrost]bifrost.coll : <140254309799120> appender has already be open
+2021-10-18 10:13:47.237 [I][37011,7f8f80607aa0]489:[bifrost]bifrost.iot : registering ok
+2021-10-18 10:13:47.237 [I][37011,7f8f80607aa0]490:[bifrost]bifrost.ext : <140254310857376> activating 12345678 "" ""
+2021-10-18 10:13:47.237 [W][37011,7f8f80607aa0]491:[bifrost]bifrost.ext : <140254310857376> Empty long-link address!
+2021-10-18 10:13:47.237 [W][37011,7f8f80607aa0]492:[bifrost]bifrost.ext : <140254310857376> Empty short-link address!
+2021-10-18 10:13:47.238 [W][37011,7f8f80607aa0]493:[bifrost]bifrost.ext : <140254310857376> Bad long-link address! ("")
+2021-10-18 10:13:47.238 [W][37011,7f8f80607aa0]494:[bifrost]bifrost.ext : <140254310857376> Bad short-link address! ("")
+2021-10-18 10:13:47.238 [I][37011,7f8f80607aa0]495:[bifrost]bifrost.stn : <140254310857376> task set backup server addr, host:iotapi.alipay.com, 
+2021-10-18 10:13:47.238 [I][37011,7f8f80607aa0]496:[bifrost]bifrost.stn : <140254310857376> task set multiplexlink server addr, port:443, debugip:
+2021-10-18 10:13:47.238 [I][37011,7f8f80607aa0]497:[bifrost]bifrost.comm : <140254310857376> create messageqeue id:123145422061568
+2021-10-18 10:13:47.238 [I][37011,7f8f8060c230]498:[bifrost]bifrost.comm : <140254310875696> -> Run messagequeue id:123145422061568
+2021-10-18 10:13:47.238 [I][37011,7f8f80607aa0]499:[bifrost]bifrost.comm : <140254310857376> create messageqeue id:123145424744448
+2021-10-18 10:13:47.238 [I][37011,7f8f80607aa0]500:[bifrost]bifrost.baseevent : <140254310857376> handler:(123145424744448,200)
+2021-10-18 10:13:47.238 [I][37011,7f8f80607aa0]501:[bifrost]bifrost.baseevent : <140254310857376> -> ActiveLogic 
+2021-10-18 10:13:47.238 [I][37011,7f8f80607aa0]502:[bifrost]bifrost.baseevent : <140254310857376> <- ActiveLogic +0, 
+2021-10-18 10:13:47.238 [I][37011,7f8f8060d970]503:[bifrost]bifrost.comm : <140254310881648> -> Run messagequeue id:123145424744448
+2021-10-18 10:13:47.239 [W][37011,7f8f80607aa0]504:[bifrost]bifrost.stn : <140254310857376> netinfoChr:YLZ, curr_netinfo.c_str():YLZ
+2021-10-18 10:13:47.239 [I][37011,7f8f80607aa0]505:[bifrost]bifrost.stn : <140254310857376> -> ShortLinkTaskManager handler:(123145422061568,202)
+2021-10-18 10:13:47.239 [I][37011,7f8f80607aa0]506:[bifrost]bifrost.stn : <140254310857376> ShortLinkTaskManager messagequeue_id=123145422061568
+2021-10-18 10:13:47.239 [I][37011,7f8f80607aa0]507:[bifrost]bifrost.stn : <140254310857376> <- ShortLinkTaskManager +0, 
+2021-10-18 10:13:47.239 [I][37011,7f8f80607aa0]508:[bifrost]bifrost.stn : <140254310857376> handler:(123145422061568,203)
+2021-10-18 10:13:47.239 [I][37011,7f8f80607aa0]509:[bifrost]bifrost.stn : <140254310857376> handler:(123145422061568,205)
+2021-10-18 10:13:47.239 [I][37011,7f8f80607aa0]510:[bifrost]bifrost.stn : <140254310857376> handler:(123145422061568,207)
+2021-10-18 10:13:47.239 [I][37011,7f8f80607aa0]511:[bifrost]bifrost.stn : <140254310857376> LongLinkConnectMonitor handler:(123145422061568,206)
+2021-10-18 10:13:47.239 [I][37011,7f8f80607aa0]512:[bifrost]bifrost.stn : <140254310857376> -> LongLinkTaskManager handler:(123145422061568,204)
+2021-10-18 10:13:47.239 [I][37011,7f8f80607aa0]513:[bifrost]bifrost.stn : <140254310857376> <- LongLinkTaskManager +0, 
+2021-10-18 10:13:47.239 [I][37011,7f8f80607aa0]514:[bifrost]bifrost.stn : <140254310857376> -> MultiplexLinkTaskManager 
+2021-10-18 10:13:47.239 [I][37011,7f8f80607aa0]515:[bifrost]bifrost.stn : <140254310857376> <- MultiplexLinkTaskManager +0, 
+2021-10-18 10:13:47.239 [I][37011,7f8f80607aa0]516:[bifrost]bifrost.stn : <140254310857376> SignallingKeeper messagequeue_id=123145422061568
+2021-10-18 10:13:47.239 [I][37011,7f8f80607aa0]517:[bifrost]bifrost.stn : <140254310857376> handler:(123145422061568,210)
+2021-10-18 10:13:47.239 [I][37011,7f8f80607aa0]518:[bifrost]bifrost.stn : <140254310857376> handler:(123145420451840,212)
+2021-10-18 10:13:47.239 [I][37011,7f8f80607aa0]519:[bifrost]bifrost.comm : <140254310857376> alarm id:140254309943616, after:90000, seq:22, po.reg.q:123145420451840,po.reg.s:0,po.s:215
+2021-10-18 10:13:47.239 [W][37011,7f8f80607aa0]520:[bifrost]bifrost.stn : <140254310857376> publiccomponent version: Jul 12 2019 15:02:34
+2021-10-18 10:13:47.239 [I][37011,7f8f80607aa0]521:[bifrost]bifrost.stn : <140254310857376> netcore messagequeue_id=123145422061568, handler:(123145422061568,198)
+2021-10-18 10:13:47.239 [W][37011,7f8f80607aa0]522:[bifrost]bifrost.stn : <140254310857376> 
+Uin :12345
+UserName :12345
+ClientVersion :0x2
+2021-10-18 10:13:47.239 [I][37011,7f8f80607aa0]523:[bifrost]bifrost.stn : <140254310857376> -> NetCore 
+2021-10-18 10:13:47.239 [I][37011,7f8f80607aa0]524:[bifrost]bifrost.stn : <140254310857376> <- NetCore +0, 
+2021-10-18 10:13:47.240 [I][37011,7f8f8060d970]525:[bifrost]bifrost.baseevent : <140254310881648> OnForeground:true, change:true, 
+2021-10-18 10:13:47.240 [I][37011,7f8f80607aa0]526:[bifrost]bifrost.iot : OK to activate.
+2021-10-18 10:13:47.240 [I][37011,7f8f80607aa0]527:[bifrost]bifrost.coll : <140254310857376> coll bifrost init:true,coll_opened:true
+2021-10-18 10:13:47.240 [I][37011,7f8f80607aa0]528:[bifrost]bifrost.ext : <140254310857376> posting 12345678 3 2
+2021-10-18 10:13:47.240 [I][37011,7f8f80708820]529:[bifrost]bifrost.coll : <140254311909408> requrl:http://iot.alipay.com:80/api/v1/time/utc?rt=138810493
+2021-10-18 10:13:47.240 [I][37011,7f8f80607aa0]530:[bifrost]bifrost.ext : <140254310857376> Something to be sent. (receipt=3, important=false, secret=true, nearing=false, shortcut=false, nolong=false, multiplex=true, channel=1, forward_ip="", trace_id="", head_count=13, body_length=700, mqtt_pkg_id=-1, mqtt_msg_id=-1)
+2021-10-18 10:13:47.240 [I][37011,7f8f80607aa0]531:[bifrost]bifrost.ext : <140254310857376> A data-frame is committed. (task_id=3, channel=1, receipt=3, sequence=0, mqtt_pkg_id=-1, mqtt_msg_id=-1)
+2021-10-18 10:13:47.240 [I][37011,7f8f80607aa0]532:[bifrost]bifrost.iot : OK to post.
+2021-10-18 10:13:47.240 [I][37011,7f8f8060c230]533:[bifrost]bifrost.stn : <140254310875696> task network change instance current network:wifi, ssid:YLZ, bssid:, ipstack:ELocalIPStack_IPv4
+ispname:, ispcode: 
+defaultgateway6:::12.0.0.0
+defaultgateway:192.168.106.1
+dns server0:AF_INET, 218.85.152.99
+dns server1:AF_INET, 218.85.157.99
+interface name:en0, AF_INET, ip:192.168.106.115
+interface name:en0, AF_INET6, ip:fe80::a2:e6a1:c9ca:6154
+interface name:awdl0, AF_INET6, ip:fe80::c838:1ff:fe8f:f9b7
+interface name:llw0, AF_INET6, ip:fe80::c838:1ff:fe8f:f9b7
+interface name:utun0, AF_INET6, ip:fe80::d2a4:24e9:e8b3:7231
+interface name:utun1, AF_INET6, ip:fe80::bc3f:81dd:8e52:57d1
+have_ipv4:1 have_ipv6:0
+local_ipstack_detect have_ipv4:1 have_ipv6:0 
+2021-10-18 10:13:47.241 [I][37011,7f8f8060c230]534:[bifrost]bifrost.stn : <140254310875696> task start long short taskid:3, cmdid:1, need_authed:false, cgi:/mgw.htm, channel_select:4, limit_flow:false, host:iotapi.alipay.com, send_only:false, cmdid:1, server_process_cost:-1, retrycount:0,  channel_strategy:0,  total_timetout:30000, network_status_sensitive:false, priority:3, report_arg:, user_context:0x7F8F80529700
+2021-10-18 10:13:47.241 [I][37011,7f8f8060c230]535:[bifrost]bifrost.stn : <140254310875696> no task mng for multiplex, host:iotapi.alipay.com
+2021-10-18 10:13:47.241 [I][37011,7f8f8060c230]536:[bifrost]bifrost.stn : <140254310875696> handler:(123145422061568,221)
+2021-10-18 10:13:47.241 [I][37011,7f8f8060c230]537:[bifrost]bifrost.stn : <140254310875696> -> SingleHostTaskManager 
+2021-10-18 10:13:47.241 [I][37011,7f8f8060c230]538:[bifrost]bifrost.stn : <140254310875696> <- SingleHostTaskManager +0, 
+2021-10-18 10:13:47.241 [I][37011,7f8f8060c230]539:[bifrost]bifrost.ext : <140254310875696> on_req_2_buf(task_id=3, user_context=0x7F8F80529700)
+2021-10-18 10:13:47.241 [I][37011,7f8f8060d650]540:[bifrost]bifrost.stn : <140254310880848> -> __Run Link Rebuild span:0, net:YLZ
+2021-10-18 10:13:47.241 [I][37011,7f8f8060d650]541:[bifrost]bifrost.stn : <140254310880848> connect status from:0 to:1, nettype:1
+2021-10-18 10:13:47.241 [I][37011,7f8f804114c0]542:[bifrost]bifrost.ext : <140254308799680> on_new_dns(host="iotapi.alipay.com")
+2021-10-18 10:13:47.241 [I][37011,7f8f8060d650]543:[bifrost]bifrost.comm : <140254310880848> dns get ip status:4 host:iotapi.alipay.com
+2021-10-18 10:13:47.242 [I][37011,7f8f8060d650]544:[bifrost]bifrost.ext : <140254310880848> on_rpt_dns_profile(profile={ start_time=138810495, end_time=138810495, host="iotapi.alipay.com", err_type=9, err_code=-1, DNS_type=1 })
+2021-10-18 10:13:47.248 [I][37011,7f8f80708820]545:[bifrost]bifrost.coll : <140254311909408> handler:(123145420451840,226)
+2021-10-18 10:13:47.248 [I][37011,7f8f80708820]546:[bifrost]bifrost.comm : <140254311909408> alarm id:123145425280384, after:30000, seq:23, po.reg.q:123145420451840,po.reg.s:0,po.s:228
+2021-10-18 10:13:47.248 [I][37011,7f8f80708820]547:[bifrost]bifrost.comm : <140254311909408> _vecaddr size:1, m_timeout:5000, m_interval:4000, m_error_interval:4000, m_max_connect:3, @0x700007545CC0
+2021-10-18 10:13:47.248 [I][37011,7f8f80708820]548:[bifrost]bifrost.comm : <140254311909408> complex.conn 203.209.245.74:80
+2021-10-18 10:13:47.248 [I][37011,7f8f80708820]549:[bifrost]bifrost.comm : <140254311909408> index:0, @0x700007545CC0, addr:(203.209.245.74:80), socket:33, connect
+2021-10-18 10:13:47.254 [I][37011,7f8f8060d650]550:[bifrost]bifrost.ext : <140254310880848> on_rpt_dns_profile(profile={ start_time=138810495, end_time=138810508, host="", err_type=0, err_code=0, DNS_type=2 })
+2021-10-18 10:13:47.254 [I][37011,7f8f8060d650]551:[bifrost]bifrost.stn : <140254310880848> link host:iotapi.alipay.com, new dns ret:false, size:0 dns ret:true, size:8,
+2021-10-18 10:13:47.255 [I][37011,7f8f8060d650]552:[bifrost]bifrost.stn : <140254310880848> link host:iotapi.alipay.com, backup ips size:0
+2021-10-18 10:13:47.256 [I][37011,7f8f8060d650]553:[bifrost]bifrost.stn : <140254310880848> task socket dns ip:203.209.245.81:443:iotapi.alipay.com:DNSIP|203.209.255.193:443:iotapi.alipay.com:DNSIP|203.209.255.212:443:iotapi.alipay.com:DNSIP|203.209.247.77:443:iotapi.alipay.com:DNSIP|203.209.250.19:443:iotapi.alipay.com:DNSIP|203.209.247.77:443:iotapi.alipay.com:BackupIP
+2021-10-18 10:13:47.256 [I][37011,7f8f8060d650]554:[bifrost]bifrost.comm : <140254310880848> _vecaddr size:6, m_timeout:10000, m_interval:4000, m_error_interval:4000, m_max_connect:3, @0x70000764A6D8
+2021-10-18 10:13:47.256 [I][37011,7f8f8060d650]555:[bifrost]bifrost.comm : <140254310880848> complex.conn 203.209.245.81:443
+2021-10-18 10:13:47.256 [I][37011,7f8f8060d650]556:[bifrost]bifrost.comm : <140254310880848> complex.conn 203.209.255.193:443
+2021-10-18 10:13:47.256 [I][37011,7f8f8060d650]557:[bifrost]bifrost.comm : <140254310880848> complex.conn 203.209.255.212:443
+2021-10-18 10:13:47.256 [I][37011,7f8f8060d650]558:[bifrost]bifrost.comm : <140254310880848> complex.conn 203.209.247.77:443
+2021-10-18 10:13:47.256 [I][37011,7f8f8060d650]559:[bifrost]bifrost.comm : <140254310880848> complex.conn 203.209.250.19:443
+2021-10-18 10:13:47.256 [I][37011,7f8f8060d650]560:[bifrost]bifrost.comm : <140254310880848> complex.conn 203.209.247.77:443
+2021-10-18 10:13:47.257 [I][37011,7f8f8060d650]561:[bifrost]bifrost.comm : <140254310880848> index:0, @0x70000764A6D8, addr:(203.209.245.81:443), socket:38, connect
+2021-10-18 10:13:47.271 [I][37011,7f8f80708820]562:[bifrost]bifrost.comm : <140254311909408> index:0, @0x700007545CC0, sock:33, (203.209.245.74:80), connected Rtt:22, 
+2021-10-18 10:13:47.271 [I][37011,7f8f80708820]563:[bifrost]bifrost.comm : <140254311909408> index:0, sock:33, suc ConnectImpatient:203.209.245.74:80, RTT:(22, 22), @0x700007545CC0
+2021-10-18 10:13:47.271 [I][37011,7f8f80708820]564:[bifrost]bifrost.comm : <140254311909408> retsocket:33, connrtt:22, conntotalrtt:22, totalcost:24, @0x700007545CC0
+2021-10-18 10:13:47.271 [I][37011,7f8f80708820]565:[bifrost]bifrost.coll : <140254311909408> task socket send sock:33,http len:182
+2021-10-18 10:13:47.281 [I][37011,7f8f8060d650]566:[bifrost]bifrost.comm : <140254310880848> index:0, @0x70000764A6D8, sock:38, (203.209.245.81:443), connected Rtt:24, 
+2021-10-18 10:13:47.281 [I][37011,7f8f8060d650]567:[bifrost]bifrost.comm : <140254310880848> index:0, sock:38, suc ConnectImpatient:203.209.245.81:443, RTT:(24, 24), @0x70000764A6D8
+2021-10-18 10:13:47.281 [I][37011,7f8f8060d650]568:[bifrost]bifrost.comm : <140254310880848> retsocket:38, connrtt:24, conntotalrtt:24, totalcost:25, @0x70000764A6D8
