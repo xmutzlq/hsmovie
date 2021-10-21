@@ -7,6 +7,7 @@ import 'package:ble_project/util/my_scroll_behavior.dart';
 import 'package:ble_project/util/toast_util.dart';
 import 'package:ble_project/widget/list/guess_like_list.dart';
 import 'package:ble_project/widget/list/recommend_list.dart';
+import 'package:ble_project/widget/scrollview_background.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -77,6 +78,7 @@ class MovieDetailControllerPage extends GetView<MovieDetailControllerLogic> {
     return ScrollConfiguration(
       behavior: MyScrollBehavior(),
       child: SingleChildScrollView(
+        controller: logic.detailState.scrollController,
         child: Container(
           color: commBgColor,
           child: Column(
@@ -122,27 +124,9 @@ class MovieDetailControllerPage extends GetView<MovieDetailControllerLogic> {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
-                      ClipPath(
-                        clipper: MClipper(),
-                        clipBehavior: Clip.antiAlias,
-                        child: Container(
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(color: commBgColor, boxShadow: [
-                            BoxShadow(
-                                color: Colors.black12,
-                                offset: Offset(0.0, 10.0),
-                                blurRadius: 10.0)
-                          ]),
-                          child: Container(
-                            width: width,
-                            height: width,
-                            child: CachedNetworkImage(
-                              imageUrl: backdrop,
-                              placeholder: (context, url) => new CircularProgressIndicator(),
-                              errorWidget: (context, url, error) => new Icon(Icons.error),
-                              fit: BoxFit.cover,)
-                          ),
-                        ),
+                      AnimatedSwitcher(
+                        duration: Duration(milliseconds: 600),
+                        child: _HeaderBackground(imgUrl: backdrop, scrollController: logic.detailState.scrollController),
                       ),
                       Container(
                         padding: EdgeInsets.only(left: 10, right: 10),
@@ -165,7 +149,7 @@ class MovieDetailControllerPage extends GetView<MovieDetailControllerLogic> {
                   ),
                 ),
                 Positioned(
-                  right: width / 2 - 25, ///
+                  right: width / 2 - 27.5, ///
                   top: width,
                   child: FractionalTranslation(
                     translation: Offset(0.0, -0.5),
@@ -414,14 +398,91 @@ class MovieDetailControllerPage extends GetView<MovieDetailControllerLogic> {
   }
 }
 
+class _HeaderBackground extends StatefulWidget {
+  final String imgUrl;
+  final ScrollController scrollController;
+  const _HeaderBackground({required this.imgUrl, required this.scrollController});
+  @override
+  _HeaderBackgroundState createState() => _HeaderBackgroundState();
+}
+
+class _HeaderBackgroundState extends State<_HeaderBackground> {
+  double _position = 0;
+  double _height = 1150;
+  void _imageScroll() {
+    if (widget.scrollController.position.pixels <= _height) {
+      _position = widget.scrollController.position.pixels;
+    }
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    debugPrint("HeaderBackground_initState");
+    widget.scrollController.addListener(_imageScroll);
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    debugPrint("HeaderBackground_dispose");
+    widget.scrollController.removeListener(_imageScroll);
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    var width = MediaQuery.of(context).size.width;
+    return Stack(
+      children: [
+        SizedBox(
+          height: width,
+          child: CustomPaint(
+            painter: MyShadowPainter(
+              shadow: Shadow(
+                color: const Color(0xFF8E8E8E),
+                offset: Offset(0, -0.5),
+                blurRadius: 10,
+              ),
+              clipper: MClipper()),
+            child: ClipPath(
+              clipper: MClipper(),
+              child: Container(
+                width: width,
+                height: _height,
+                child: CachedNetworkImage(
+                  imageUrl: widget.imgUrl,
+                  placeholder: (context, url) => new CircularProgressIndicator(),
+                  errorWidget: (context, url, error) => new Icon(Icons.error),
+                  fit: BoxFit.cover,)
+              ),
+            )
+          ),
+        ),
+        ScrollViewBackGround(
+          scrollController: widget.scrollController,
+          height: 750,
+          maxOpacity: 0.8,
+        )
+      ],
+    );
+  }
+}
+
+///裁剪
 class MClipper extends CustomClipper<Path> {
+
+  double deltaY;
+
+  MClipper({this.deltaY = 0});
+
   @override
   Path getClip(Size size) {
     var path = new Path();
     path.lineTo(0.0, size.height - 40.0);
 
     var controlPoint = Offset(size.width / 4, size.height);
-    var endpoint = Offset(size.width / 2, size.height);
+    var endpoint = Offset(size.width / 2, size.height - deltaY);
 
     path.quadraticBezierTo(
         controlPoint.dx, controlPoint.dy, endpoint.dx, endpoint.dy);
@@ -439,6 +500,26 @@ class MClipper extends CustomClipper<Path> {
 
   @override
   bool shouldReclip(CustomClipper<Path> oldClipper) {
+    return true;
+  }
+}
+
+///阴影
+class MyShadowPainter extends CustomPainter {
+  final Shadow shadow;
+  final CustomClipper<Path> clipper;
+
+  MyShadowPainter({required this.shadow, required this.clipper});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    var paint = shadow.toPaint();
+    var clipPath = clipper.getClip(size).shift(Offset(0, 0));
+    canvas.drawPath(clipPath, paint);
+  }
+
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate) {
     return true;
   }
 }

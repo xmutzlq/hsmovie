@@ -9,7 +9,6 @@ import 'package:ble_project/util/sp.dart';
 import 'package:flutter/material.dart';
 import 'package:fps_monitor/widget/custom_widget_inspector.dart';
 import 'package:get/get.dart';
-import 'package:nhsa_midware_n4f/nhsa_midware_n4f.dart';
 
 Future main() async {
   AutoSizeUtil.setStandard(360, isAutoTextSize: true);

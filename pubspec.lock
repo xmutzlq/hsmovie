@@ -471,15 +471,6 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.0.0"
-  nhsa_midware_n4f:
-    dependency: "direct main"
-    description:
-      path: "."
-      ref: HEAD
-      resolved-ref: "76eabaf0744eedab9c354e6b8a733bb98c56b001"
-      url: "https://gitlab.ylzpay.com/android/sdk/nhsa_midware_n4f"
-    source: git
-    version: "0.0.1"
   octo_image:
     dependency: transitive
     description:

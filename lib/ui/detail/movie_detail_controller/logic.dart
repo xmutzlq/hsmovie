@@ -2,6 +2,7 @@ import 'package:ble_project/model/detail/movie_detail_entity.dart';
 import 'package:ble_project/repository/movie_repository.dart';
 import 'package:ble_project/ui/detail/movie_detail_controller/state.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/src/scheduler/ticker.dart';
 import 'package:get/get.dart';
 
 class MovieDetailControllerLogic extends GetxController with StateMixin<MovieDetailEntity> {
@@ -39,4 +40,5 @@ class MovieDetailControllerLogic extends GetxController with StateMixin<MovieDet
     debugPrint("MovieDetailControllerLogic_onClose");
     super.onClose();
   }
+
 }
