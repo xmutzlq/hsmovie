@@ -25,7 +25,7 @@ Widget rankingMovieView() {
           itemCount: logic.state.movieVodList.length,
           itemBuilder: (BuildContext context, int index) =>
             _ItemCell(index: index, data: logic.state.movieVodList[index], onTap: () => {
-              Get.toNamed(RouterConfig.detail, arguments: {'movieId' : logic.state.movieVodList[index].vodID})
+              Get.toNamed(RouterConfigs.detail, arguments: {'movieId' : logic.state.movieVodList[index].vodID})
             })
           )
           :

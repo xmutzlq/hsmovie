@@ -2,9 +2,10 @@ import 'dart:async';
 import 'dart:math';
 import 'dart:ui';
 
-import 'package:fijkplayer/fijkplayer.dart';
+import 'package:fijkplayer_plus/fijkplayer_plus.dart';
 import 'package:flutter/material.dart';
-import 'package:wakelock/wakelock.dart';
+import 'package:wakelock_plus/wakelock_plus.dart';
+// import 'package:wakelock/wakelock.dart';
 
 import './schema.dart' show VideoSourceFormat;
 import './slider.dart' show NewFijkSliderColors, NewFijkSlider;
@@ -115,7 +116,8 @@ class _CustomFijkPanelState extends State<CustomFijkPanel>
       debugPrint("_playerState_init = $_playerState");
     });
     player.addListener(_playerValueChanged);
-    Wakelock.enable();
+    WakelockPlus.enable();
+    // Wakelock.enable();
   }
 
   @override
@@ -131,7 +133,8 @@ class _CustomFijkPanelState extends State<CustomFijkPanel>
     // _tabController.dispose();
     player.removeListener(_playerValueChanged);
     _animationController!.dispose();
-    Wakelock.disable();
+    WakelockPlus.disable();
+    // Wakelock.disable();
     super.dispose();
   }
 

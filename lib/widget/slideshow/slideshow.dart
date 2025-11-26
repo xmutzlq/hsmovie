@@ -33,7 +33,7 @@ class SlideShowView extends StatelessWidget {
             items: logic.weekHot.map((item) {
               return Builder(
                 builder: (BuildContext context) {
-                  return InkWell(onTap: () => Get.toNamed(RouterConfig.detail, arguments: {'movieId': item.vodID}),
+                  return InkWell(onTap: () => Get.toNamed(RouterConfigs.detail, arguments: {'movieId': item.vodID}),
                     child: Container(
                         width: width,
                         child: _buildItem(item.vodPic, item.vodName)),

@@ -1,5 +1,7 @@
+import 'dart:io';
+
 import 'package:cookie_jar/cookie_jar.dart';
-import 'package:dio/adapter.dart';
+import 'package:dio/io.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_cache_interceptor/dio_cache_interceptor.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
@@ -11,10 +13,10 @@ class AppDio with DioMixin implements Dio {
     options ??= BaseOptions(
       baseUrl: dioConfig?.baseUrl ?? "",
       contentType: 'application/json',
-      connectTimeout: dioConfig?.connectTimeout,
-      sendTimeout: dioConfig?.sendTimeout,
-      receiveTimeout: dioConfig?.receiveTimeout,
-    )..headers = dioConfig?.headers;
+      connectTimeout: Duration(seconds: dioConfig!.connectTimeout),
+      sendTimeout: Duration(seconds: dioConfig.sendTimeout),
+      receiveTimeout: Duration(seconds: dioConfig.receiveTimeout),
+    )..headers = dioConfig.headers;
     this.options = options;
 
     // DioCacheManager
@@ -22,7 +24,7 @@ class AppDio with DioMixin implements Dio {
       // A default store is required for interceptor.
       store: MemCacheStore(),
       // Optional. Returns a cached response on error but for statuses 401 & 403.
-      hitCacheOnErrorExcept: [401, 403],
+      hitCacheOnErrorCodes: [401, 403],
       // Optional. Overrides any HTTP directive to delete entry past this duration.
       maxStale: const Duration(days: 7),
     );
@@ -44,22 +46,19 @@ class AppDio with DioMixin implements Dio {
     if (dioConfig?.interceptors?.isNotEmpty ?? false) {
       interceptors.addAll(dioConfig!.interceptors!);
     }
-    httpClientAdapter = DefaultHttpClientAdapter();
+    httpClientAdapter = IOHttpClientAdapter();
     if (dioConfig?.proxy?.isNotEmpty ?? false) {
       setProxy(dioConfig!.proxy!);
     }
   }
 
   setProxy(String proxy) {
-    (httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
-        (client) {
-      // config the http client
+    (httpClientAdapter as IOHttpClientAdapter).createHttpClient = () {
+      final HttpClient client = HttpClient();
       client.findProxy = (uri) {
-        // proxy all request to localhost:8888
         return "PROXY $proxy";
       };
-      // you can also create a HttpClient to dio
-      // return HttpClient();
+      return client;
     };
   }
 }

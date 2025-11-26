@@ -4,7 +4,8 @@ import 'package:ble_project/model/vod_info.dart';
 import 'package:ble_project/util/time_util.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_easyrefresh/easy_refresh.dart';
+import 'package:flutter/services.dart';
+import 'package:easy_refresh/easy_refresh.dart';
 import 'package:get/get.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -25,18 +26,16 @@ class MorePage extends StatelessWidget {
           child: Obx(() => Text(logic.state.title.value, style: TextStyle(color: appThemeData.primaryColor),)),
         ),
         centerTitle: true,
-        brightness: Brightness.light,
         iconTheme: IconThemeData(
           color: appThemeData.primaryColor, //change your color here
         ),
         elevation: 0.0,
-        backgroundColor: commBgColor,
+        backgroundColor: commBgColor, systemOverlayStyle: SystemUiOverlayStyle.dark,
       ),
       body: GetBuilder<MoreLogic>(builder: (logic){
         return logic.state.moreList.length > 0 ?
-        EasyRefresh.custom(
+        EasyRefresh(
           scrollController: logic.controller,
-          firstRefresh: false,
           header: MaterialHeader(),
           footer: MaterialFooter(),
           onRefresh: () async {
@@ -47,17 +46,19 @@ class MorePage extends StatelessWidget {
             var moreData = await logic.refreshMoreData(false);
             logic.updateResultForRefresh(moreData, false);
           },
-          slivers: <Widget>[
-            SliverList(
-              delegate: SliverChildBuilderDelegate((context, index) {
-                return _ItemCell(data: logic.state.moreList[index], onTap: () => {
-                  Get.toNamed(RouterConfig.detail, arguments: {'movieId' : logic.state.moreList[index].vodID})
-                });
-              },
-                childCount: logic.state.moreList.length,
+          child: CustomScrollView(
+            slivers: <Widget>[
+              SliverList(
+                delegate: SliverChildBuilderDelegate((context, index) {
+                  return _ItemCell(data: logic.state.moreList[index], onTap: () => {
+                    Get.toNamed(RouterConfigs.detail, arguments: {'movieId' : logic.state.moreList[index].vodID})
+                  });
+                },
+                  childCount: logic.state.moreList.length,
+                ),
               ),
-            ),
-          ],
+            ]
+          )
         ) :
         ListView.separated(
           physics: BouncingScrollPhysics(),

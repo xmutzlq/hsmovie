@@ -62,7 +62,7 @@ Widget varietyShowView() {
               placeHolder: _ShimmerCell(),
               child: _ItemCell(
                 data: element.vodInfo,
-                onTap: () => Get.toNamed(RouterConfig.detail, arguments: {'movieId' : element.vodInfo.vodID}),
+                onTap: () => Get.toNamed(RouterConfigs.detail, arguments: {'movieId' : element.vodInfo.vodID}),
               ),
             ),
           )),

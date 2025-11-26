@@ -24,7 +24,7 @@ Widget rankingShowView() {
             scrollDirection: Axis.vertical,
             itemCount: logic.state.showVodList.length,
             itemBuilder: (BuildContext context, int index) => _ItemCell(index: index, data: logic.state.showVodList[index], onTap: () => {
-              Get.toNamed(RouterConfig.detail, arguments: {'movieId' : logic.state.showVodList[index].vodID})
+              Get.toNamed(RouterConfigs.detail, arguments: {'movieId' : logic.state.showVodList[index].vodID})
             }))
           :
           ListView.separated(

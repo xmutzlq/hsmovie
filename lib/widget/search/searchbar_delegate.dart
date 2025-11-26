@@ -225,11 +225,9 @@ class SearchBarDelegate extends SearchDelegate<SearchEntity> {
   ThemeData appBarTheme(BuildContext context) {
     final ThemeData theme = Theme.of(context);
     final _lightTheme = theme.copyWith(
-      inputDecorationTheme:
-      InputDecorationTheme(hintStyle: TextStyle(color: Colors.grey)),
+      inputDecorationTheme: InputDecorationTheme(hintStyle: TextStyle(color: Colors.grey)),
       primaryColor: Colors.white,
       primaryIconTheme: theme.primaryIconTheme.copyWith(color: Colors.grey),
-      primaryColorBrightness: Brightness.light,
       primaryTextTheme: theme.textTheme,
     );
     final _darkTheme = theme.copyWith(
@@ -237,7 +235,6 @@ class SearchBarDelegate extends SearchDelegate<SearchEntity> {
       InputDecorationTheme(hintStyle: TextStyle(color: Colors.grey)),
       primaryColor: Color(0xFF303030),
       primaryIconTheme: theme.primaryIconTheme.copyWith(color: Colors.grey),
-      primaryColorBrightness: Brightness.dark,
       primaryTextTheme: theme.textTheme,
     );
     final MediaQueryData _mediaQuery = MediaQuery.of(context);
@@ -295,7 +292,7 @@ Widget _buildResultCell(VodInfo vodInfo, BuildContext ctx) {
   final _rightPanelWidth = width - 170;
   return GestureDetector(
     onTap: () async {
-      Get.offNamed(RouterConfig.detail, arguments: {'movieId' : vodInfo.vodID});
+      Get.offNamed(RouterConfigs.detail, arguments: {'movieId' : vodInfo.vodID});
     },
     child: Container(
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),

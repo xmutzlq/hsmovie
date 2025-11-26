@@ -1,5 +1,4 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.me.ble.ble_project">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <!--网络权限-->
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -9,22 +8,21 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 
     <!--点播播放器悬浮窗权限-->
-
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
     <!--存储-->
-
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
    <application
-        android:label="花哨影视"
+        android:label="花哨影视2"
         android:icon="@mipmap/ic_launcher"
         android:networkSecurityConfig="@xml/public_network_security_config"
         android:usesCleartextTraffic="true"
         android:allowBackup="false">
         <activity
-            android:name=".MainActivity"
+            android:name="com.me.ble.ble_project.MainActivity"
+            android:exported="true"
             android:launchMode="singleTop"
             android:theme="@style/LaunchTheme"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"

@@ -20,7 +20,7 @@ class Global {
           SystemUiOverlayStyle(statusBarColor: Colors.transparent));
     }
     HttpConfig dioConfig = HttpConfig(
-        baseUrl: "https://vip.88-spa.com:8443/"
+        baseUrl: "https://88api.omwjhz.com:18888/"
     );
     HttpClient client = HttpClient(dioConfig: dioConfig);
     Get.lazyPut(() => client);

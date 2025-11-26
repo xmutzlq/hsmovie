@@ -6,7 +6,7 @@ import 'package:get/get.dart';
 
 import 'state.dart';
 
-class DiscoveryLogic extends GetxController with SingleGetTickerProviderMixin{
+class DiscoveryLogic extends GetxController with GetSingleTickerProviderStateMixin{
   final DiscoveryState state = DiscoveryState();
   late List<Widget> discoveryTabs;
   late TabController tabController;

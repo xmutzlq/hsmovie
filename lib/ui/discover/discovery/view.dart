@@ -17,7 +17,6 @@ class DiscoveryPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        brightness: appThemeData.brightness,
         title: tabBarView(),
         backgroundColor: commBgColor,
         elevation: 0.0,

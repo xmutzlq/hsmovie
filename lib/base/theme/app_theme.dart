@@ -1,5 +1,6 @@
 import 'package:ble_project/widget/search/searchbar_delegate.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -21,16 +22,15 @@ ThemeData get appThemeData => ThemeData(
     primaryColor: kPrimaryColor,
     primaryColorDark: primaryDarkColor,
     primaryColorLight: kPrimaryLightColor,
-    backgroundColor: commBgColor,
     scaffoldBackgroundColor: Colors.white,
-    accentColor: kPrimaryColor,
+    hintColor: kPrimaryColor,
     appBarTheme: appBarTheme,
     tabBarTheme: tabBarTheme,
     textTheme: GoogleFonts.poppinsTextTheme());
 
 AppBarTheme get appBarTheme => AppBarTheme();
 
-TabBarTheme get tabBarTheme => TabBarTheme(
+TabBarThemeData get tabBarTheme => TabBarThemeData(
   labelColor: kPrimaryColor
 );
 
@@ -39,9 +39,8 @@ AppBar get appBarHome => AppBar(
     onTap: () => showSearch(context: Get.context!, delegate: SearchBarDelegate()),
   ),
   centerTitle: true,
-  brightness: Brightness.light,
   backgroundColor: commBgColor,
-  elevation: 0.0,
+  elevation: 0.0, systemOverlayStyle: SystemUiOverlayStyle.dark,
 );
 
 class _SearchBar extends StatelessWidget {

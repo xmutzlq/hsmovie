@@ -24,7 +24,7 @@ Widget rankingCartoonView() {
             scrollDirection: Axis.vertical,
             itemCount: logic.state.cartoonVodList.length,
             itemBuilder: (BuildContext context, int index) => _ItemCell(index: index, data: logic.state.cartoonVodList[index], onTap: () => {
-              Get.toNamed(RouterConfig.detail, arguments: {'movieId' : logic.state.cartoonVodList[index].vodID})
+              Get.toNamed(RouterConfigs.detail, arguments: {'movieId' : logic.state.cartoonVodList[index].vodID})
             }))
           :
           ListView.separated(

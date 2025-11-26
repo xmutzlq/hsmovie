@@ -1,6 +1,6 @@
 part of './page_config.dart';
 
-abstract class RouterConfig {
+abstract class RouterConfigs {
   ///主页
   static const String root = "/";
   ///首页

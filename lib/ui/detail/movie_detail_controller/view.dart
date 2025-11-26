@@ -10,6 +10,7 @@ import 'package:ble_project/widget/list/recommend_list.dart';
 import 'package:ble_project/widget/scrollview_background.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
 
@@ -50,7 +51,6 @@ class MovieDetailControllerPage extends GetView<MovieDetailControllerLogic> {
             child: AppBar(
               title: Text('花哨影视'),
               centerTitle: true,
-              brightness: Brightness.light,
               iconTheme: IconThemeData(
                 color: Colors.white, //change your color here
               ),
@@ -67,7 +67,7 @@ class MovieDetailControllerPage extends GetView<MovieDetailControllerLogic> {
                     ToastUtil.showToast("即将开放");
                   },
                 ),
-              ],
+              ], systemOverlayStyle: SystemUiOverlayStyle.dark,
             ),),
         ],
       ),
@@ -160,11 +160,11 @@ class MovieDetailControllerPage extends GetView<MovieDetailControllerLogic> {
                           || logic.detailState.entity!.vod.vodPlayServer!.isEmpty) {
                         ToastUtil.showToast("暂无无播放资源")
                       } else {
-                        Navigator.of(context).pushNamed(RouterConfig.player, arguments: {
+                        Navigator.of(context).pushNamed(RouterConfigs.player, arguments: {
                           'playServers' : logic.detailState.entity?.vod.vodPlayServer,
                           'playUrlInfo' : logic.detailState.entity?.vod.vodPlayUrls,
                           'videoTitle' : logic.detailState.entity?.vod.vodName})
-                        // Get.toNamed(RouterConfig.player, arguments: {
+                        // Get.toNamed(RouterConfigs.player, arguments: {
                         //       'playServers' : logic.detailState.entity?.vod.vodPlayServer,
                         //       'playUrlInfo' : logic.detailState.entity?.vod.vodPlayUrls,
                         //       'videoTitle' : logic.detailState.entity?.vod.vodName})
@@ -313,7 +313,7 @@ class MovieDetailControllerPage extends GetView<MovieDetailControllerLogic> {
                 ),
                 // InkWell(
                 //   onTap: () => {
-                //     Get.toNamed(RouterConfig.more, arguments: {'title':'猜你喜欢', 'vodTypeId' : logic.detailState.entity!.vod.typeID})
+                //     Get.toNamed(RouterConfigs.more, arguments: {'title':'猜你喜欢', 'vodTypeId' : logic.detailState.entity!.vod.typeID})
                 //   },
                 //   child: Icon(Icons.arrow_forward_outlined, color: Colors.black,),
                 // )
@@ -322,7 +322,7 @@ class MovieDetailControllerPage extends GetView<MovieDetailControllerLogic> {
           ),
           GuessLikeListView(items: items, onItemInteraction: (movieId) {
             debugPrint("handle_GuessLike_ite：$movieId");
-            Navigator.of(Get.context!).pushReplacementNamed(RouterConfig.detail, arguments: {'movieId' : movieId});
+            Navigator.of(Get.context!).pushReplacementNamed(RouterConfigs.detail, arguments: {'movieId' : movieId});
            },)
         ],
       ),
@@ -347,7 +347,7 @@ class MovieDetailControllerPage extends GetView<MovieDetailControllerLogic> {
                 ),
                 // InkWell(
                 //   onTap: () => {
-                //     Get.toNamed(RouterConfig.more, arguments: {'title':'相关推荐', 'vodTypeId' : logic.detailState.entity!.vod.typeID})
+                //     Get.toNamed(RouterConfigs.more, arguments: {'title':'相关推荐', 'vodTypeId' : logic.detailState.entity!.vod.typeID})
                 //   },
                 //   child: Icon(Icons.arrow_forward_outlined, color: Colors.black,),
                 // )
@@ -356,7 +356,7 @@ class MovieDetailControllerPage extends GetView<MovieDetailControllerLogic> {
           ),
           RecommendListView(items: items, onItemInteraction: (movieId) {
             debugPrint("handle_Recommend_item：$movieId");
-            Navigator.of(Get.context!).pushReplacementNamed(RouterConfig.detail, arguments: {'movieId' : movieId});
+            Navigator.of(Get.context!).pushReplacementNamed(RouterConfigs.detail, arguments: {'movieId' : movieId});
           },)
         ],
       ),

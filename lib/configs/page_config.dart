@@ -22,42 +22,42 @@ abstract class PageConfig {
   ///别名映射页面
   static final List<GetPage> getPages = [
     GetPage(
-      name: RouterConfig.home,
+      name: RouterConfigs.home,
       page: () => HomePageMixin(),
       binding: HomePageBinding()
     ),
     GetPage(
-        name: RouterConfig.more,
+        name: RouterConfigs.more,
         page: () => MorePage(),
         binding: MoreBinding()
     ),
     GetPage(
-        name: RouterConfig.simple_list,
+        name: RouterConfigs.simple_list,
         page: () => SimpleListPage(),
         binding: SimpleListBinding()
     ),
     GetPage(
-      name: RouterConfig.discovery,
+      name: RouterConfigs.discovery,
       page: () => DiscoveryPage(),
       binding: DiscoveryPageBinding()
     ),
     GetPage(
-        name: RouterConfig.ranking,
+        name: RouterConfigs.ranking,
         page: () => RankingPage(),
         binding: RankingBinding()
     ),
     GetPage(
-        name: RouterConfig.search,
+        name: RouterConfigs.search,
         page: () => SearchLogicPage(),
         binding: SearchLogicBinding()
     ),
     GetPage(
-        name: RouterConfig.detail,
+        name: RouterConfigs.detail,
         page: () => MovieDetailControllerPage(),
         binding: MovieDetailControllerBinding()
     ),
     GetPage(
-        name: RouterConfig.player,
+        name: RouterConfigs.player,
         page: () => PlayerControllerPage(),
         binding: PlayerControllerBinding()
     )

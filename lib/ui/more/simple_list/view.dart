@@ -4,6 +4,7 @@ import 'package:ble_project/model/vod_info.dart';
 import 'package:ble_project/util/time_util.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -18,12 +19,11 @@ class SimpleListPage extends StatelessWidget {
         appBar: AppBar(
           title: Obx(() => Text(state.title.value, style: TextStyle(color: appThemeData.primaryColor),),),
           centerTitle: true,
-          brightness: Brightness.light,
           iconTheme: IconThemeData(
             color: appThemeData.primaryColor, //change your color here
           ),
           elevation: 0.0,
-          backgroundColor: commBgColor,
+          backgroundColor: commBgColor, systemOverlayStyle: SystemUiOverlayStyle.dark,
         ),
         body: GetBuilder<SimpleListLogic>(builder: (logic){
           return logic.state.simpleList.length > 0 ?
@@ -32,7 +32,7 @@ class SimpleListPage extends StatelessWidget {
                   SliverList(
                     delegate: SliverChildBuilderDelegate((context, index) {
                       return _ItemCell(data: logic.state.simpleList[index], onTap: () => {
-                        Get.toNamed(RouterConfig.detail, arguments: {'movieId' : logic.state.simpleList[index].vodID})
+                        Get.toNamed(RouterConfigs.detail, arguments: {'movieId' : logic.state.simpleList[index].vodID})
                       });
                     },
                       childCount: logic.state.simpleList.length,

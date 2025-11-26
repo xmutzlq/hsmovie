@@ -1,6 +1,6 @@
 import 'package:ble_project/base/skin/fijkplayer_skin.dart';
 import 'package:ble_project/base/theme/app_theme.dart';
-import 'package:fijkplayer/fijkplayer.dart';
+import 'package:fijkplayer_plus/fijkplayer_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

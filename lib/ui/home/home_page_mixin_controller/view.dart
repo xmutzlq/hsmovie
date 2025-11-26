@@ -92,21 +92,21 @@ class HomePageMixin extends GetView<HomePageMixinControllerLogic> {
                     } else {
                       if("最新电影" == title) {
                         if(logic.filterTypes!.movieFilter != null && logic.filterTypes!.movieFilter!.length > 0) {
-                          Get.toNamed(RouterConfig.more, arguments: {'title':'电影', 'vodTypeId' : logic.filterTypes!.movieFilter![0].id})
+                          Get.toNamed(RouterConfigs.more, arguments: {'title':'电影', 'vodTypeId' : logic.filterTypes!.movieFilter![0].id})
                         } else {
                           ToastUtil.showToast("查不到电影分类，请刷新界面")
                         }
                       } else if("最新连续剧" == title) {
                         if(logic.filterTypes!.tvFilter != null && logic.filterTypes!.tvFilter!.length > 0) {
-                          Get.toNamed(RouterConfig.more, arguments: {'title':'连续剧', 'vodTypeId' : logic.filterTypes!.tvFilter![0].id})
+                          Get.toNamed(RouterConfigs.more, arguments: {'title':'连续剧', 'vodTypeId' : logic.filterTypes!.tvFilter![0].id})
                         } else {
                           ToastUtil.showToast("查不到连续剧分类，请刷新界面")
                         }
                       } else if("最新综艺" == title) {
-                        Get.toNamed(RouterConfig.more, arguments: {'title':'综艺', 'vodTypeId' : 3})
+                        Get.toNamed(RouterConfigs.more, arguments: {'title':'综艺', 'vodTypeId' : 3})
                       } else if("最新动漫" == title) {
                         if(logic.filterTypes!.cartoonFilter != null && logic.filterTypes!.cartoonFilter!.length > 0) {
-                          Get.toNamed(RouterConfig.more, arguments: {'title':'动漫', 'vodTypeId' : logic.filterTypes!.cartoonFilter![0].id})
+                          Get.toNamed(RouterConfigs.more, arguments: {'title':'动漫', 'vodTypeId' : logic.filterTypes!.cartoonFilter![0].id})
                         } else {
                           ToastUtil.showToast("查不到动漫分类，请刷新界面")
                         }
@@ -119,7 +119,7 @@ class HomePageMixin extends GetView<HomePageMixinControllerLogic> {
             ),
           ),
           MovieListView(items: vodList, onItemInteraction: (movieId) {
-            Get.toNamed(RouterConfig.detail, arguments: {'movieId' : movieId});
+            Get.toNamed(RouterConfigs.detail, arguments: {'movieId' : movieId});
           },)
         ],
       ),
