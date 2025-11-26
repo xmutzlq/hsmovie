@@ -13,6 +13,7 @@ import 'package:get/get.dart';
 class Global {
   /// 是否 release
   static bool get isRelease => bool.fromEnvironment("dart.vm.product");
+  static bool get showFPS => false;
   /// 全局依赖
   static Future<void> init() async {
     if(Platform.isAndroid) {
@@ -20,7 +21,7 @@ class Global {
           SystemUiOverlayStyle(statusBarColor: Colors.transparent));
     }
     HttpConfig dioConfig = HttpConfig(
-        baseUrl: "https://88api.omwjhz.com:18888/"
+        baseUrl: "https://88api.omwjhz.com:18888/" // https://88api.omwjhz.com:18888/ || https://vip.88-spa.com:8443/
     );
     HttpClient client = HttpClient(dioConfig: dioConfig);
     Get.lazyPut(() => client);

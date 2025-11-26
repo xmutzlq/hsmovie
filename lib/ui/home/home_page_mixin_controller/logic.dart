@@ -1,9 +1,12 @@
+import 'package:ble_project/base/log/app_log.dart';
 import 'package:ble_project/model/filter/filter_entity.dart';
 import 'package:ble_project/model/filter/filter_types.dart';
 import 'package:ble_project/model/home/category/cate_info.dart';
 import 'package:ble_project/model/home/home_entity.dart';
 import 'package:ble_project/model/home/home_result.dart';
 import 'package:ble_project/model/vod_info.dart';
+import 'package:ble_project/util/class_util.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
 import '../../../repository/movie_repository.dart';
@@ -53,6 +56,7 @@ class HomePageMixinControllerLogic extends GetxController with StateMixin<HomeRe
     if(homeData.ok) {
       parserDataWithChange(homeData);
     } else {
+      debugPrint("${ClazzUtil.getClassName(this)} -> error msg : ${homeData.error?.message}");
       change(null, status: RxStatus.error(homeData.error?.message));
     }
   }

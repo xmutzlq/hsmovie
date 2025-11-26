@@ -56,7 +56,7 @@ class DiscoveryLogic extends GetxController with GetSingleTickerProviderStateMix
   }
 
   void listScrollTop() {
-    scrollController.animateTo(0, duration: Duration(milliseconds: 500), curve: Curves.ease);
+    scrollController.animateTo(0, duration: const Duration(milliseconds: 500), curve: Curves.ease);
   }
 
   @override

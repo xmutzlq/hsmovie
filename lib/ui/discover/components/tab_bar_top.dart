@@ -14,7 +14,7 @@ Widget tabBarView() {
       labelColor: appThemeData.tabBarTheme.labelColor,
       unselectedLabelColor: appThemeData.tabBarTheme.unselectedLabelColor,
       labelStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-      unselectedLabelStyle: TextStyle(color: kPrimaryLightColor),
+      unselectedLabelStyle: TextStyle(fontSize: 14, color: kPrimaryLightColor),
     )
   );
 }

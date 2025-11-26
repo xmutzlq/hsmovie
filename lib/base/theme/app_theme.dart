@@ -31,7 +31,7 @@ ThemeData get appThemeData => ThemeData(
 AppBarTheme get appBarTheme => AppBarTheme();
 
 TabBarThemeData get tabBarTheme => TabBarThemeData(
-  labelColor: kPrimaryColor
+  labelColor: kPrimaryColor, dividerColor: Colors.transparent
 );
 
 AppBar get appBarHome => AppBar(
@@ -52,6 +52,7 @@ class _SearchBar extends StatelessWidget {
         .of(context)
         .size
         .width;
+    debugPrint("SearchBar width : $width");
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -68,7 +69,7 @@ class _SearchBar extends StatelessWidget {
               color: kPrimaryColor,
             ),
             SizedBox(
-              width: width - 200,
+              width: width - 100,
               child: Text(
                 '搜索电影、电视剧、演员',
                 maxLines: 1,

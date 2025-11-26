@@ -27,7 +27,7 @@ class _MovieListViewState extends State<MovieListView> {
         } else if (snapshot.hasError) {
           return Text(snapshot.error.toString());
         }
-        return Container(padding: const EdgeInsets.all(20.0), child: Center(child: SizedBox()));
+        return Container(padding: const EdgeInsets.all(20.0), child: const Center(child: SizedBox()));
       },
     );
   }

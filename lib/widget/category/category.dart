@@ -8,16 +8,13 @@ import 'package:get/get.dart';
 class MovieCategory extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    var width = MediaQuery
-        .of(context)
-        .size
-        .width;
+    var width = MediaQuery.of(context).size.width;
     return GetBuilder<HomePageMixinControllerLogic>(
       id: 'categories',
       init: HomePageMixinControllerLogic(), // use it only first time on each controller
       builder: (logic) {
         return Container(
-          height: width / 5,
+          height: width / 4.5,
           margin: const EdgeInsets.all(10),
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
@@ -88,8 +85,8 @@ class MovieCategory extends StatelessWidget {
                     alignment: Alignment.center,
                     width: constraints.biggest.width,
                     height: constraints.biggest.height,
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
+                    decoration: const BoxDecoration(
+                      gradient: const LinearGradient(
                         begin: Alignment.topRight,
                         end: Alignment.bottomLeft,
                         stops: [0.1, 0.5, 0.7, 0.9],

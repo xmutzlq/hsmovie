@@ -1,4 +1,3 @@
-import 'package:ble_project/base/screen/binding.dart';
 import 'package:ble_project/base/theme/app_theme.dart';
 import 'package:ble_project/configs/global_config.dart';
 import 'package:ble_project/configs/page_config.dart';
@@ -13,7 +12,7 @@ import 'package:statsfl/statsfl.dart';
 Future main() async {
   FlutterAutosizeScreenPro.setStandard(360, isAutoTextSize: true);
   Global.init();
-  runApp(StatsFl(child: const MyApp()));
+  runApp(StatsFl(isEnabled: Global.showFPS, child: const MyApp()));
 }
 
 class MyApp extends StatelessWidget {

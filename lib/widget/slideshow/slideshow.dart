@@ -15,7 +15,7 @@ class SlideShowView extends StatelessWidget {
       builder: (logic) {
         return Padding(
           padding: const EdgeInsets.only(top: 10.0),
-          child: CarouselSlider(
+          child: CarouselSlider.builder(
             options: CarouselOptions(
               height: width / 2,
               aspectRatio: 16 / 9,
@@ -30,17 +30,14 @@ class SlideShowView extends StatelessWidget {
               enlargeCenterPage: true,
               scrollDirection: Axis.horizontal,
             ),
-            items: logic.weekHot.map((item) {
-              return Builder(
-                builder: (BuildContext context) {
-                  return InkWell(onTap: () => Get.toNamed(RouterConfigs.detail, arguments: {'movieId': item.vodID}),
-                    child: Container(
-                        width: width,
-                        child: _buildItem(item.vodPic, item.vodName)),
-                  );
-                },
+            itemCount: logic.weekHot.length,
+            itemBuilder: (context, index, realIdx) {
+              return InkWell(onTap: () => Get.toNamed(RouterConfigs.detail, arguments: {'movieId': logic.weekHot[index].vodID}),
+                child: Container(
+                    width: width,
+                    child: _buildItem(logic.weekHot[index].vodPic, logic.weekHot[index].vodName)),
               );
-            }).toList(),
+            }
           ),
         );
       },
