@@ -55,7 +55,7 @@ class _SearchBar extends StatelessWidget {
       onTap: onTap,
       child: Container(
         padding: const EdgeInsets.only(left: 15, right: 15),
-        height: 30,
+        height: 35,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(40),
           color: searchBgColor,
@@ -72,7 +72,7 @@ class _SearchBar extends StatelessWidget {
                 '搜索电影、电视剧、演员',
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
-                style: TextStyle(color: kPrimaryLightColor, fontSize: 13),
+                style: const TextStyle(color: kPrimaryLightColor, fontSize: 13),
               ),
             ),
           ],

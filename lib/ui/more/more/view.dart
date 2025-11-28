@@ -23,71 +23,90 @@ class MorePage extends StatelessWidget {
       appBar: AppBar(
         title: GestureDetector(
           onDoubleTap: () => logic.listScrollTop(),
-          child: Obx(() => Text(logic.state.title.value, style: TextStyle(color: appThemeData.primaryColor),)),
+          child: Obx(
+            () => Text(
+              logic.state.title.value,
+              style: TextStyle(color: appThemeData.primaryColor, fontSize: 17.0, fontWeight: FontWeight.w500),
+            ),
+          ),
         ),
         centerTitle: true,
         iconTheme: IconThemeData(
           color: appThemeData.primaryColor, //change your color here
         ),
         elevation: 0.0,
-        backgroundColor: commBgColor, systemOverlayStyle: SystemUiOverlayStyle.dark,
+        backgroundColor: commBgColor,
+        systemOverlayStyle: SystemUiOverlayStyle.dark,
       ),
-      body: GetBuilder<MoreLogic>(builder: (logic){
-        return logic.state.moreList.length > 0 ?
-        EasyRefresh(
-          scrollController: logic.controller,
-          header: const MaterialHeader(),
-          footer: const MaterialFooter(),
-          onRefresh: () async {
-            var moreData = await logic.refreshMoreData(true);
-            logic.updateResultForRefresh(moreData, true);
-          },
-          onLoad: () async {
-            var moreData = await logic.refreshMoreData(false);
-            logic.updateResultForRefresh(moreData, false);
-          },
-          child: CustomScrollView(
-            slivers: <Widget>[
-              SliverList(
-                delegate: SliverChildBuilderDelegate((context, index) {
-                  return _ItemCell(data: logic.state.moreList[index], onTap: () => {
-                    Get.toNamed(RouterConfigs.detail, arguments: {'movieId' : logic.state.moreList[index].vodID})
-                  });
-                },
-                  childCount: logic.state.moreList.length,
-                ),
-              ),
-            ]
-          )
-        ) :
-        ListView.separated(
-          physics: const BouncingScrollPhysics(),
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          cacheExtent: 500,
-          separatorBuilder: (_, __) => _SeparatorItem(),
-          itemCount: 1,
-          itemBuilder: (_, index) {
-            return const Offstage(
-                offstage: false,
-                child: const _ShimmerList());
-          },
-        );
-      })
+      body: GetBuilder<MoreLogic>(
+        builder: (logic) {
+          return logic.state.moreList.length > 0
+              ? EasyRefresh(
+                  scrollController: logic.controller,
+                  header: const MaterialHeader(),
+                  footer: const MaterialFooter(),
+                  onRefresh: () async {
+                    var moreData = await logic.refreshMoreData(true);
+                    logic.updateResultForRefresh(moreData, true);
+                  },
+                  onLoad: () async {
+                    var moreData = await logic.refreshMoreData(false);
+                    logic.updateResultForRefresh(moreData, false);
+                  },
+                  child: CustomScrollView(
+                    slivers: <Widget>[
+                      SliverList(
+                        delegate: SliverChildBuilderDelegate((context, index) {
+                          return _ItemCell(
+                            data: logic.state.moreList[index],
+                            onTap: () => {
+                              Get.toNamed(
+                                RouterConfigs.detail,
+                                arguments: {
+                                  'movieId': logic.state.moreList[index].vodID,
+                                },
+                              ),
+                            },
+                          );
+                        }, childCount: logic.state.moreList.length),
+                      ),
+                    ],
+                  ),
+                )
+              : ListView.separated(
+                  physics: const BouncingScrollPhysics(),
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  cacheExtent: 500,
+                  separatorBuilder: (_, __) => _SeparatorItem(),
+                  itemCount: 1,
+                  itemBuilder: (_, index) {
+                    return const Offstage(
+                      offstage: false,
+                      child: const _ShimmerList(),
+                    );
+                  },
+                );
+        },
+      ),
     );
   }
 }
 
 class _SeparatorItem extends StatelessWidget {
   const _SeparatorItem({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return const Padding(
-        padding: const EdgeInsets.only(left: 130), child: const Divider());
+      padding: const EdgeInsets.only(left: 130),
+      child: const Divider(),
+    );
   }
 }
 
 class _ShimmerCell extends StatelessWidget {
   const _ShimmerCell({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
@@ -102,8 +121,9 @@ class _ShimmerCell extends StatelessWidget {
             height: 200,
             width: 130,
             decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: _color),
+              borderRadius: BorderRadius.circular(10),
+              color: _color,
+            ),
           ),
           const SizedBox(width: 20),
           SizedBox(
@@ -112,11 +132,23 @@ class _ShimmerCell extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const SizedBox(height: 20),
-                Container(height: 30, width: _rightPanelWidth - 50, color: _color),
+                Container(
+                  height: 30,
+                  width: _rightPanelWidth - 50,
+                  color: _color,
+                ),
                 const SizedBox(height: 5),
-                Container(height: 15, width: _rightPanelWidth - 50, color: _color),
+                Container(
+                  height: 15,
+                  width: _rightPanelWidth - 50,
+                  color: _color,
+                ),
                 const SizedBox(height: 5),
-                Container(height: 15, width: _rightPanelWidth - 50, color: _color),
+                Container(
+                  height: 15,
+                  width: _rightPanelWidth - 50,
+                  color: _color,
+                ),
                 const SizedBox(height: 15),
                 Container(height: 18, color: _color),
                 const SizedBox(height: 5),
@@ -132,6 +164,7 @@ class _ShimmerCell extends StatelessWidget {
 
 class _ShimmerList extends StatelessWidget {
   const _ShimmerList({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Shimmer.fromColors(
@@ -139,12 +172,15 @@ class _ShimmerList extends StatelessWidget {
       highlightColor: shimmerColorLight,
       child: Column(
         ///默认4个骨架
-          children: [
-            const SizedBox(height: 20),
-            Column(
-              children: List.filled(4, 0).map((e) => const _ShimmerCell()).toList(),
-            )
-          ]
+        children: [
+          const SizedBox(height: 20),
+          Column(
+            children: List.filled(
+              4,
+              0,
+            ).map((e) => const _ShimmerCell()).toList(),
+          ),
+        ],
       ),
     );
   }
@@ -153,7 +189,9 @@ class _ShimmerList extends StatelessWidget {
 class _ItemCell extends StatelessWidget {
   final VodInfo data;
   final Function() onTap;
+
   const _ItemCell({required this.data, required this.onTap});
+
   @override
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
@@ -171,23 +209,24 @@ class _ItemCell extends StatelessWidget {
               decoration: BoxDecoration(
                 color: shimmerColorLight,
                 borderRadius: const BorderRadius.only(
-                    topLeft: const Radius.circular(10.0),
-                    topRight: Radius.zero,
-                    bottomLeft: const Radius.circular(10.0),
-                    bottomRight: const Radius.circular(35.0)
+                  topLeft: const Radius.circular(10.0),
+                  topRight: Radius.zero,
+                  bottomLeft: const Radius.circular(10.0),
+                  bottomRight: const Radius.circular(35.0),
                 ),
                 boxShadow: [
                   BoxShadow(
-                      color: appThemeData.brightness == Brightness.light
-                          ? const Color(0xFF8E8E8E)
-                          : const Color(0x00000000),
-                      offset: const Offset(0, 15),
-                      blurRadius: 10,
-                      spreadRadius: -10)
+                    color: appThemeData.brightness == Brightness.light
+                        ? const Color(0xFF8E8E8E)
+                        : const Color(0x00000000),
+                    offset: const Offset(0, 15),
+                    blurRadius: 10,
+                    spreadRadius: -10,
+                  ),
                 ],
                 image: DecorationImage(
                   fit: BoxFit.cover,
-                  image: CachedNetworkImageProvider(data.vodPic,),
+                  image: CachedNetworkImageProvider(data.vodPic),
                 ),
               ),
             ),
@@ -202,21 +241,30 @@ class _ItemCell extends StatelessWidget {
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     style: const TextStyle(
-                        fontWeight: FontWeight.bold, fontSize: 16),
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
                   ),
                   const SizedBox(height: 5),
                   RichText(
-                    text: TextSpan (
-                        style: TextStyle(
-                            color: secondaryColor,
-                            fontWeight: FontWeight.normal, fontSize: 14),
-                        children: <InlineSpan>[
-                          const TextSpan(text: "年份地区："),
-                          TextSpan(text: data.vodYear, style: TextStyle(
-                              color: const Color(0xFF109E9E),
-                              fontWeight: FontWeight.w500, fontSize: 14)),
-                          TextSpan(text: " ${data.vodArea}"),
-                        ]
+                    text: TextSpan(
+                      style: TextStyle(
+                        color: secondaryColor,
+                        fontWeight: FontWeight.normal,
+                        fontSize: 14,
+                      ),
+                      children: <InlineSpan>[
+                        const TextSpan(text: "年份地区："),
+                        TextSpan(
+                          text: data.vodYear,
+                          style: TextStyle(
+                            color: const Color(0xFF109E9E),
+                            fontWeight: FontWeight.w500,
+                            fontSize: 14,
+                          ),
+                        ),
+                        TextSpan(text: " ${data.vodArea}"),
+                      ],
                     ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
@@ -226,8 +274,10 @@ class _ItemCell extends StatelessWidget {
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
-                        color: secondaryColor,
-                        fontWeight: FontWeight.normal, fontSize: 14),
+                      color: secondaryColor,
+                      fontWeight: FontWeight.normal,
+                      fontSize: 14,
+                    ),
                   ),
                   SizedBox(height: 3),
                   Text(
@@ -235,8 +285,10 @@ class _ItemCell extends StatelessWidget {
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
-                        color: secondaryColor,
-                        fontWeight: FontWeight.normal, fontSize: 13),
+                      color: secondaryColor,
+                      fontWeight: FontWeight.normal,
+                      fontSize: 13,
+                    ),
                   ),
                 ],
               ),

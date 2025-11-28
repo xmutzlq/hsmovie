@@ -12,56 +12,58 @@ class PlayerControllerPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        FijkView(
-          height: 260,
-          color: Colors.black,
-          fit: FijkFit.cover,
-          player: logic.state.player,
-          panelBuilder: (
-            FijkPlayer player,
-            FijkData data,
-            BuildContext context,
-            Size viewSize,
-            Rect texturePos,
-          ) {
-            /// 使用自定义的布局
-            return Obx(() => CustomFijkPanel (
-              player: player,
-              viewSize: viewSize,
-              texturePos: texturePos,
-              pageContent: context,
-              /// 标题 当前页面顶部的标题部分
-              playerTitle: logic.title.value,
-              /// 当前视频改变钩子
-              onChangeVideo: logic.onChangeVideo,
-              /// 当前视频源tabIndex
-              curTabIdx: logic.curTabIdx.value,
-              /// 当前视频源activeIndex
-              curActiveIdx: logic.curActiveIdx.value,
-              /// 显示的配置
-              showConfig: logic.state.showConfigAbs,
-              /// json格式化后的视频数据
-              videoFormat: logic.state.videoSourceFormat,
-              /// tabController
-              tabController: logic.state.tabController!,
-            ));
-          },
-        ),
-        // 请不要使用同一个tabbar，否则会卡顿，原因是数据更新导致整体重新绘制，
-        // 可以使用_curTabIdx和_curActiveIdx手动渲染其他类似组件，判断
-        Container(
-          child: Expanded(
-            child: buildPlayDrawer(),
+    return Material(child:
+      Column(
+        children: [
+          FijkView(
+            height: 260,
+            color: Colors.black,
+            fit: FijkFit.cover,
+            player: logic.state.player,
+            panelBuilder: (
+                FijkPlayer player,
+                FijkData data,
+                BuildContext context,
+                Size viewSize,
+                Rect texturePos,
+                ) {
+              /// 使用自定义的布局
+              return Obx(() => CustomFijkPanel (
+                player: player,
+                viewSize: viewSize,
+                texturePos: texturePos,
+                pageContent: context,
+                /// 标题 当前页面顶部的标题部分
+                playerTitle: logic.title.value,
+                /// 当前视频改变钩子
+                onChangeVideo: logic.onChangeVideo,
+                /// 当前视频源tabIndex
+                curTabIdx: logic.curTabIdx.value,
+                /// 当前视频源activeIndex
+                curActiveIdx: logic.curActiveIdx.value,
+                /// 显示的配置
+                showConfig: logic.state.showConfigAbs,
+                /// json格式化后的视频数据
+                videoFormat: logic.state.videoSourceFormat,
+                /// tabController
+                tabController: logic.state.tabController!,
+              ));
+            },
           ),
-        ),
-        Container(
-          color: commBgColor,
-          child: Text(
-              '当前tabIdx : ${logic.curTabIdx.toString()} 当前activeIdx : ${logic.curActiveIdx.toString()}'),
-        )
-      ],
+          // 请不要使用同一个tabbar，否则会卡顿，原因是数据更新导致整体重新绘制，
+          // 可以使用_curTabIdx和_curActiveIdx手动渲染其他类似组件，判断
+          Container(
+            child: Expanded(
+              child: buildPlayDrawer(),
+            ),
+          ),
+          Container(
+            color: commBgColor,
+            child: Text(
+                '当前tabIdx : ${logic.curTabIdx.toString()} 当前activeIdx : ${logic.curActiveIdx.toString()}'),
+          )
+        ],
+      )
     );
   }
 
@@ -71,6 +73,7 @@ class PlayerControllerPage extends StatelessWidget {
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(24),
         child: AppBar(
+          titleSpacing: 0,
           backgroundColor: commBgColor,
           automaticallyImplyLeading: false,
           primary: false,
@@ -81,6 +84,7 @@ class PlayerControllerPage extends StatelessWidget {
                 .map((e) => Tab(text: e!.name!))
                 .toList(),
             isScrollable: true,
+            tabAlignment:TabAlignment.center,
             controller: logic.state.tabController,
           ),
         ),
@@ -100,11 +104,9 @@ class PlayerControllerPage extends StatelessWidget {
     List<Widget> list = [];
     logic.state.videoSourceFormat!.video!.asMap().keys.forEach((int tabIdx) {
       List<Widget> playListBtns = logic.state.videoSourceFormat!.video![tabIdx]!.list!
-          .asMap()
-          .keys
-          .map((int activeIdx) {
+          .asMap().keys.map((int activeIdx) {
         return Padding(
-          padding: EdgeInsets.all(5),
+          padding: const EdgeInsets.all(5),
           child: Obx(() => ElevatedButton(
             style: ButtonStyle(
               shape: MaterialStateProperty.all(
@@ -112,8 +114,8 @@ class PlayerControllerPage extends StatelessWidget {
                   borderRadius: BorderRadius.circular(5),
                 ),
               ),
-              elevation: MaterialStateProperty.all(0),
-              backgroundColor: MaterialStateProperty.all(
+              elevation: WidgetStateProperty.all(0),
+              backgroundColor: WidgetStateProperty.all(
                   tabIdx == logic.curTabIdx.value && activeIdx == logic.curActiveIdx.value
                       ? Colors.red
                       : Colors.blue),

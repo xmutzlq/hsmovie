@@ -210,7 +210,7 @@ class _CustomFijkPanelState extends State<CustomFijkPanel>
       child: Container(
         child: AnimatedOpacity(
           opacity: _hideLockStuff ? 0.0 : 0.7,
-          duration: Duration(milliseconds: 400),
+          duration: const Duration(milliseconds: 400),
           child: Align(
             alignment: Alignment.centerLeft,
             child: Padding(
@@ -244,8 +244,8 @@ class _CustomFijkPanelState extends State<CustomFijkPanel>
       height: barHeight,
       alignment: Alignment.centerLeft,
       child: IconButton(
-        icon: Icon(Icons.arrow_back),
-        padding: EdgeInsets.only(
+        icon: const Icon(Icons.arrow_back),
+        padding: const EdgeInsets.only(
           left: 10.0,
           right: 10.0,
         ),
@@ -279,7 +279,7 @@ class _CustomFijkPanelState extends State<CustomFijkPanel>
                 : 0,
           ),
           // 失败图标
-          Icon(
+          const Icon(
             Icons.error,
             size: 50,
             color: Colors.white,
@@ -287,31 +287,31 @@ class _CustomFijkPanelState extends State<CustomFijkPanel>
           // 错误信息
           Text(
             "播放失败，您可以点击重试！",
-            style: TextStyle(
+            style: const TextStyle(
               color: Colors.white,
               fontSize: 15,
               fontWeight: FontWeight.bold,
             ),
           ),
-          SizedBox(height: 5),
+          const SizedBox(height: 5),
           // 重试
           ElevatedButton(
             style: ButtonStyle(
-              shape: MaterialStateProperty.all(
+              shape: WidgetStateProperty.all(
                 RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20),
                 ),
               ),
-              elevation: MaterialStateProperty.all(0),
-              backgroundColor: MaterialStateProperty.all(Colors.white),
+              elevation: WidgetStateProperty.all(0),
+              backgroundColor: WidgetStateProperty.all(Colors.white),
             ),
             onPressed: () {
               // 切换视频
               changeCurPlayVideo(widget.curTabIdx, widget.curActiveIdx);
             },
-            child: Text(
+            child: const Text(
               "点击重试",
-              style: TextStyle(color: Colors.black),
+              style: const TextStyle(color: Colors.black),
             ),
           ),
         ],
@@ -423,13 +423,13 @@ class _CustomFijkPanelState extends State<CustomFijkPanel>
           padding: EdgeInsets.all(5),
           child: ElevatedButton(
             style: ButtonStyle(
-              shape: MaterialStateProperty.all(
+              shape: WidgetStateProperty.all(
                 RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(5),
                 ),
               ),
-              elevation: MaterialStateProperty.all(0),
-              backgroundColor: MaterialStateProperty.all(
+              elevation: WidgetStateProperty.all(0),
+              backgroundColor: WidgetStateProperty.all(
                   tabIdx == widget.curTabIdx && activeIdx == widget.curActiveIdx
                       ? Colors.red
                       : Colors.blue),
@@ -453,7 +453,7 @@ class _CustomFijkPanelState extends State<CustomFijkPanel>
       list.add(
         SingleChildScrollView(
           child: Padding(
-            padding: EdgeInsets.only(left: 5, right: 5),
+            padding: const EdgeInsets.only(left: 5, right: 5),
             child: Wrap(
               direction: Axis.horizontal,
               children: playListBtns,
@@ -922,7 +922,7 @@ class _buildGestureDetectorState extends State<_buildGestureDetector> {
     return IconButton(
       icon: Icon(iconData),
       color: Colors.white,
-      padding: EdgeInsets.only(
+      padding: const EdgeInsets.only(
         left: 10.0,
         right: 10.0,
       ),
@@ -968,8 +968,8 @@ class _buildGestureDetectorState extends State<_buildGestureDetector> {
                     begin: Alignment.topLeft,
                     end: Alignment.bottomLeft,
                     colors: [
-                      Color.fromRGBO(0, 0, 0, 0),
-                      Color.fromRGBO(0, 0, 0, 1),
+                      const Color.fromRGBO(0, 0, 0, 0),
+                      const Color.fromRGBO(0, 0, 0, 1),
                     ],
                   ),
                 ),
@@ -980,9 +980,9 @@ class _buildGestureDetectorState extends State<_buildGestureDetector> {
                     // 下一集
                     showConfig.nextBtn
                         ? IconButton (
-                      icon: Icon(Icons.skip_next),
+                      icon: const Icon(Icons.skip_next),
                       color: Colors.white,
-                      padding: EdgeInsets.only(
+                      padding: const EdgeInsets.only(
                         left: 10.0,
                         right: 10.0,
                       ),
@@ -1008,10 +1008,10 @@ class _buildGestureDetectorState extends State<_buildGestureDetector> {
                         : Container(),
                     // 已播放时间
                     Padding(
-                      padding: EdgeInsets.only(right: 5.0, left: 5),
+                      padding: const EdgeInsets.only(right: 5.0, left: 5),
                       child: Text(
                         '${_duration2String(_currentPos)}',
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 14.0,
                           color: Colors.white,
                         ),
@@ -1021,9 +1021,9 @@ class _buildGestureDetectorState extends State<_buildGestureDetector> {
                     _duration.inMilliseconds == 0
                         ? Expanded(
                       child: Padding(
-                        padding: EdgeInsets.only(right: 5, left: 5),
+                        padding: const EdgeInsets.only(right: 5, left: 5),
                         child: NewFijkSlider(
-                          colors: NewFijkSliderColors(
+                          colors: const NewFijkSliderColors(
                             cursorColor: Colors.blue,
                             playedColor: Colors.blue,
                           ),
@@ -1035,7 +1035,7 @@ class _buildGestureDetectorState extends State<_buildGestureDetector> {
                     )
                         : Expanded(
                       child: Padding(
-                        padding: EdgeInsets.only(right: 5, left: 5),
+                        padding: const EdgeInsets.only(right: 5, left: 5),
                         child: NewFijkSlider(
                           colors: NewFijkSliderColors(
                             cursorColor: Colors.blue,
@@ -1070,14 +1070,14 @@ class _buildGestureDetectorState extends State<_buildGestureDetector> {
                         ? Container(
                       child: const Text(
                         "00:00",
-                        style: TextStyle(color: Colors.white),
+                        style: const TextStyle(color: Colors.white, fontSize: 14.0),
                       ),
                     )
                         : Padding(
                       padding: EdgeInsets.only(right: 5.0, left: 5),
                       child: Text(
                         '${_duration2String(_duration)}',
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 14.0,
                           color: Colors.white,
                         ),
@@ -1086,7 +1086,7 @@ class _buildGestureDetectorState extends State<_buildGestureDetector> {
                     // 剧集按钮
                     widget.player.value.fullScreen && showConfig.drawerBtn
                         ? Ink(
-                      padding: EdgeInsets.all(5),
+                      padding: const EdgeInsets.all(5),
                       child: InkWell(
                         onTap: () {
                           // 调用父组件的回调
@@ -1096,9 +1096,9 @@ class _buildGestureDetectorState extends State<_buildGestureDetector> {
                           alignment: Alignment.center,
                           width: 40,
                           height: 30,
-                          child: Text(
+                          child: const Text(
                             "剧集",
-                            style: TextStyle(color: Colors.white),
+                            style: const TextStyle(color: Colors.white),
                           ),
                         ),
                       ),
@@ -1107,7 +1107,7 @@ class _buildGestureDetectorState extends State<_buildGestureDetector> {
                     // 倍数按钮
                     widget.player.value.fullScreen && showConfig.speedBtn
                         ? Ink(
-                      padding: EdgeInsets.all(5),
+                      padding: const EdgeInsets.all(5),
                       child: InkWell(
                         onTap: () {
                           setState(() {
@@ -1131,7 +1131,7 @@ class _buildGestureDetectorState extends State<_buildGestureDetector> {
                       icon: Icon(widget.player.value.fullScreen
                           ? Icons.fullscreen_exit
                           : Icons.fullscreen),
-                      padding: EdgeInsets.only(left: 10.0, right: 10.0),
+                      padding: const EdgeInsets.only(left: 10.0, right: 10.0),
                       color: Colors.white,
                       splashColor: Colors.transparent,
                       highlightColor: Colors.transparent,
@@ -1179,8 +1179,8 @@ class _buildGestureDetectorState extends State<_buildGestureDetector> {
   // 返回按钮
   Widget _buildTopBackBtn() {
     return IconButton(
-      icon: Icon(Icons.arrow_back),
-      padding: EdgeInsets.only(
+      icon: const Icon(Icons.arrow_back),
+      padding: const EdgeInsets.only(
         left: 10.0,
         right: 10.0,
       ),
@@ -1204,7 +1204,7 @@ class _buildGestureDetectorState extends State<_buildGestureDetector> {
   Widget _buildTopBar() {
     return AnimatedOpacity(
       opacity: _hideStuff ? 0.0 : 0.8,
-      duration: Duration(milliseconds: 400),
+      duration: const Duration(milliseconds: 400),
       child: Container(
         height: showConfig.stateAuto && !widget.player.value.fullScreen
             ? barFillingHeight
@@ -1215,8 +1215,8 @@ class _buildGestureDetectorState extends State<_buildGestureDetector> {
             begin: Alignment.topLeft,
             end: Alignment.bottomLeft,
             colors: [
-              Color.fromRGBO(0, 0, 0, 1),
-              Color.fromRGBO(0, 0, 0, 0),
+              const Color.fromRGBO(0, 0, 0, 1),
+              const Color.fromRGBO(0, 0, 0, 0),
             ],
           ),
         ),
@@ -1232,7 +1232,7 @@ class _buildGestureDetectorState extends State<_buildGestureDetector> {
                     overflow: TextOverflow.ellipsis,
                     maxLines: 1,
                     textAlign: TextAlign.left,
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: Colors.white,
                     ),
                   ),
@@ -1255,12 +1255,12 @@ class _buildGestureDetectorState extends State<_buildGestureDetector> {
         child: (_prepared && !_buffering)
             ? AnimatedOpacity(
           opacity: _hideStuff ? 0.0 : 0.7,
-          duration: Duration(milliseconds: 400),
+          duration: const Duration(milliseconds: 400),
           child: IconButton(
             iconSize: barHeight * 1.2,
             icon: Icon(_playing ? Icons.pause : Icons.play_arrow,
                 color: Colors.white),
-            padding: EdgeInsets.only(left: 10.0, right: 10.0),
+            padding: const EdgeInsets.only(left: 10.0, right: 10.0),
             onPressed: _playOrPause,
           ),
         )
@@ -1285,13 +1285,13 @@ class _buildGestureDetectorState extends State<_buildGestureDetector> {
         borderRadius: BorderRadius.all(
           Radius.circular(5),
         ),
-        color: Color.fromRGBO(0, 0, 0, 0.8),
+        color: const Color.fromRGBO(0, 0, 0, 0.8),
       ),
       child: Padding(
-        padding: EdgeInsets.only(left: 10, right: 10),
+        padding: const EdgeInsets.only(left: 10, right: 10),
         child: Text(
           '${_duration2String(_dargPos)} / ${_duration2String(_duration)}',
-          style: TextStyle(
+          style: const TextStyle(
             color: Colors.white,
             fontSize: 18,
           ),
@@ -1330,11 +1330,11 @@ class _buildGestureDetectorState extends State<_buildGestureDetector> {
             Container(
               width: 100,
               height: 3,
-              margin: EdgeInsets.only(left: 8),
+              margin: const EdgeInsets.only(left: 8),
               child: LinearProgressIndicator(
                 value: updateDargVarVal,
                 backgroundColor: Colors.white54,
-                valueColor: AlwaysStoppedAnimation(Colors.lightBlue),
+                valueColor: const AlwaysStoppedAnimation(Colors.lightBlue),
               ),
             ),
           ],
@@ -1375,7 +1375,7 @@ class _buildGestureDetectorState extends State<_buildGestureDetector> {
       );
       columnChild.add(
         Padding(
-          padding: EdgeInsets.only(top: 5, bottom: 5),
+          padding: const EdgeInsets.only(top: 5, bottom: 5),
           child: Container(
             width: 50,
             height: 1,
@@ -1443,7 +1443,7 @@ class _buildGestureDetectorState extends State<_buildGestureDetector> {
                     child: !_hideSpeedStu
                         ? Container(
                       child: Padding(
-                        padding: EdgeInsets.all(10),
+                        padding: const EdgeInsets.all(10),
                         child: Column(
                           children: _buildSpeedListWidget(),
                         ),
@@ -1461,16 +1461,16 @@ class _buildGestureDetectorState extends State<_buildGestureDetector> {
                     alignment: Alignment.centerLeft,
                     child: AnimatedOpacity(
                       opacity: _hideStuff ? 0.0 : 0.7,
-                      duration: Duration(milliseconds: 400),
+                      duration: const Duration(milliseconds: 400),
                       child: Padding(
-                        padding: EdgeInsets.only(left: 20),
+                        padding: const EdgeInsets.only(left: 20),
                         child: IconButton(
                           iconSize: 30,
                           onPressed: () {
                             // 更改 ui显示状态
                             widget.changeLockState(true);
                           },
-                          icon: Icon(Icons.lock_open),
+                          icon: const Icon(Icons.lock_open),
                           color: Colors.white,
                         ),
                       ),

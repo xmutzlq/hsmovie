@@ -13,6 +13,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+/// 搜索逻辑委托类
 class SearchBarDelegate extends SearchDelegate<SearchEntity> {
 
   List<String>? searchHistory;
@@ -25,7 +26,7 @@ class SearchBarDelegate extends SearchDelegate<SearchEntity> {
   List<Widget> buildActions(BuildContext context) {
     return [
       IconButton(
-        icon: Icon(Icons.clear),
+        icon: const Icon(Icons.clear),
         onPressed: () {
           query = "";
           showSuggestions(context);
@@ -49,8 +50,10 @@ class SearchBarDelegate extends SearchDelegate<SearchEntity> {
     return searchHistory!;
   }
 
+  /// 搜索结果
   @override
   Widget buildResults(BuildContext context) {
+    debugPrint("buildSuggestions");
     if (query != '') {
       int index = searchHistory!.indexOf(query);
       if (index < 0) {
@@ -64,17 +67,17 @@ class SearchBarDelegate extends SearchDelegate<SearchEntity> {
         switch (snapshot.connectionState) {
           case ConnectionState.none:
             return Container(
-              child: Center(
-                child: Text('无搜索结果'),
+              child: const Center(
+                child: const Text('无搜索结果'),
               ),
             );
           case ConnectionState.active:
           case ConnectionState.waiting:
             return Container(
-              margin: EdgeInsets.only(top: 30),
+              margin: const EdgeInsets.only(top: 30),
               alignment: Alignment.topCenter,
-              child: CircularProgressIndicator(
-                valueColor: AlwaysStoppedAnimation(Colors.black),
+              child: const CircularProgressIndicator(
+                valueColor: const AlwaysStoppedAnimation(Colors.black),
               ),
             );
           case ConnectionState.done:
@@ -90,8 +93,10 @@ class SearchBarDelegate extends SearchDelegate<SearchEntity> {
     );
   }
 
+  /// 搜索实时输入
   @override
   Widget buildSuggestions(BuildContext context) {
+    debugPrint("buildSuggestions");
     if(query != "")
       debugPrint("buildSuggestions_query = " + query);
       return FutureBuilder<SearchEntitySuggestion>(
@@ -103,9 +108,9 @@ class SearchBarDelegate extends SearchDelegate<SearchEntity> {
           case ConnectionState.active:
           case ConnectionState.waiting:
             return Container(
-              margin: EdgeInsets.only(top: 30),
+              margin: const EdgeInsets.only(top: 30),
               alignment: Alignment.topCenter,
-              child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation(Colors.black)),
+              child: const CircularProgressIndicator(valueColor: const AlwaysStoppedAnimation(Colors.black)),
             );
           case ConnectionState.done:
             if(snapshot.hasError) {
@@ -130,11 +135,7 @@ class SearchBarDelegate extends SearchDelegate<SearchEntity> {
   }
 
   Widget _buildHistoryList() {
-    var width = MediaQuery
-        .of(Get.context!)
-        .size
-        .width;
-
+    var width = MediaQuery.of(Get.context!).size.width;
     return FutureBuilder<List<String>>(
       future: _getHistory(), // a previously-obtained Future<String> or null
       builder: (BuildContext context, AsyncSnapshot<List<String>> snapshot) {
@@ -144,10 +145,10 @@ class SearchBarDelegate extends SearchDelegate<SearchEntity> {
           case ConnectionState.active:
           case ConnectionState.waiting:
             return Container(
-              margin: EdgeInsets.only(top: 15),
+              margin: const EdgeInsets.only(top: 15),
               alignment: Alignment.topCenter,
-              child: CircularProgressIndicator(
-                  valueColor: AlwaysStoppedAnimation(Colors.black)),
+              child: const CircularProgressIndicator(
+                  valueColor: const AlwaysStoppedAnimation(Colors.black)),
             );
           case ConnectionState.done:
             if (snapshot.hasError) return Text('Error: ${snapshot.error}');
@@ -156,14 +157,13 @@ class SearchBarDelegate extends SearchDelegate<SearchEntity> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Padding(
-                    padding:
-                    EdgeInsets.fromLTRB(15, 15, 0, 0),
+                    padding: const EdgeInsets.fromLTRB(15, 15, 0, 0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
-                        Text(
+                        const Text(
                           '搜索记录',
-                          style: TextStyle(
+                          style: const TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 15),
                         ),
@@ -171,8 +171,8 @@ class SearchBarDelegate extends SearchDelegate<SearchEntity> {
                             ? SizedBox(
                           height: 40,
                           child: IconButton(
-                            padding: EdgeInsets.all(0),
-                            icon: Icon(Icons.delete_outline),
+                            padding: const EdgeInsets.all(0),
+                            icon: const Icon(Icons.delete_outline),
                             onPressed: () {
                               if (searchHistory != null && searchHistory!.length > 0) {
                                 searchHistory = [];
@@ -183,13 +183,12 @@ class SearchBarDelegate extends SearchDelegate<SearchEntity> {
                             },
                           ),
                         )
-                            : SizedBox()
+                            : const SizedBox()
                       ],
                     )),
                   searchHistory != null && searchHistory!.length > 0 ?
                   Container(
-                    padding:
-                    EdgeInsets.symmetric(horizontal: 15),
+                    padding: const EdgeInsets.symmetric(horizontal: 15),
                     width: width,
                     child: Wrap(
                       spacing: 20,
@@ -210,8 +209,8 @@ class SearchBarDelegate extends SearchDelegate<SearchEntity> {
                       }).toList()),
                   )
                       : Container(
-                    padding: EdgeInsets.only(left: 15),
-                    child: Text('无搜索记录'),
+                    padding: const EdgeInsets.only(left: 15),
+                    child: const Text('无搜索记录'),
                   ),
                 ],
               ),
