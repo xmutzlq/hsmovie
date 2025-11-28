@@ -14,7 +14,7 @@ class MovieCategory extends StatelessWidget {
       init: HomePageMixinControllerLogic(), // use it only first time on each controller
       builder: (logic) {
         return Container(
-          height: width / 4.5,
+          height: width / 5,
           margin: const EdgeInsets.all(10),
           child: ListView.builder(
             scrollDirection: Axis.horizontal,

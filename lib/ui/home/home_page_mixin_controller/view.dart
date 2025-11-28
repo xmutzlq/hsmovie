@@ -5,6 +5,7 @@ import 'package:ble_project/repository/movie_repository.dart';
 import 'package:ble_project/util/my_scroll_behavior.dart';
 import 'package:ble_project/util/toast_util.dart';
 import 'package:ble_project/widget/category/category.dart';
+import 'package:ble_project/widget/common_state_screen.dart';
 import 'package:ble_project/widget/list/movie_list.dart';
 import 'package:ble_project/widget/slideshow/slideshow.dart';
 import 'package:flutter/material.dart';
@@ -21,15 +22,9 @@ class HomePageMixin extends GetView<HomePageMixinControllerLogic> {
   Widget build(BuildContext context) {
     return controller.obx(
             (homeResult) => _homePageMixinControllerPage(homeResult!),
-        onLoading: Center(
-          child: CircularProgressIndicator(),
-        ),
-        onError: (error) => Center(
-            child: Text(error!)
-        ),
-        onEmpty: Center(
-          child: Text('暂无数据，尽请期待'),
-        )
+        onLoading: screenLoadingState(),
+        onError: (error) => screenErrorState(error),
+        onEmpty: screenEmptyState()
     );
   }
 

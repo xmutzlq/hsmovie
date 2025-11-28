@@ -3,6 +3,7 @@ import 'package:ble_project/configs/page_config.dart';
 import 'package:ble_project/model/discovery/discovery_result.dart';
 import 'package:ble_project/model/vod_info.dart';
 import 'package:ble_project/repository/movie_repository.dart';
+import 'package:ble_project/ui/discover/components/size_config.dart';
 import 'package:ble_project/ui/discover/discovery/logic.dart';
 import 'package:ble_project/util/time_util.dart';
 import 'package:ble_project/widget/keepalive_widget.dart';
@@ -105,7 +106,7 @@ class _ShimmerCell extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
-    final _rightPanelWidth = width - 110;
+    final _rightPanelWidth = width - SizeConfig.ShimmerListRightPadding;
     final _color = const Color(0xFFFFFFFF);
     return Container(
       padding: const EdgeInsets.only(bottom: 20),
@@ -171,7 +172,7 @@ class _ItemCell extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
-    final _rightPanelWidth = width - 110;
+    final _rightPanelWidth = width - SizeConfig.ListItemRightPadding;
     return GestureDetector(
       onTap: onTap,
       child: Container(

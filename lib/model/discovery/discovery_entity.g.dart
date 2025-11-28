@@ -6,15 +6,12 @@ part of 'discovery_entity.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-DiscoveryEntity _$DiscoveryEntityFromJson(Map<String, dynamic> json) {
-  return DiscoveryEntity(
-    (json['data'] as List<dynamic>)
-        .map((e) => MovieInfo.fromJson(e as Map<String, dynamic>))
-        .toList(),
-  );
-}
+DiscoveryEntity _$DiscoveryEntityFromJson(Map<String, dynamic> json) =>
+    DiscoveryEntity(
+      (json['data'] as List<dynamic>)
+          .map((e) => MovieInfo.fromJson(e as Map<String, dynamic>))
+          .toList(),
+    );
 
 Map<String, dynamic> _$DiscoveryEntityToJson(DiscoveryEntity instance) =>
-    <String, dynamic>{
-      'data': instance.data,
-    };
+    <String, dynamic>{'data': instance.data};

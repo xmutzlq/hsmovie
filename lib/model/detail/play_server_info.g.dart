@@ -6,20 +6,19 @@ part of 'play_server_info.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-PlayServerInfo _$PlayServerInfoFromJson(Map<String, dynamic> json) {
-  return PlayServerInfo(
-    json['Status'] as String,
-    json['From'] as String,
-    json['Show'] as String,
-    json['Des'] as String,
-    json['Ps'] as String,
-    json['Target'] as String,
-    json['Parse'] as String,
-    json['Sort'] as String,
-    json['Tip'] as String,
-    json['ID'] as String,
-  );
-}
+PlayServerInfo _$PlayServerInfoFromJson(Map<String, dynamic> json) =>
+    PlayServerInfo(
+      (json['Status'] as num).toInt(),
+      json['From'] as String,
+      json['Show'] as String,
+      json['Des'] as String?,
+      json['Ps'] as String?,
+      json['Target'] as String?,
+      json['Parse'] as String?,
+      json['Sort'] as String?,
+      json['Tip'] as String,
+      json['ID'] as String,
+    );
 
 Map<String, dynamic> _$PlayServerInfoToJson(PlayServerInfo instance) =>
     <String, dynamic>{

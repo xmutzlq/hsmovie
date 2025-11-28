@@ -40,7 +40,8 @@ AppBar get appBarHome => AppBar(
   ),
   centerTitle: true,
   backgroundColor: commBgColor,
-  elevation: 0.0, systemOverlayStyle: SystemUiOverlayStyle.dark,
+  elevation: 0.0,
+  systemOverlayStyle: SystemUiOverlayStyle.dark,
 );
 
 class _SearchBar extends StatelessWidget {
@@ -48,15 +49,12 @@ class _SearchBar extends StatelessWidget {
   const _SearchBar({required this.onTap});
   @override
   Widget build(BuildContext context) {
-    var width = MediaQuery
-        .of(context)
-        .size
-        .width;
+    var width = MediaQuery.of(context).size.width;
     debugPrint("SearchBar width : $width");
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: EdgeInsets.only(left: 15, right: 15),
+        padding: const EdgeInsets.only(left: 15, right: 15),
         height: 30,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(40),

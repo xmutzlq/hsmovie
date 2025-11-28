@@ -5,21 +5,21 @@ part 'play_server_info.g.dart';
 @JsonSerializable()
 class PlayServerInfo {
   @JsonKey(name: "Status")
-  String status;
+  int status;
   @JsonKey(name: "From")
   String from;
   @JsonKey(name: "Show")
   String show;
   @JsonKey(name: "Des")
-  String des;
+  String? des;
   @JsonKey(name: "Ps")
-  String ps;
+  String? ps;
   @JsonKey(name: "Target")
-  String target;
+  String? target;
   @JsonKey(name: "Parse")
-  String parse;
+  String? parse;
   @JsonKey(name: "Sort")
-  String sort;
+  String? sort;
   @JsonKey(name: "Tip")
   String tip;
   @JsonKey(name: "ID")

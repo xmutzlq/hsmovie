@@ -41,13 +41,13 @@ class SimpleListPage extends StatelessWidget {
                 ],
               ) :
           ListView.separated(
-            physics: BouncingScrollPhysics(),
-            padding: EdgeInsets.symmetric(horizontal: 20),
+            physics: const BouncingScrollPhysics(),
+            padding: const EdgeInsets.symmetric(horizontal: 20),
             cacheExtent: 500,
             separatorBuilder: (_, __) => _SeparatorItem(),
             itemCount: 1,
             itemBuilder: (_, index) {
-              return Offstage(
+              return const Offstage(
                   offstage: false,
                   child: const _ShimmerList());
             },
@@ -61,8 +61,8 @@ class _SeparatorItem extends StatelessWidget {
   const _SeparatorItem({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return Padding(
-        padding: EdgeInsets.only(left: 130), child: Divider());
+    return const Padding(
+        padding: const EdgeInsets.only(left: 130), child: const Divider());
   }
 }
 
@@ -70,10 +70,7 @@ class _ShimmerCell extends StatelessWidget {
   const _ShimmerCell({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    var width = MediaQuery
-        .of(context)
-        .size
-        .width;
+    var width = MediaQuery.of(context).size.width;
     final _rightPanelWidth = width - 200;
     final _color = const Color(0xFFFFFFFF);
     return Container(
@@ -88,21 +85,21 @@ class _ShimmerCell extends StatelessWidget {
                 borderRadius: BorderRadius.circular(10),
                 color: _color),
           ),
-          SizedBox(width: 20),
+          const SizedBox(width: 20),
           SizedBox(
             width: _rightPanelWidth,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 Container(height: 30, width: _rightPanelWidth - 50, color: _color),
-                SizedBox(height: 5),
+                const SizedBox(height: 5),
                 Container(height: 15, width: _rightPanelWidth - 50, color: _color),
-                SizedBox(height: 5),
+                const SizedBox(height: 5),
                 Container(height: 15, width: _rightPanelWidth - 50, color: _color),
-                SizedBox(height: 15),
+                const SizedBox(height: 15),
                 Container(height: 18, color: _color),
-                SizedBox(height: 5),
+                const SizedBox(height: 5),
                 Container(height: 18, width: 350, color: _color),
               ],
             ),
@@ -123,7 +120,7 @@ class _ShimmerList extends StatelessWidget {
       child: Column(
         ///默认4个骨架
           children: [
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Column(
               children: List.filled(4, 0).map((e) => const _ShimmerCell()).toList(),
             )
@@ -153,18 +150,18 @@ class _ItemCell extends StatelessWidget {
               width: 110,
               decoration: BoxDecoration(
                 color: shimmerColorLight,
-                borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(10.0),
+                borderRadius: const BorderRadius.only(
+                    topLeft: const Radius.circular(10.0),
                     topRight: Radius.zero,
-                    bottomLeft: Radius.circular(10.0),
-                    bottomRight: Radius.circular(35.0)
+                    bottomLeft: const Radius.circular(10.0),
+                    bottomRight: const Radius.circular(35.0)
                 ),
                 boxShadow: [
                   BoxShadow(
                       color: appThemeData.brightness == Brightness.light
                           ? const Color(0xFF8E8E8E)
                           : const Color(0x00000000),
-                      offset: Offset(0, 15),
+                      offset: const Offset(0, 15),
                       blurRadius: 10,
                       spreadRadius: -10)
                 ],
@@ -174,7 +171,7 @@ class _ItemCell extends StatelessWidget {
                 ),
               ),
             ),
-            SizedBox(width: 20),
+            const SizedBox(width: 20),
             SizedBox(
               width: _rightPanelWidth,
               child: Column(
@@ -184,18 +181,18 @@ class _ItemCell extends StatelessWidget {
                     data.vodName,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
+                    style: const TextStyle(
                         fontWeight: FontWeight.bold, fontSize: 16),
                   ),
-                  SizedBox(height: 5),
+                  const SizedBox(height: 5),
                   RichText(
                     text: TextSpan (
-                        style: TextStyle(
+                        style: const TextStyle(
                             color: secondaryColor,
                             fontWeight: FontWeight.normal, fontSize: 14),
                         children: <InlineSpan>[
-                          TextSpan(text: "年份地区："),
-                          TextSpan(text: data.vodYear, style: TextStyle(
+                          const TextSpan(text: "年份地区："),
+                          TextSpan(text: data.vodYear, style: const TextStyle(
                               color: const Color(0xFF109E9E),
                               fontWeight: FontWeight.w500, fontSize: 14)),
                           TextSpan(text: " ${data.vodArea}"),
@@ -212,7 +209,7 @@ class _ItemCell extends StatelessWidget {
                         color: secondaryColor,
                         fontWeight: FontWeight.normal, fontSize: 14),
                   ),
-                  SizedBox(height: 3),
+                  const SizedBox(height: 3),
                   Text(
                     "时间：${TimeUtil.timeStampToTimeStr(data.vodTime)}",
                     maxLines: 1,

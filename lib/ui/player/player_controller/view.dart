@@ -65,7 +65,7 @@ class PlayerControllerPage extends StatelessWidget {
     );
   }
 
-  // build 剧集
+  /// build 剧集
   Widget buildPlayDrawer() {
     return Scaffold(
       appBar: PreferredSize(
@@ -95,7 +95,7 @@ class PlayerControllerPage extends StatelessWidget {
     );
   }
 
-  // 剧集 tabCon
+  /// 剧集 tabCon
   List<Widget> createTabConList() {
     List<Widget> list = [];
     logic.state.videoSourceFormat!.video!.asMap().keys.forEach((int tabIdx) {
@@ -142,7 +142,7 @@ class PlayerControllerPage extends StatelessWidget {
       list.add(
         SingleChildScrollView(
           child: Padding(
-            padding: EdgeInsets.only(left: 5, right: 5),
+            padding: const EdgeInsets.only(left: 5, right: 5),
             child: Wrap(
               direction: Axis.horizontal,
               children: playListBtns,

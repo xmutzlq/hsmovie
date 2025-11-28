@@ -6,24 +6,23 @@ part of 'movie_detail_entity.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-MovieDetailEntity _$MovieDetailEntityFromJson(Map<String, dynamic> json) {
-  return MovieDetailEntity(
-    (json['comments'] as List<dynamic>)
-        .map((e) => CommentInfo.fromJson(e as Map<String, dynamic>))
-        .toList(),
-    json['count'] as int,
-    json['domain'] as String,
-    (json['rand'] as List<dynamic>)
-        .map((e) => VodInfo.fromJson(e as Map<String, dynamic>))
-        .toList(),
-    (json['relate'] as List<dynamic>)
-        .map((e) => VodInfo.fromJson(e as Map<String, dynamic>))
-        .toList(),
-    json['shareLink'] as String,
-    json['status'] as int,
-    DetailVodInfo.fromJson(json['vod'] as Map<String, dynamic>),
-  );
-}
+MovieDetailEntity _$MovieDetailEntityFromJson(Map<String, dynamic> json) =>
+    MovieDetailEntity(
+      (json['comments'] as List<dynamic>)
+          .map((e) => CommentInfo.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      (json['count'] as num).toInt(),
+      json['domain'] as String,
+      (json['rand'] as List<dynamic>)
+          .map((e) => VodInfo.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      (json['relate'] as List<dynamic>)
+          .map((e) => VodInfo.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      json['shareLink'] as String,
+      (json['status'] as num).toInt(),
+      DetailVodInfo.fromJson(json['vod'] as Map<String, dynamic>),
+    );
 
 Map<String, dynamic> _$MovieDetailEntityToJson(MovieDetailEntity instance) =>
     <String, dynamic>{

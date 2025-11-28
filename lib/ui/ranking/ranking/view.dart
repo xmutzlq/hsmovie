@@ -86,10 +86,7 @@ class _ShimmerCell extends StatelessWidget {
   const _ShimmerCell({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    var width = MediaQuery
-        .of(context)
-        .size
-        .width;
+    var width = MediaQuery.of(context).size.width;
     final _rightPanelWidth = width - _imageWidth - _horizontalPadding * 2 - _rightPanelPadding * 2;
     return Container(
       height: _cardHeight,
@@ -174,9 +171,9 @@ class _ShimmerList extends StatelessWidget {
           child: Column(
             children: <Widget>[
               const _ShimmerCell(),
-              SizedBox(height: 15),
+              const SizedBox(height: 15),
               const _ShimmerCell(),
-              SizedBox(height: 15),
+              const SizedBox(height: 15),
               const _ShimmerCell(),
             ],
           ),

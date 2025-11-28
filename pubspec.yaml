@@ -27,7 +27,7 @@ dependencies:
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^1.0.2
+  cupertino_icons: ^1.0.8
   google_fonts: ^6.3.2
   # GetX
   get: 4.7.2
@@ -41,6 +41,7 @@ dependencies:
   # log
   logger: 1.1.0
   # tools
+  flutter_svg: ^2.2.3
   fluttertoast: ^9.0.0
   carousel_slider: ^5.1.1
   cached_network_image: 3.4.1
@@ -50,16 +51,24 @@ dependencies:
   grouped_list: ^4.1.0
   # Player
   fijkplayer_plus: ^0.0.1
-#  wakelock: ^0.6.2
+  media_kit: ^1.2.2 # Primary package.
+  media_kit_video: ^2.0.0 # For video rendering.
+  media_kit_libs_video: ^1.0.7 # Native video dependencies.
+  # wakelock: ^0.6.2
   wakelock_plus: ^1.4.0
   # FPS
   keframe: 2.0.2
   statsfl: ^2.2.0+1
   # Test
   flutter_autosize_screen_pro: ^0.0.2
+  # Html
+  flutter_html: ^3.0.0
+  # Splash
+  flutter_native_splash: ^2.4.7
+  flutter_lints: ^6.0.0
 
 dependency_overrides:
-  sqflite_android: ^2.4.1 # 此处替换为你想要的版本号
+  sqflite_android: 2.4.1 # 此处替换为你想要的版本号
 
 dev_dependencies:
   flutter_test:
@@ -103,3 +112,12 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+
+flutter_native_splash:
+  color: "#e1f5fe"
+  image: assets/logo_lockup_flutter_vertical.png
+  color_dark: "#042a49"
+  image_dark: assets/logo_lockup_flutter_vertical_wht.png
+  android_12:
+    image: assets/android12splash.png
+    icon_background_color: "#eeeeee"

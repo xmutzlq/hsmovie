@@ -7,16 +7,13 @@ part of 'search_entity_suggestion.dart';
 // **************************************************************************
 
 SearchEntitySuggestion _$SearchEntitySuggestionFromJson(
-    Map<String, dynamic> json) {
-  return SearchEntitySuggestion(
-    (json['data'] as List<dynamic>)
-        .map((e) => VodInfo.fromJson(e as Map<String, dynamic>))
-        .toList(),
-  );
-}
+  Map<String, dynamic> json,
+) => SearchEntitySuggestion(
+  (json['data'] as List<dynamic>)
+      .map((e) => VodInfo.fromJson(e as Map<String, dynamic>))
+      .toList(),
+);
 
 Map<String, dynamic> _$SearchEntitySuggestionToJson(
-        SearchEntitySuggestion instance) =>
-    <String, dynamic>{
-      'data': instance.data,
-    };
+  SearchEntitySuggestion instance,
+) => <String, dynamic>{'data': instance.data};

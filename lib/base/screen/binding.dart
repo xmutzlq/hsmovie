@@ -1,69 +1,40 @@
-import 'dart:async';
-import 'dart:collection';
-
-import 'package:flutter/gestures.dart';
+import 'package:ble_project/util/class_util.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
+import 'package:flutter/scheduler.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 
-void runAutoApp(Widget app) {
-  WidgetsFlutterBinding.ensureInitialized();
-  AutoWidgetsFlutterBinding.ensureInitialized()
-    ..attachRootWidget(app)
-    ..scheduleWarmUpFrame();
-}
+mixin AutoWidgetsFlutterBinding on WidgetsFlutterBinding {
+  bool _appLifecycleStateLocked = true;
 
-class AutoWidgetsFlutterBinding extends WidgetsFlutterBinding {
-  static WidgetsBinding ensureInitialized() {
-    return WidgetsBinding.instance;
-  }
-
-  /// 因为修改了 devicePixelRatio ，得适配点击事件  GestureBinding
   @override
   void initInstances() {
     super.initInstances();
+    debugPrint("${ClazzUtil.getClassName(this)} -> initInstances");
+    _instance = this;
+    changeAppLifecycleState(AppLifecycleState.resumed);
   }
+
+  static AutoWidgetsFlutterBinding? get instance => _instance;
+  static AutoWidgetsFlutterBinding? _instance;
 
   @override
-  void unlocked() {
-    super.unlocked();
-    _flushPointerEventQueue();
-  }
-
-  final Queue<PointerEvent> _pendingPointerEvents = Queue<PointerEvent>();
-
-  @override
-  void cancelPointer(int pointer) {
-    if (_pendingPointerEvents.isEmpty && !locked)
-      scheduleMicrotask(_flushPointerEventQueue);
-    _pendingPointerEvents.addFirst(PointerCancelEvent(pointer: pointer));
-  }
-
-  void _flushPointerEventQueue() {
-    assert(!locked);
-    while (_pendingPointerEvents.isNotEmpty)
-      _handlePointerEvent(_pendingPointerEvents.removeFirst());
-  }
-
-  final Map<int, HitTestResult> _hitTests = <int, HitTestResult>{};
-
-  void _handlePointerEvent(PointerEvent event) {
-    assert(!locked);
-    HitTestResult result;
-    if (event is PointerDownEvent) {
-      assert(!_hitTests.containsKey(event.pointer));
-      result = HitTestResult();
-      _hitTests[event.pointer] = result;
-      assert(() {
-        if (debugPrintHitTestResults) debugPrint('$event: $result');
-        return true;
-      }());
-    } else if (event is PointerUpEvent || event is PointerCancelEvent) {
-      result = _hitTests.remove(event.pointer)!;
-    } else if (event.down) {
-      result = _hitTests[event.pointer]!;
-    } else {
-      return; // We currently ignore add, remove, and hover move events.
+  void handleAppLifecycleStateChanged(AppLifecycleState state) {
+    if (_appLifecycleStateLocked) {
+      return;
     }
-    dispatchEvent(event, result);
+    debugPrint("${ClazzUtil.getClassName(this)} -> handleAppLifecycleStateChanged ${state.toString()}");
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      FlutterNativeSplash.remove();
+    });
+    super.handleAppLifecycleStateChanged(state);
+  }
+
+  void changeAppLifecycleState(AppLifecycleState state) {
+    if (SchedulerBinding.instance.lifecycleState == state) {
+      return;
+    }
+    _appLifecycleStateLocked = false;
+    handleAppLifecycleStateChanged(state);
+    _appLifecycleStateLocked = true;
   }
 }

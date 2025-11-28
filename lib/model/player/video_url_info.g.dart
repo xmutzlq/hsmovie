@@ -6,15 +6,8 @@ part of 'video_url_info.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-VideoUrlInfo _$VideoUrlInfoFromJson(Map<String, dynamic> json) {
-  return VideoUrlInfo(
-    json['name'] as String,
-    json['url'] as String,
-  );
-}
+VideoUrlInfo _$VideoUrlInfoFromJson(Map<String, dynamic> json) =>
+    VideoUrlInfo(json['name'] as String, json['url'] as String);
 
 Map<String, dynamic> _$VideoUrlInfoToJson(VideoUrlInfo instance) =>
-    <String, dynamic>{
-      'name': instance.name,
-      'url': instance.url,
-    };
+    <String, dynamic>{'name': instance.name, 'url': instance.url};
