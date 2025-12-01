@@ -6,8 +6,9 @@ import 'package:get/get.dart';
 
 import 'state.dart';
 
-class SearchLogicLogic extends GetxController {
+class SearchLogicLogic extends GetxController{
   final SearchLogicState state = SearchLogicState();
+  SearchEntitySuggestion? _suggestion;
 
   Future<SearchEntity> getSearchRemoteData(String keyword, String page) async {
     var searchData = await MovieRepository().fetchSearchResultByPage(keyword, page);
@@ -18,15 +19,24 @@ class SearchLogicLogic extends GetxController {
     }
   }
 
+  SearchEntitySuggestion getSearchSuggestionsLocalData() {
+    return _suggestion ?? SearchEntitySuggestion(List.empty());
+  }
+
+  void clearSearchSuggestionsLocalData() {
+    _suggestion = SearchEntitySuggestion(List.empty());
+  }
+
   Future<SearchEntitySuggestion> getSearchSuggestionsRemoteData(String keyword) async {
     var searchData = await MovieRepository().fetchSearchSuggestions(keyword);
     if(searchData.ok) {
       debugPrint("searchData.data = ${searchData.data}");
       if(searchData.data == null || searchData.data['data'] == null) {
-        return SearchEntitySuggestion(List.empty());
+        _suggestion = SearchEntitySuggestion(List.empty());
       } else {
-        return SearchEntitySuggestion.fromJson(searchData.data);
+        _suggestion = SearchEntitySuggestion.fromJson(searchData.data);
       }
+      return _suggestion!;
     } else {
       throw Exception(searchData.error?.message);
     }

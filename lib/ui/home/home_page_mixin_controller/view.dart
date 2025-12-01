@@ -24,12 +24,13 @@ class HomePageMixin extends GetView<HomePageMixinControllerLogic> {
             (homeResult) => _homePageMixinControllerPage(homeResult!),
         onLoading: screenLoadingState(),
         onError: (error) => screenErrorState(error),
-        onEmpty: screenEmptyState()
+        onEmpty: screenEmptyStateFull()
     );
   }
 
   Widget _homePageMixinControllerPage(HomeResult homeResult) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: commBgColor,
       appBar: appBarHome,
       body: RefreshIndicator(

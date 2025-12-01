@@ -7,7 +7,7 @@ import 'package:get/get.dart';
 
 import 'state.dart';
 
-class RankingLogic extends GetxController with SingleGetTickerProviderMixin {
+class RankingLogic extends GetxController with GetSingleTickerProviderStateMixin {
   final RankingState state = RankingState();
   late List<Widget> rankingTabs;
   late ScrollController scrollController;

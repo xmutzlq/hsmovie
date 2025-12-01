@@ -60,8 +60,8 @@ class PlayerControllerLogic extends GetxController with SingleGetTickerProviderM
     debugPrint("parseUrl = $url");
     if(url != null) {
       // final decoded = Uri.decodeFull(url);
-      final uri = Uri.parse(url);
-      url = uri.queryParameters['v'];
+      // final uri = Uri.parse(url);
+      // url = uri.queryParameters['v'];
     }
     return url??"";
   }

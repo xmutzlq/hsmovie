@@ -1,6 +1,8 @@
 import 'package:ble_project/base/theme/app_theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_autosize_screen_pro/flutter_autosize_screen_pro.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 
 Widget screenLoadingState() {
   return Container(
@@ -12,29 +14,53 @@ Widget screenLoadingState() {
 }
 
 Widget screenErrorState(String? error) {
+  debugPrint("buildResults -> screenErrorState error : $screenErrorState");
   return Container(
-      color: commBgColor,
-      child: Center(
-          child: Column(
-            children: [
-              SvgPicture.asset('assets/page_error.svg', semanticsLabel: 'PageError Logo'),
-              Text(error ?? "error msg null")
-            ],
-          )
-      )
+    color: Colors.white,
+    width: Get.width,
+    height: Get.height,
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        SvgPicture.asset('assets/page_error.svg', width: 150, height: 150, semanticsLabel: 'PageError Logo'),
+        SizedBox(height: 15,),
+        Text(error ?? "error msg null"),
+        SizedBox(height: 140,),
+      ],
+    )
+  );
+}
+
+Widget screenEmptyStateFull() {
+  return Container(
+    color: Colors.white,
+    width: Get.width,
+    height: Get.height,
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        SvgPicture.asset('assets/page_empty.svg', width: 150, height: 150, semanticsLabel: 'PageEmpty Logo'),
+        SizedBox(height: 15,),
+        const Text('暂无数据'),
+        SizedBox(height: 140,),
+      ],
+    )
   );
 }
 
 Widget screenEmptyState() {
   return Container(
-      color: commBgColor,
-      child: Center(
-          child: Column(
-            children: [
-              SvgPicture.asset('assets/page_empty.svg', semanticsLabel: 'PageEmpty Logo'),
-              const Text('暂无数据')
-            ],
-          )
+      color: Colors.white,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          SvgPicture.asset('assets/page_empty.svg', width: 150, height: 150, semanticsLabel: 'PageEmpty Logo'),
+          SizedBox(height: 15,),
+          const Text('暂无数据'),
+        ],
       )
   );
 }

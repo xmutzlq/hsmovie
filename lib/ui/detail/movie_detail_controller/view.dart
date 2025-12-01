@@ -32,7 +32,7 @@ class MovieDetailControllerPage extends GetView<MovieDetailControllerLogic> {
             (movieDetailResult) => _buildDetailContent(movieDetailResult!),
         onLoading: screenLoadingState(),
         onError: (error) => screenErrorState(error),
-        onEmpty: screenEmptyState()
+        onEmpty: screenEmptyStateFull()
     );
   }
 

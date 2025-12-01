@@ -109,7 +109,7 @@ class PlayerControllerPage extends StatelessWidget {
           padding: const EdgeInsets.all(5),
           child: Obx(() => ElevatedButton(
             style: ButtonStyle(
-              shape: MaterialStateProperty.all(
+              shape: WidgetStateProperty.all(
                 RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(5),
                 ),
