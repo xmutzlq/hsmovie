@@ -1,7 +1,11 @@
+import 'dart:convert';
+
+import 'package:ble_project/base/log/app_log.dart';
 import 'package:ble_project/base/skin/fijkplayer_skin.dart';
 import 'package:ble_project/base/skin/schema.dart';
 import 'package:ble_project/model/detail/play_server_info.dart';
 import 'package:ble_project/model/detail/play_url_info.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -22,9 +26,18 @@ class PlayerControllerLogic extends GetxController with SingleGetTickerProviderM
     this.title.value = title;
   }
 
+  void _debugLog(Object obj) {
+    if (kDebugMode) {
+      final json = JsonEncoder.withIndent('  ');
+      debugPrint(json.convert(obj));
+    }
+  }
+
   @override
   void onInit() {
     var map = Get.arguments;
+    debugPrint('play info : ');
+    logD('${JsonEncoder.withIndent('  ').convert(map)}');
     String title = map['videoTitle'];
     List<PlayServerInfo> playServers = map['playServers'];
     PlayUrlInfo playUrlInfo = map['playUrlInfo'];
@@ -60,8 +73,8 @@ class PlayerControllerLogic extends GetxController with SingleGetTickerProviderM
     debugPrint("parseUrl = $url");
     if(url != null) {
       // final decoded = Uri.decodeFull(url);
-      // final uri = Uri.parse(url);
-      // url = uri.queryParameters['v'];
+      final uri = Uri.parse(url);
+      url = uri.queryParameters['v'] ?? url;
     }
     return url??"";
   }

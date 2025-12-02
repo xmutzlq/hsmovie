@@ -1,5 +1,9 @@
+import 'package:ble_project/base/log/app_log.dart';
 import 'package:ble_project/base/skin/fijkplayer_skin.dart';
 import 'package:ble_project/base/theme/app_theme.dart';
+import 'package:ble_project/configs/global_config.dart';
+import 'package:ble_project/repository/movie_repository.dart';
+import 'package:ble_project/widget/common_state_screen.dart';
 import 'package:fijkplayer_plus/fijkplayer_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -57,11 +61,11 @@ class PlayerControllerPage extends StatelessWidget {
               child: buildPlayDrawer(),
             ),
           ),
-          Container(
+          Global.isRelease ? SizedBox() : Container(
             color: commBgColor,
-            child: Text(
-                '当前tabIdx : ${logic.curTabIdx.toString()} 当前activeIdx : ${logic.curActiveIdx.toString()}'),
-          )
+            child: Obx(() => Text(
+                '当前tabIdx : ${logic.curTabIdx.toString()}, 当前activeIdx : ${logic.curActiveIdx.toString()}'),
+          ))
         ],
       )
     );
@@ -101,8 +105,12 @@ class PlayerControllerPage extends StatelessWidget {
 
   /// 剧集 tabCon
   List<Widget> createTabConList() {
+    debugPrint("createTabConList");
     List<Widget> list = [];
+    debugPrint('tabView size : ${logic.state.videoSourceFormat!.video!.asMap().length}');
     logic.state.videoSourceFormat!.video!.asMap().keys.forEach((int tabIdx) {
+      debugPrint('tabView item size : ${logic.state.videoSourceFormat!.video![tabIdx]!.list!.length}');
+
       List<Widget> playListBtns = logic.state.videoSourceFormat!.video![tabIdx]!.list!
           .asMap().keys.map((int activeIdx) {
         return Padding(
@@ -129,7 +137,9 @@ class PlayerControllerPage extends StatelessWidget {
               await logic.state.player.stop();
               await logic.state.player.reset();
               debugPrint("nextVideoUrl = $nextVideoUrl");
-              logic.state.player.setDataSource(nextVideoUrl, autoPlay: true);
+              String? playUrl = await MovieRepository().getPlayUrl(nextVideoUrl);
+              logD("realPlayUrl : $playUrl");
+              logic.state.player.setDataSource(playUrl ?? nextVideoUrl, autoPlay: true);
             },
             child: Text(
               logic.state.videoSourceFormat!.video![tabIdx]!.list![activeIdx]!.name!,
@@ -141,9 +151,15 @@ class PlayerControllerPage extends StatelessWidget {
         );
       }).toList();
       //
-      list.add(
+      list.add((playListBtns.isEmpty) ?
+        Container(
+          color: Colors.white,
+          padding: const EdgeInsets.only(left: 5, right: 5),
+          child: screenEmptyStateForTabView()
+        ) :
         SingleChildScrollView(
-          child: Padding(
+          child: Container(
+            color: Colors.white,
             padding: const EdgeInsets.only(left: 5, right: 5),
             child: Wrap(
               direction: Axis.horizontal,

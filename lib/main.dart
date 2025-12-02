@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:ble_project/base/theme/app_theme.dart';
 import 'package:ble_project/configs/global_config.dart';
 import 'package:ble_project/configs/page_config.dart';
@@ -11,15 +13,39 @@ import 'package:flutter_autosize_screen_pro/flutter_autosize_screen_pro.dart';
 import 'package:media_kit/media_kit.dart';
 import 'package:statsfl/statsfl.dart';
 
+import 'base/log/log_helper.dart';
+import 'base/log/size_based_logger.dart';
 import 'base/screen/binding.dart';
 
-Future main() async {
-  FlutterAutosizeScreenPro.setStandard(360, isAutoTextSize: true);
-  Global.init();
-  FlutterNativeSplash.preserve(widgetsBinding: CustomFlutterBinding());
-  SpUtil.init();
-  MediaKit.ensureInitialized();
-  runApp(StatsFl(isEnabled: Global.showFPS, child: const MyApp()));
+void main() async {
+  runZonedGuarded(() async {
+    FlutterAutosizeScreenPro.setStandard(360, isAutoTextSize: true);
+    Global.init();
+    FlutterNativeSplash.preserve(widgetsBinding: CustomFlutterBinding());
+    SpUtil.init();
+    MediaKit.ensureInitialized();
+
+    // 初始化基于大小的日志系统
+    await SizeBasedLoggerConfig.instance.initialize();
+    // 如果需要使用基于时间的日志系统，注释上面的行，取消注释下面的行
+    // await TimeBasedLoggerConfig.instance.initialize();
+    // 配置Flutter错误处理
+    FlutterError.onError = (details) {
+      FlutterError.presentError(details);
+      Log.error('Flutter error',
+          error: details.exception, stackTrace: details.stack);
+    };
+
+    Log.info('Application starting...');
+    runApp(StatsFl(isEnabled: Global.showFPS, child: const MyApp()));
+  }, (error, stack) {
+    // 在日志系统初始化之前发生的错误，直接打印到控制台
+    if (SizeBasedLoggerConfig.instance.isInitialized) {
+      Log.critical('Uncaught error', error: error, stackTrace: stack);
+    } else {
+      print('Error before logger initialization: $error\n$stack');
+    }
+  });
 }
 
 class CustomFlutterBinding extends WidgetsFlutterBinding with AutoWidgetsFlutterBinding{}

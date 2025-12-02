@@ -2,10 +2,11 @@ import 'dart:async';
 import 'dart:math';
 import 'dart:ui';
 
+import 'package:ble_project/base/log/app_log.dart';
+import 'package:ble_project/repository/movie_repository.dart';
 import 'package:fijkplayer_plus/fijkplayer_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
-// import 'package:wakelock/wakelock.dart';
 
 import './schema.dart' show VideoSourceFormat;
 import './slider.dart' show NewFijkSliderColors, NewFijkSlider;
@@ -99,13 +100,14 @@ class _CustomFijkPanelState extends State<CustomFijkPanel>
   Animation<Offset>? _animation;
 
   void initEvent() {
+    debugPrint("initEvent 1");
     _animationController = AnimationController(
       duration: const Duration(milliseconds: 280),
       vsync: this,
     );
     // init animation
     _animation = Tween(
-      begin: Offset(1, 0),
+      begin: const Offset(1, 0),
       end: Offset.zero,
     ).animate(_animationController!);
     // is not null
@@ -171,12 +173,15 @@ class _CustomFijkPanelState extends State<CustomFijkPanel>
 
   // 切换播放源
   Future<void> changeCurPlayVideo(int tabIdx, int activeIdx) async {
+    debugPrint('changeCurPlayVideo => tabIdx : $tabIdx, activeIdx : $activeIdx');
     await player.stop();
-    player.reset().then((_) {
+    player.reset().then((_) async {
       String curTabActiveUrl =
       _videoSourceTabs.video![tabIdx]!.list![activeIdx]!.url!;
+      String? playUrl = await MovieRepository().getPlayUrl(curTabActiveUrl);
+      logD("realPlayUrl : $playUrl");
       player.setDataSource(
-        curTabActiveUrl,
+        playUrl ?? curTabActiveUrl,
         autoPlay: true,
       );
       // 回调
@@ -384,6 +389,7 @@ class _CustomFijkPanelState extends State<CustomFijkPanel>
 
   // build 剧集
   Widget _buildPlayDrawer() {
+    debugPrint('_buildPlayDrawer');
     return DefaultTabController(
       length: _videoSourceTabs.video!.length,
       child: Scaffold(
@@ -411,10 +417,12 @@ class _CustomFijkPanelState extends State<CustomFijkPanel>
     );
   }
 
-  // 剧集 tabCon
+  /// 剧集 tabCon
   List<Widget> _createTabConList() {
     List<Widget> list = [];
+    debugPrint('tabView size : ${_videoSourceTabs.video!.asMap().length}');
     _videoSourceTabs.video!.asMap().keys.forEach((int tabIdx) {
+      debugPrint('tabView item size : ${_videoSourceTabs.video![tabIdx]!.list!.length}');
       List<Widget> playListBtns = _videoSourceTabs.video![tabIdx]!.list!
           .asMap()
           .keys
@@ -583,12 +591,12 @@ class _buildGestureDetectorState extends State<_buildGestureDetector> {
   ShowConfigAbs get showConfig => widget.showConfig;
   VideoSourceFormat get _videoSourceTabs => widget.videoFormat!;
 
-  Duration _duration = Duration();
-  Duration _currentPos = Duration();
-  Duration _bufferPos = Duration();
+  Duration _duration = const Duration();
+  Duration _currentPos = const Duration();
+  Duration _bufferPos = const Duration();
 
   // 滑动后值
-  Duration _dargPos = Duration();
+  Duration _dargPos = const Duration();
 
   bool _isTouch = false;
 
@@ -633,21 +641,34 @@ class _buildGestureDetectorState extends State<_buildGestureDetector> {
   // 初始化构造函数
   _buildGestureDetectorState(this._hideStuff);
 
-  void initEvent() {
+  Future<void> initEvent() async {
+    debugPrint("initEvent 2");
     // 设置初始化的值，全屏与半屏切换后，重设
     setState(() {
       _speed = speed;
     });
     // is not null
+    debugPrint("initEvent 2 videoSourceTabs size : ${_videoSourceTabs.video!.length}");
     if (_videoSourceTabs.video!.length < 1) return null;
     // url
     String url = _videoSourceTabs
         .video![widget.curTabIdx]!.list![widget.curActiveIdx]!.url!;
-    debugPrint("play_url = " + url);
-    player.setDataSource(
-      url,
-      autoPlay: true,
-    );
+    debugPrint("play_url : $url");
+
+    String? playUrl = await MovieRepository().getPlayUrl(url);
+    logD("realPlayUrl : $playUrl");
+
+    final state = player.state;
+    if (state == FijkState.idle ||
+        state == FijkState.initialized ||
+        state == FijkState.prepared) {
+      player.setDataSource(playUrl ?? url, autoPlay: true);
+    } else {
+      // 先重置到合适的状态
+      player.reset();
+      player.setDataSource(playUrl ?? url, autoPlay: true);
+    }
+
     // 延时隐藏
     _startHideTimer();
   }
@@ -871,12 +892,15 @@ class _buildGestureDetectorState extends State<_buildGestureDetector> {
     setState(() {
       _buffering = false;
     });
-    player.reset().then((_) {
+    player.reset().then((_) async {
       _speed = speed = 1.0;
       String curTabActiveUrl =
       _videoSourceTabs.video![tabIdx]!.list![activeIdx]!.url!;
+      debugPrint('curTabActiveUrl : $curTabActiveUrl');
+      String? playUrl = await MovieRepository().getPlayUrl(curTabActiveUrl);
+      logD("realPlayUrl : $playUrl");
       player.setDataSource(
-        curTabActiveUrl,
+        playUrl ?? curTabActiveUrl,
         autoPlay: true,
       );
       // 回调
@@ -1165,7 +1189,7 @@ class _buildGestureDetectorState extends State<_buildGestureDetector> {
               color: Colors.white70,
               child: Container(
                 color: Colors.blue,
-                width: curBottomProW is double ? curBottomProW : 0,
+                width: curBottomProW,
                 height: 4,
               ),
             )

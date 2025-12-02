@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:ble_project/base/log/app_log.dart';
 import 'package:ble_project/model/detail/movie_detail_entity.dart';
 import 'package:ble_project/repository/movie_repository.dart';
 import 'package:ble_project/ui/detail/movie_detail_controller/state.dart';
@@ -28,6 +31,7 @@ class MovieDetailControllerLogic extends GetxController with StateMixin<MovieDet
     var movieDetailData = await MovieRepository().fetchMovieDetail(movieId);
     if(movieDetailData.ok) {
       MovieDetailEntity entity = MovieDetailEntity.fromJson(movieDetailData.data);
+      logD('${JsonEncoder.withIndent('  ').convert(entity)}');
       detailState.entity = entity;
       change(entity, status: RxStatus.success());
     } else {

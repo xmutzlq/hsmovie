@@ -2,12 +2,11 @@ import 'package:ble_project/model/ranking/ranking_entity.dart';
 import 'package:ble_project/model/vod_info.dart';
 import 'package:ble_project/repository/movie_repository.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 
 import 'state.dart';
 
-class RankingLogic extends GetxController with GetSingleTickerProviderStateMixin {
+class RankingLogic extends GetxController with SingleGetTickerProviderMixin {
   final RankingState state = RankingState();
   late List<Widget> rankingTabs;
   late ScrollController scrollController;

@@ -53,4 +53,6 @@ class PlayUrlInfo extends Object {
   PlayUrlInfo(this.hnm3u8, this.zjm3u8);
 
   factory PlayUrlInfo.fromJson(Map<String, dynamic> json) => _$PlayUrlInfoFromJson(json);
+
+  Map<String, dynamic> toJson() => _$PlayUrlInfoToJson(this);
 }

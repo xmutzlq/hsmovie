@@ -19,4 +19,6 @@ class MovieRepository {
   Future<HttpResponse> fetchAllFilter() => moviesApiProvider.getAllFilters();
 
   Future<HttpResponse> fetchMoreData(int type, int page) => moviesApiProvider.getMoreData(type, page);
+
+  Future<String?> getPlayUrl(String url) => moviesApiProvider.getPlayUrl(url);
 }

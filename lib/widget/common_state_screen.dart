@@ -64,3 +64,16 @@ Widget screenEmptyState() {
       )
   );
 }
+
+Widget screenEmptyStateForTabView() {
+  return Center(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          SvgPicture.asset('assets/page_empty.svg', width: 150, height: 150, semanticsLabel: 'PageEmpty Logo'),
+          SizedBox(height: 15,),
+          const Text('暂无播放源，请切换到其他播放源'),
+        ],
+      )
+  );
+}

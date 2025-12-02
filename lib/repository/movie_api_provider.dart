@@ -1,4 +1,5 @@
 import 'package:ble_project/base/dio_new.dart';
+import 'package:ble_project/base/log/app_log.dart';
 import 'package:get/get.dart';
 
 class MovieApiProvider {
@@ -53,4 +54,20 @@ class MovieApiProvider {
     return appResponse;
   }
 
+  ///获取播放url中隐藏的播放地址
+  Future<String?> getPlayUrl(String url) async {
+    try {
+      final response = await Dio().get(url);
+      logD('response : $response');
+      if(response.data is String) {
+        return getVideoUrl(response.data as String);
+      }
+      return url;
+    } on DioException catch(e) {
+      return url;
+    }
+  }
+
+  String? getVideoUrl(String html) =>
+      RegExp(r"video_url\s*=\s*'([^']+)'").firstMatch(html)?.group(1);
 }
