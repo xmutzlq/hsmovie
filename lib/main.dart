@@ -59,6 +59,7 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       builder: FlutterAutosizeScreenPro.appBuilder,
       theme: appThemeData,
+      darkTheme: appThemeDarkData,
       debugShowCheckedModeBanner: false,
       defaultTransition: Transition.fade,
       navigatorKey: Get.key,

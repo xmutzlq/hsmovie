@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 
 class PlayerControllerState {
   final FijkPlayer player = FijkPlayer();
-  ShowConfigAbs showConfigAbs = PlayerShowConfig();
+  final ShowConfigAbs showConfigAbs = PlayerShowConfig();
   VideoSourceFormat? videoSourceFormat;
   TabController? tabController;
 }

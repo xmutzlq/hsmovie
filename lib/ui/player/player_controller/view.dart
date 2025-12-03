@@ -3,6 +3,7 @@ import 'package:ble_project/base/skin/fijkplayer_skin.dart';
 import 'package:ble_project/base/theme/app_theme.dart';
 import 'package:ble_project/configs/global_config.dart';
 import 'package:ble_project/repository/movie_repository.dart';
+import 'package:ble_project/ui/player/components/lazy_tab_page.dart';
 import 'package:ble_project/widget/common_state_screen.dart';
 import 'package:fijkplayer_plus/fijkplayer_plus.dart';
 import 'package:flutter/material.dart';
@@ -61,10 +62,10 @@ class PlayerControllerPage extends StatelessWidget {
               child: buildPlayDrawer(),
             ),
           ),
-          Global.isRelease ? SizedBox() : Container(
-            color: commBgColor,
+          Global.isRelease ? const SizedBox() : Container(
+            color: Colors.white,
             child: Obx(() => Text(
-                '当前tabIdx : ${logic.curTabIdx.toString()}, 当前activeIdx : ${logic.curActiveIdx.toString()}'),
+                '当前TabIndex : ${logic.curTabIdx.toString()}, 当前PlayIndex : ${logic.curActiveIdx.toString()}'),
           ))
         ],
       )
@@ -94,7 +95,7 @@ class PlayerControllerPage extends StatelessWidget {
         ),
       ),
       body: Container(
-        color: commBgColor,
+        color: Colors.white,
         child: TabBarView(
           controller: logic.state.tabController,
           children: createTabConList(),
@@ -107,6 +108,7 @@ class PlayerControllerPage extends StatelessWidget {
   List<Widget> createTabConList() {
     debugPrint("createTabConList");
     List<Widget> list = [];
+    int widgetIndex = -1;
     debugPrint('tabView size : ${logic.state.videoSourceFormat!.video!.asMap().length}');
     logic.state.videoSourceFormat!.video!.asMap().keys.forEach((int tabIdx) {
       debugPrint('tabView item size : ${logic.state.videoSourceFormat!.video![tabIdx]!.list!.length}');
@@ -150,23 +152,14 @@ class PlayerControllerPage extends StatelessWidget {
           )),
         );
       }).toList();
-      //
+      // 更新widgetIndex
+      widgetIndex ++;
       list.add((playListBtns.isEmpty) ?
         Container(
-          color: Colors.white,
           padding: const EdgeInsets.only(left: 5, right: 5),
           child: screenEmptyStateForTabView()
         ) :
-        SingleChildScrollView(
-          child: Container(
-            color: Colors.white,
-            padding: const EdgeInsets.only(left: 5, right: 5),
-            child: Wrap(
-              direction: Axis.horizontal,
-              children: playListBtns,
-            ),
-          ),
-        ),
+        LazyTabPage(index: widgetIndex, playListBtns: playListBtns)
       );
     });
     return list;

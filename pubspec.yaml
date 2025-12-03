@@ -30,7 +30,7 @@ dependencies:
   cupertino_icons: ^1.0.8
   google_fonts: ^6.3.2
   # GetX
-  get: 4.7.2
+  get: 4.7.3
   # Net
   dio: ^5.9.0
   dio_cache_interceptor: ^4.0.5
@@ -116,10 +116,10 @@ flutter:
   # see https://flutter.dev/custom-fonts/#from-packages
 
 flutter_native_splash:
-  color: "#e1f5fe"
-  image: assets/logo_lockup_flutter_vertical.png
-  color_dark: "#042a49"
-  image_dark: assets/logo_lockup_flutter_vertical_wht.png
+  color: "#ffffff"
+  image: assets/logo.png
+  color_dark: "#002832"
+  image_dark: assets/logo_dark.png
   android_12:
     image: assets/android12splash.png
     icon_background_color: "#eeeeee"

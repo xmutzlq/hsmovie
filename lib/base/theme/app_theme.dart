@@ -28,6 +28,16 @@ ThemeData get appThemeData => ThemeData(
     tabBarTheme: tabBarTheme,
     textTheme: GoogleFonts.poppinsTextTheme());
 
+ThemeData get appThemeDarkData => ThemeData(
+    primaryColor: kPrimaryColor,
+    primaryColorDark: primaryDarkColor,
+    primaryColorLight: kPrimaryLightColor,
+    scaffoldBackgroundColor: Colors.white,
+    hintColor: kPrimaryColor,
+    appBarTheme: appBarTheme,
+    tabBarTheme: tabBarTheme,
+    textTheme: GoogleFonts.poppinsTextTheme());
+
 AppBarTheme get appBarTheme => AppBarTheme();
 
 TabBarThemeData get tabBarTheme => TabBarThemeData(

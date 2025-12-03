@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:ble_project/base/log/app_log.dart';
 import 'package:ble_project/base/skin/fijkplayer_skin.dart';
 import 'package:ble_project/base/skin/schema.dart';
 import 'package:ble_project/model/detail/play_server_info.dart';
@@ -16,6 +15,8 @@ class PlayerControllerLogic extends GetxController with SingleGetTickerProviderM
   RxString title = "未知".obs;
   RxInt curTabIdx = 0.obs;
   RxInt curActiveIdx = 0.obs;
+
+  RxInt curTabPageIdx = 0.obs;
 
   void onChangeVideo(int curTabIdx, int curActiveIdx) {
     this.curTabIdx.value = curTabIdx;
@@ -37,7 +38,7 @@ class PlayerControllerLogic extends GetxController with SingleGetTickerProviderM
   void onInit() {
     var map = Get.arguments;
     debugPrint('play info : ');
-    logD('${JsonEncoder.withIndent('  ').convert(map)}');
+    // logD('${JsonEncoder.withIndent('  ').convert(map)}');
     String title = map['videoTitle'];
     List<PlayServerInfo> playServers = map['playServers'];
     PlayUrlInfo playUrlInfo = map['playUrlInfo'];
@@ -49,6 +50,9 @@ class PlayerControllerLogic extends GetxController with SingleGetTickerProviderM
       length: videoEntity.video!.length,
       vsync: this,
     );
+    state.tabController?.addListener(() {
+      curTabPageIdx.value = state.tabController?.index ?? 0;
+    });
     // 这句不能省，必须有
     speed = 1.0;
     super.onInit();
@@ -70,7 +74,7 @@ class PlayerControllerLogic extends GetxController with SingleGetTickerProviderM
   }
 
   String _parseUrl(String? url) {
-    debugPrint("parseUrl = $url");
+    // debugPrint("parseUrl = $url");
     if(url != null) {
       // final decoded = Uri.decodeFull(url);
       final uri = Uri.parse(url);

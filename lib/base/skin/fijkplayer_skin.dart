@@ -3,9 +3,13 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:ble_project/base/log/app_log.dart';
+import 'package:ble_project/configs/page_config.dart';
 import 'package:ble_project/repository/movie_repository.dart';
+import 'package:ble_project/ui/player/components/lazy_tab_page.dart';
+import 'package:ble_project/widget/common_state_screen.dart';
 import 'package:fijkplayer_plus/fijkplayer_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 
 import './schema.dart' show VideoSourceFormat;
@@ -207,7 +211,7 @@ class _CustomFijkPanelState extends State<CustomFijkPanel>
     });
   }
 
-  // 锁 组件
+  /// 锁 组件
   Widget _buidLockStateDetctor() {
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
@@ -243,7 +247,7 @@ class _CustomFijkPanelState extends State<CustomFijkPanel>
     );
   }
 
-  // 返回按钮
+  /// 返回按钮
   Widget _buildTopBackBtn() {
     return Container(
       height: barHeight,
@@ -271,7 +275,7 @@ class _CustomFijkPanelState extends State<CustomFijkPanel>
     );
   }
 
-  // 错误状态
+  /// 错误状态
   Widget _buildErrorContext() {
     return Center(
       child: Column(
@@ -324,7 +328,7 @@ class _CustomFijkPanelState extends State<CustomFijkPanel>
     );
   }
 
-  // 播放错误状态
+  /// 播放错误状态
   Widget _buildErrorWidget() {
     return Container(
       color: Colors.black,
@@ -356,7 +360,7 @@ class _CustomFijkPanelState extends State<CustomFijkPanel>
     );
   }
 
-  // 抽屉组件 - 播放列表
+  /// 抽屉组件 - 播放列表
   Widget _buildPlayerListDrawer() {
     return Container(
       alignment: Alignment.centerRight,
@@ -387,13 +391,14 @@ class _CustomFijkPanelState extends State<CustomFijkPanel>
     );
   }
 
-  // build 剧集
+  /// build 剧集
   Widget _buildPlayDrawer() {
     debugPrint('_buildPlayDrawer');
     return DefaultTabController(
       length: _videoSourceTabs.video!.length,
       child: Scaffold(
         appBar: AppBar(
+          titleSpacing: 0,
           backgroundColor: Colors.black87,
           automaticallyImplyLeading: false,
           elevation: 0.1,
@@ -403,6 +408,7 @@ class _CustomFijkPanelState extends State<CustomFijkPanel>
                 .map((e) => Tab(text: e!.name!))
                 .toList(),
             isScrollable: true,
+            tabAlignment:TabAlignment.center,
             controller: _tabController,
           ),
         ),
@@ -420,6 +426,7 @@ class _CustomFijkPanelState extends State<CustomFijkPanel>
   /// 剧集 tabCon
   List<Widget> _createTabConList() {
     List<Widget> list = [];
+    int widgetIndex = -1;
     debugPrint('tabView size : ${_videoSourceTabs.video!.asMap().length}');
     _videoSourceTabs.video!.asMap().keys.forEach((int tabIdx) {
       debugPrint('tabView item size : ${_videoSourceTabs.video![tabIdx]!.list!.length}');
@@ -428,7 +435,7 @@ class _CustomFijkPanelState extends State<CustomFijkPanel>
           .keys
           .map((int activeIdx) {
         return Padding(
-          padding: EdgeInsets.all(5),
+          padding: const EdgeInsets.all(5),
           child: ElevatedButton(
             style: ButtonStyle(
               shape: WidgetStateProperty.all(
@@ -450,24 +457,21 @@ class _CustomFijkPanelState extends State<CustomFijkPanel>
             },
             child: Text(
               _videoSourceTabs.video![tabIdx]!.list![activeIdx]!.name!,
-              style: TextStyle(
+              style: const TextStyle(
                 color: Colors.white,
               ),
             ),
           ),
         );
       }).toList();
-      //
-      list.add(
-        SingleChildScrollView(
-          child: Padding(
+      // 更新widgetIndex
+      widgetIndex ++;
+      list.add((playListBtns.isEmpty) ?
+        Container(
             padding: const EdgeInsets.only(left: 5, right: 5),
-            child: Wrap(
-              direction: Axis.horizontal,
-              children: playListBtns,
-            ),
-          ),
-        ),
+            child: screenEmptyStateForTabViewDark()
+        ) :
+        LazyTabPage(index: widgetIndex, playListBtns: playListBtns),
       );
     });
     return list;
@@ -477,12 +481,7 @@ class _CustomFijkPanelState extends State<CustomFijkPanel>
   // ignore: must_call_super
   Widget build(BuildContext context) {
     Rect rect = player.value.fullScreen
-        ? Rect.fromLTWH(
-      0,
-      0,
-      widget.viewSize.width,
-      widget.viewSize.height,
-    )
+        ? Rect.fromLTWH(0, 0, widget.viewSize.width, widget.viewSize.height,)
         : Rect.fromLTRB(
       max(0.0, widget.texturePos.left),
       max(0.0, widget.texturePos.top),
@@ -641,7 +640,8 @@ class _buildGestureDetectorState extends State<_buildGestureDetector> {
   // 初始化构造函数
   _buildGestureDetectorState(this._hideStuff);
 
-  Future<void> initEvent() async {
+  Future<void> initEventAndPlay() async {
+
     debugPrint("initEvent 2");
     // 设置初始化的值，全屏与半屏切换后，重设
     setState(() {
@@ -665,8 +665,8 @@ class _buildGestureDetectorState extends State<_buildGestureDetector> {
       player.setDataSource(playUrl ?? url, autoPlay: true);
     } else {
       // 先重置到合适的状态
-      player.reset();
-      player.setDataSource(playUrl ?? url, autoPlay: true);
+      // player.reset();
+      // player.setDataSource(playUrl ?? url, autoPlay: true);
     }
 
     // 延时隐藏
@@ -676,6 +676,7 @@ class _buildGestureDetectorState extends State<_buildGestureDetector> {
   @override
   void dispose() {
     super.dispose();
+    debugPrint("initEvent 2 dispose");
     _hideTimer?.cancel();
 
     player.removeListener(_playerValueChanged);
@@ -687,8 +688,9 @@ class _buildGestureDetectorState extends State<_buildGestureDetector> {
   @override
   void initState() {
     super.initState();
+    debugPrint("initEvent 2 initState");
 
-    initEvent();
+    initEventAndPlay();
 
     _duration = player.value.duration;
     _currentPos = player.currentPos;
@@ -728,7 +730,7 @@ class _buildGestureDetectorState extends State<_buildGestureDetector> {
       });
     }
     print(
-        '+++++++++ $value.state  播放器状态  ${value.state == FijkState.started} ++++++++++');
+        '+++++++++ $value.state  播放器started状态  ${value.state == FijkState.started} ++++++++++');
     bool playing = (value.state == FijkState.started);
     bool prepared = value.prepared;
     String? exception = value.exception.message;
@@ -1211,14 +1213,18 @@ class _buildGestureDetectorState extends State<_buildGestureDetector> {
       splashColor: Colors.transparent,
       highlightColor: Colors.transparent,
       color: Colors.white,
-      onPressed: () {
+      onPressed: () async {
         // 判断当前是否全屏，如果全屏，退出
         if (widget.player.value.fullScreen) {
           player.exitFullScreen();
         } else {
-          if (widget.pageContent == null) return null;
-          player.stop();
-          Navigator.pop(widget.pageContent!);
+          if (widget.pageContent == null) return;
+          await player.stop();
+          Navigator.popUntil(
+            context,
+                (route) => route.settings.name == RouterConfigs.detail,
+          );
+          // Navigator.pop(widget.pageContent!);
         }
       },
     );

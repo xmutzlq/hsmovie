@@ -58,7 +58,7 @@ class MovieApiProvider {
   Future<String?> getPlayUrl(String url) async {
     try {
       final response = await Dio().get(url);
-      logD('response : $response');
+      // logD('response : $response');
       if(response.data is String) {
         return getVideoUrl(response.data as String);
       }
