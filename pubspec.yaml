@@ -66,6 +66,9 @@ dependencies:
   flutter_html: ^3.0.0
   # Splash
   flutter_native_splash: ^2.4.7
+  # lifecycle
+  lifecycle: ^0.10.0
+  flutter_lifecycle_detector: ^0.0.8
 
 dependency_overrides:
   sqflite_android: 2.4.1 # 此处替换为你想要的版本号

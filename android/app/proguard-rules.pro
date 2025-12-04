@@ -108,3 +108,7 @@
 -keep class tv.danmaku.ijk.media.player.** {
     *;
 }
+
+-keep class io.flutter.** { *; }
+-keep class io.flutter.plugins.** { *; }
+-keep class com.baseflow.permissionhandler.** { *; }

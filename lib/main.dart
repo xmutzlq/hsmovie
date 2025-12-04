@@ -12,6 +12,7 @@ import 'package:get/get.dart';
 import 'package:flutter_autosize_screen_pro/flutter_autosize_screen_pro.dart';
 import 'package:media_kit/media_kit.dart';
 import 'package:statsfl/statsfl.dart';
+import 'package:lifecycle/lifecycle.dart';
 
 import 'base/log/log_helper.dart';
 import 'base/log/size_based_logger.dart';
@@ -63,6 +64,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       defaultTransition: Transition.fade,
       navigatorKey: Get.key,
+      navigatorObservers: [defaultLifecycleObserver],
       initialRoute: RouterConfigs.root,
       getPages: PageConfig.getPages,
       initialBinding: NavigationPageBinding(),

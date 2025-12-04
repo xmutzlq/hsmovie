@@ -7,6 +7,7 @@ import 'package:ble_project/ui/player/components/lazy_tab_page.dart';
 import 'package:ble_project/widget/common_state_screen.dart';
 import 'package:fijkplayer_plus/fijkplayer_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_lifecycle_detector/flutter_lifecycle_detector.dart';
 import 'package:get/get.dart';
 
 import 'logic.dart';
@@ -17,6 +18,16 @@ class PlayerControllerPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    /// 前后台监听只适合android和ios
+    FlutterLifecycleDetector().onBackgroundChange.listen((isBackground) async {
+      debugPrint('Movie in background $isBackground');
+      if(isBackground) {
+        await state.player.pause();
+      } else {
+        await state.player.start();
+      }
+    });
+
     return Material(child:
       Column(
         children: [
@@ -59,7 +70,7 @@ class PlayerControllerPage extends StatelessWidget {
           // 可以使用_curTabIdx和_curActiveIdx手动渲染其他类似组件，判断
           Container(
             child: Expanded(
-              child: buildPlayDrawer(),
+              child: _buildPlayDrawer(),
             ),
           ),
           Global.isRelease ? const SizedBox() : Container(
@@ -73,7 +84,7 @@ class PlayerControllerPage extends StatelessWidget {
   }
 
   /// build 剧集
-  Widget buildPlayDrawer() {
+  Widget _buildPlayDrawer() {
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(24),
@@ -98,14 +109,14 @@ class PlayerControllerPage extends StatelessWidget {
         color: Colors.white,
         child: TabBarView(
           controller: logic.state.tabController,
-          children: createTabConList(),
+          children: _createTabConList(),
         ),
       ),
     );
   }
 
   /// 剧集 tabCon
-  List<Widget> createTabConList() {
+  List<Widget> _createTabConList() {
     debugPrint("createTabConList");
     List<Widget> list = [];
     int widgetIndex = -1;

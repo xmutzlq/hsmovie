@@ -9,7 +9,6 @@ import 'package:ble_project/ui/player/components/lazy_tab_page.dart';
 import 'package:ble_project/widget/common_state_screen.dart';
 import 'package:fijkplayer_plus/fijkplayer_plus.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 
 import './schema.dart' show VideoSourceFormat;
