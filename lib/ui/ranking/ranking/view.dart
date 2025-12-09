@@ -11,7 +11,6 @@ import 'package:ble_project/widget/sliverappbar_delegate.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 import 'package:shimmer/shimmer.dart';
 
 import 'logic.dart';

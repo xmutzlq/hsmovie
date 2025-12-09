@@ -157,6 +157,8 @@ class MovieDetailControllerPage extends GetView<MovieDetailControllerLogic> {
                           || logic.detailState.entity!.vod.vodPlayServer!.isEmpty) {
                         ToastUtil.showToast("暂无无播放资源")
                       } else {
+                        // 加入观看记录
+
                         Navigator.of(context).pushNamed(RouterConfigs.player, arguments: {
                           'playServers' : logic.detailState.entity?.vod.vodPlayServer,
                           'playUrlInfo' : logic.detailState.entity?.vod.vodPlayUrls,

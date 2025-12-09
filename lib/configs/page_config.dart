@@ -13,6 +13,8 @@ import 'package:ble_project/ui/ranking/ranking/binding.dart';
 import 'package:ble_project/ui/ranking/ranking/view.dart';
 import 'package:ble_project/ui/search/search_page_controller/search_logic/binding.dart';
 import 'package:ble_project/ui/search/search_page_controller/search_logic/view.dart';
+import 'package:ble_project/ui/user/edit/person_info_edit.dart';
+import 'package:ble_project/ui/user/personal/binding.dart';
 import 'package:get/get.dart';
 
 import '../ui/home/home_page_mixin_controller/view.dart';
@@ -60,6 +62,11 @@ abstract class PageConfig {
         name: RouterConfigs.player,
         page: () => PlayerControllerPage(),
         binding: PlayerControllerBinding()
-    )
+    ),
+    GetPage(
+        name: RouterConfigs.person_edit,
+        page: () => PersonalInfoEditPage(),
+        binding: PersonalBinding()
+    ),
   ];
 }

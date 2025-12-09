@@ -38,6 +38,7 @@ class NavigationPage extends StatelessWidget {
                 BottomNavigationBarItem(icon: Icon(Icons.home), label: "首页"),
                 BottomNavigationBarItem(icon: Icon(Icons.movie), label: "发现"),
                 BottomNavigationBarItem(icon: Icon(Icons.sort), label: "排行"),
+                BottomNavigationBarItem(icon: Icon(Icons.person), label: "我的")
               ],
             ),
           ),

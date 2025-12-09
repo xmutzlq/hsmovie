@@ -19,4 +19,8 @@ abstract class RouterConfigs {
   static const String detail = "/detail";
   ///播放
   static const String player = "/player";
+  ///我的
+  static const String person = "/person";
+  ///个人编辑
+  static const String person_edit = "/person_edit";
 }
