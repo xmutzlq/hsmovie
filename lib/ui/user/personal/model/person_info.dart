@@ -9,9 +9,11 @@ class PersonAdapter extends TypeAdapter<PersonInfo> {
 
   @override
   PersonInfo read(BinaryReader reader) {
-    final movies = reader.readList().cast<MovieInfo>();
-    return PersonInfo(nickName: reader.readString(),
-        avatarSVG: reader.readString(), favourite: movies);
+    final fMovies = reader.readList().cast<MovieInfo>();
+    final vMovies = reader.readList().cast<MovieInfo>();
+    final bMovies = reader.readList().cast<MovieInfo>();
+    return PersonInfo(nickName: reader.readString(), avatarSVG: reader.readString(),
+        favourite: fMovies, viewingRecord: vMovies, browsingRecord: bMovies);
   }
 
   @override
@@ -19,12 +21,15 @@ class PersonAdapter extends TypeAdapter<PersonInfo> {
     writer.writeString(obj.nickName);
     writer.writeString(obj.avatarSVG);
     writer.writeList(obj.favourite?.cast<MovieInfo>() ?? []);
+    writer.writeList(obj.viewingRecord?.cast<MovieInfo>() ?? []);
+    writer.writeList(obj.browsingRecord?.cast<MovieInfo>() ?? []);
   }
 }
 
 @HiveType(typeId: 0)
 class PersonInfo {
-  PersonInfo({required this.nickName, required this.avatarSVG, required this.favourite});
+  PersonInfo({required this.nickName, required this.avatarSVG,
+    required this.favourite, required this.viewingRecord, required this.browsingRecord});
 
   @HiveField(0)
   final String nickName;
@@ -35,16 +40,26 @@ class PersonInfo {
   @HiveField(2)
   final List<MovieInfo>? favourite;
 
+  @HiveField(3)
+  final List<MovieInfo>? viewingRecord;
+
+  @HiveField(4)
+  final List<MovieInfo>? browsingRecord;
+
   // 添加 copyWith 方法
   PersonInfo copyWith({
     String? nickName,
     String? avatarSVG,
     List<MovieInfo>? favourite,
+    List<MovieInfo>? viewingRecord,
+    List<MovieInfo>? browsingRecord,
   }) {
     return PersonInfo(
       nickName: nickName ?? '', // 如果新参数为null，则使用原值
       avatarSVG: avatarSVG ?? '',
       favourite: favourite ?? [],
+      viewingRecord: viewingRecord ?? [],
+      browsingRecord: browsingRecord ?? [],
     );
   }
 }

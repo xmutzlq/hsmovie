@@ -38,9 +38,11 @@ class PersonalInfoEditPage extends GetView<PersonalLogic> {
                 ),
                 onPressed: () async {
                   try {
-                    await controller.saveNicknameAndAvatarSvgToDB();
-                    ToastUtil.showToast('保存成功');
-                    Get.back();
+                    var saveResult = await controller.saveNicknameAndAvatarSvgToDB();
+                    if(saveResult) {
+                      ToastUtil.showToast('保存成功');
+                      Get.back();
+                    }
                   } on Exception catch (e) {
                     ToastUtil.showToast('保存失败 : ${e.toString()}');
                   }

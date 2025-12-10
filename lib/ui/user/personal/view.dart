@@ -1,6 +1,9 @@
 import 'package:ble_project/base/theme/app_theme.dart';
 import 'package:ble_project/configs/page_config.dart';
+import 'package:ble_project/model/vod_class.dart';
+import 'package:ble_project/model/vod_info.dart';
 import 'package:ble_project/util/my_scroll_behavior.dart';
+import 'package:ble_project/widget/list/movie_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -32,7 +35,7 @@ class PersonalPage extends StatelessWidget {
                 children: [
                   _buildHeader(),
                   _buildRecordContent(),
-                  _buildViewingRecord(),
+                  _buildViewingRecord(context),
                 ],
               ),
             ),
@@ -159,21 +162,21 @@ class PersonalPage extends StatelessWidget {
                   child: InkWell(
                     onTap: () {},
                     borderRadius: const BorderRadius.all(Radius.circular(5)),
-                    child: _buildRecordItem('收藏'),
+                    child: _buildFavouriteItem('收藏'),
                   ),
                 ),
                 Expanded(
                   child: InkWell(
                     onTap: () {},
                     borderRadius: const BorderRadius.all(Radius.circular(5)),
-                    child: _buildRecordItem('观看记录'),
+                    child: _buildViewingRecordItem('观看记录'),
                   ),
                 ),
                 Expanded(
                   child: InkWell(
                     onTap: () {},
                     borderRadius: const BorderRadius.all(Radius.circular(5)),
-                    child: _buildRecordItem('浏览记录'),
+                    child: _buildBrowsingRecordItem('浏览记录'),
                   ),
                 ),
               ],
@@ -184,62 +187,121 @@ class PersonalPage extends StatelessWidget {
     );
   }
 
-  Widget _buildRecordItem(String recordName) {
+  Widget _buildViewingRecordItem(String recordName) {
     return Column(
       children: [
         Text(recordName, style: const TextStyle(fontSize: 16)),
         const SizedBox(height: 10),
-        Text(
-          '0',
+        Obx(() => Text(
+          personalController.personState.viewingRecordSize.value,
           style: const TextStyle(
             color: const Color(0xFF109E9E),
             fontWeight: FontWeight.w500,
             fontSize: 14,
           ),
-        ),
+        )),
       ],
     );
   }
 
-  Widget _buildViewingRecord() {
-    return Card(
-      color: cardBgColor,
-      clipBehavior: Clip.antiAliasWithSaveLayer,
-      elevation: cardElevation,
-      margin: const EdgeInsets.only(left: 15, right: 15, top: 0, bottom: 15),
-      shape: RoundedRectangleBorder(
-        borderRadius: const BorderRadius.all(Radius.circular(10.0)),
-      ),
-      child: LayoutBuilder(
-        builder: (BuildContext context, BoxConstraints constraints) {
-          return Container(
-            padding: const EdgeInsets.only(
-              left: 15,
-              right: 15,
-              top: 10,
-              bottom: 10,
-            ),
-            child: Row(
-              spacing: 15,
-              children: <Widget>[
-                Column(
-                  children: [
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
+  Widget _buildBrowsingRecordItem(String recordName) {
+    return Column(
+      children: [
+        Text(recordName, style: const TextStyle(fontSize: 16)),
+        const SizedBox(height: 10),
+        Obx(() => Text(
+          personalController.personState.browsingRecordSize.value,
+          style: const TextStyle(
+            color: const Color(0xFF109E9E),
+            fontWeight: FontWeight.w500,
+            fontSize: 14,
+          ),
+        )),
+      ],
+    );
+  }
+
+  Widget _buildFavouriteItem(String recordName) {
+    return Column(
+      children: [
+        Text(recordName, style: const TextStyle(fontSize: 16)),
+        const SizedBox(height: 10),
+        Obx(() => Text(
+          personalController.personState.favouriteSize.value,
+          style: const TextStyle(
+            color: const Color(0xFF109E9E),
+            fontWeight: FontWeight.w500,
+            fontSize: 14,
+          ),
+        )),
+      ],
+    );
+  }
+
+  Widget _buildViewingRecord(BuildContext context) {
+    bool hasViewingRecord = personalController.personState.viewingRecord.isNotEmpty;
+    debugPrint('hasViewingRecord : $hasViewingRecord');
+    return Obx(
+      () => personalController.personState.viewingRecord.isNotEmpty
+          ? Card(
+              color: cardBgColor,
+              clipBehavior: Clip.antiAliasWithSaveLayer,
+              elevation: cardElevation,
+              margin: const EdgeInsets.only(left: 15, right: 15, top: 0, bottom: 15,),
+              shape: RoundedRectangleBorder(
+                borderRadius: const BorderRadius.all(Radius.circular(10.0)),
+              ),
+              child: LayoutBuilder(
+                builder: (BuildContext context, BoxConstraints constraints) {
+                  return Container(
+                    padding: const EdgeInsets.only(left: 0, right: 0, top: 10, bottom: 10,),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Icon(Icons.history, size: 25),
-                        SizedBox(width: 5,),
-                        Text('观看记录', style: const TextStyle(fontSize: 16)),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            SizedBox(width: 10),
+                            const Icon(Icons.history, size: 25),
+                            SizedBox(width: 3),
+                            Text(
+                              '观看记录',
+                              style: const TextStyle(fontSize: 16),
+                            ),
+                          ],
+                        ),
+                        _buildMovieList(context),
                       ],
                     ),
+                  );
+                },
+              ),
+            )
+          : SizedBox(),
+    );
+  }
 
-                  ],
-                ),
-              ],
-            ),
-          );
+  Widget _buildMovieList(BuildContext context) {
+    List<VodInfo> vodInfos = [];
+    var viewingList = personalController.personState.viewingRecord;
+    viewingList.forEach((item) {
+      VodInfo info = VodInfo(
+        int.parse(item.movieId ?? '0'),
+        item.movieName ?? '',
+        item.movieImg ?? '',
+        '', '', '', 0, '', '', 0, 0, VodClass(0, ''),
+      );
+      vodInfos.add(info);
+    });
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: MovieListView(
+        items: vodInfos,
+        onItemInteraction: (movieId) {
+          Get.toNamed(RouterConfigs.detail, arguments: {'movieId': movieId});
         },
-      ),
+        leftPaddingControl: -10,
+      )
     );
   }
 }

@@ -6,15 +6,18 @@ import 'package:ble_project/ui/user/personal/model/person_info.dart';
 import 'package:ble_project/ui/user/personal/state.dart';
 import 'package:ble_project/util/keyboard_util.dart';
 import 'package:ble_project/util/toast_util.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:hive_ce/hive.dart';
 import 'package:random_avatar/random_avatar.dart';
 
 import 'model/avatar_state.dart';
+import 'model/movie_info.dart';
 
 class PersonalLogic extends GetxController with StateMixin<List<String>> {
   static const String BOX_NAME_PERSONAL = "box_personal";
   static const String BOX_KEY_PERSONAL = "key_personal";
+  static const int MAX_RECORD_SIZE = 10;
   final Random _random = Random();
   final PersonalState personState = PersonalState();
   /// 当前保存的头像index
@@ -26,6 +29,9 @@ class PersonalLogic extends GetxController with StateMixin<List<String>> {
   Future<void> onInit() async {
     super.onInit();
     _setPersonInfo();
+    _getViewingRecord();
+    _getBrowsingRecord();
+    _getFavourite();
   }
 
   @override
@@ -60,29 +66,30 @@ class PersonalLogic extends GetxController with StateMixin<List<String>> {
     return personBox.get(BOX_KEY_PERSONAL)?.avatarSVG ?? "";
   }
 
-  Future<void> saveNicknameAndAvatarSvgToDB() async {
+  Future<bool> saveNicknameAndAvatarSvgToDB() async {
     if(nicknameStr == null || nicknameStr!.isEmpty) {
       ToastUtil.showToast('请选输入昵称');
-      return;
+      return false;
     }
     if(nicknameStr!.length < 4) {
       ToastUtil.showToast('昵称至少4位');
-      return;
+      return false;
     }
     if(currentSelectedAvatarIndex == -1) {
       ToastUtil.showToast('请选择一个头像');
-      return;
+      return false;
     }
 
     String avatarSVGStr = personState.avatarItemStatus[currentSelectedAvatarIndex]?.avatar ?? '';
     var personBox = await Hive.openBox<PersonInfo>(BOX_NAME_PERSONAL);
     PersonInfo personInfo = personBox.get(BOX_KEY_PERSONAL)
-        ?? PersonInfo(nickName: '', avatarSVG: '', favourite: []);
+        ?? PersonInfo(nickName: '', avatarSVG: '', favourite: [], viewingRecord: [], browsingRecord: []);
     PersonInfo updatedPerson = personInfo.copyWith(
         nickName: nicknameStr, avatarSVG: avatarSVGStr);
     await personBox.put(BOX_KEY_PERSONAL, updatedPerson);
     // 需要触发更新“我的”页面中的头像和昵称
     _setPersonInfo();
+    return true;
   }
 
   Future<void> getRandomAvatars() async {
@@ -127,5 +134,155 @@ class PersonalLogic extends GetxController with StateMixin<List<String>> {
 
   void updateNickNameValue(String? nickname) {
     this.nicknameStr = nickname;
+  }
+
+  /// 保存观看记录到DB
+  void saveViewingRecord(String movieId, String movieImg, String movieName) async {
+    logD('movieId : $movieId, movieImg : $movieImg, movieName : $movieName');
+    var personBox = await Hive.openBox<PersonInfo>(BOX_NAME_PERSONAL);
+    PersonInfo personInfo = personBox.get(BOX_KEY_PERSONAL)
+        ?? PersonInfo(nickName: '', avatarSVG: '', favourite: [], viewingRecord: [], browsingRecord: []);
+    List<MovieInfo> viewingMovies = personInfo.viewingRecord ?? [];
+    // 查看是否是相同的
+    bool hasSame = false;
+    for(MovieInfo info in viewingMovies) {
+      if(info.movieId == movieId) {
+        hasSame = true;
+        return;
+      }
+    }
+    if(hasSame) return;
+    MovieInfo movieInfo = MovieInfo(movieId: movieId, movieName: movieName, movieImg: movieImg);
+    viewingMovies.insert(0, movieInfo);
+    // 暂时不同去掉超过项
+    // if (viewingMovies.length > MAX_RECORD_SIZE) {
+    //   viewingMovies.removeLast();
+    // }
+    PersonInfo updatedPerson = personInfo.copyWith(
+        nickName: personInfo.nickName,
+        avatarSVG: personInfo.avatarSVG,
+        favourite: personInfo.favourite,
+        viewingRecord: viewingMovies,
+        browsingRecord: personInfo.browsingRecord);
+    await personBox.put(BOX_KEY_PERSONAL, updatedPerson);
+    _updateViewingRecord(updatedPerson);
+  }
+
+  /// 保存收藏DB
+  void saveFavouriteRecord(String movieId, String movieImg, String movieName) async {
+    logD('movieId : $movieId, movieImg : $movieImg, movieName : $movieName');
+    var personBox = await Hive.openBox<PersonInfo>(BOX_NAME_PERSONAL);
+    PersonInfo personInfo = personBox.get(BOX_KEY_PERSONAL)
+        ?? PersonInfo(nickName: '', avatarSVG: '', favourite: [], viewingRecord: [], browsingRecord: []);
+    List<MovieInfo> favouriteMovies = personInfo.favourite ?? [];
+    // 查看是否是相同的
+    bool hasSame = false;
+    for(MovieInfo info in favouriteMovies) {
+      if(info.movieId == movieId) {
+        hasSame = true;
+        return;
+      }
+    }
+    if(hasSame) return;
+    MovieInfo movieInfo = MovieInfo(movieId: movieId, movieName: movieName, movieImg: movieImg);
+    favouriteMovies.insert(0, movieInfo);
+    // 暂时不同去掉超过项
+    // if (viewingMovies.length > MAX_RECORD_SIZE) {
+    //   viewingMovies.removeLast();
+    // }
+    PersonInfo updatedPerson = personInfo.copyWith(
+        nickName: personInfo.nickName,
+        avatarSVG: personInfo.avatarSVG,
+        favourite: favouriteMovies,
+        viewingRecord: personInfo.viewingRecord,
+        browsingRecord: personInfo.browsingRecord);
+    await personBox.put(BOX_KEY_PERSONAL, updatedPerson);
+    _updateFavourite(updatedPerson);
+  }
+
+  /// 保存浏览记录到DB
+  void saveBrowsingRecord(String movieId, String movieImg, String movieName) async {
+    logD('movieId : $movieId, movieImg : $movieImg, movieName : $movieName');
+    var personBox = await Hive.openBox<PersonInfo>(BOX_NAME_PERSONAL);
+    PersonInfo personInfo = personBox.get(BOX_KEY_PERSONAL)
+        ?? PersonInfo(nickName: '', avatarSVG: '', favourite: [], viewingRecord: [], browsingRecord: []);
+    List<MovieInfo> browsingMovies = personInfo.browsingRecord ?? [];
+    // 查看是否是相同的
+    bool hasSame = false;
+    for(MovieInfo info in browsingMovies) {
+      if(info.movieId == movieId) {
+        hasSame = true;
+        return;
+      }
+    }
+    if(hasSame) return;
+    MovieInfo movieInfo = MovieInfo(movieId: movieId, movieName: movieName, movieImg: movieImg);
+    browsingMovies.insert(0, movieInfo);
+    // 暂时不同去掉超过项
+    // if (viewingMovies.length > MAX_RECORD_SIZE) {
+    //   viewingMovies.removeLast();
+    // }
+    PersonInfo updatedPerson = personInfo.copyWith(
+        nickName: personInfo.nickName,
+        avatarSVG: personInfo.avatarSVG,
+        favourite: personInfo.favourite,
+        viewingRecord: personInfo.viewingRecord,
+        browsingRecord: browsingMovies);
+    await personBox.put(BOX_KEY_PERSONAL, updatedPerson);
+    _updateBrowsingRecord(updatedPerson);
+  }
+
+  /// 获取观看记录列表
+  Future<void> _getViewingRecord() async {
+    var personBox = await Hive.openBox<PersonInfo>(BOX_NAME_PERSONAL);
+    PersonInfo? personInfo = personBox.get(BOX_KEY_PERSONAL);
+    _updateViewingRecord(personInfo);
+  }
+
+  /// 获取浏览记录列表
+  Future<void> _getBrowsingRecord() async {
+    var personBox = await Hive.openBox<PersonInfo>(BOX_NAME_PERSONAL);
+    PersonInfo? personInfo = personBox.get(BOX_KEY_PERSONAL);
+    _updateBrowsingRecord(personInfo);
+  }
+
+  /// 获取收藏列表
+  Future<void> _getFavourite() async {
+    var personBox = await Hive.openBox<PersonInfo>(BOX_NAME_PERSONAL);
+    PersonInfo? personInfo = personBox.get(BOX_KEY_PERSONAL);
+    _updateFavourite(personInfo);
+  }
+
+  /// 更新观看记录
+  void _updateViewingRecord(PersonInfo? personInfo) {
+    if(personInfo != null) {
+      personState.viewingRecordSize.value = (personInfo.viewingRecord?.length ?? 0).toString();
+      List<MovieInfo>? topTen = personInfo.viewingRecord?.take(MAX_RECORD_SIZE).toList();
+      if(topTen != null && topTen.isNotEmpty) {
+        personState.viewingRecord.value = topTen;
+      }
+    }
+  }
+
+  /// 更新浏览记录
+  void _updateBrowsingRecord(PersonInfo? personInfo) {
+    if(personInfo != null) {
+      personState.browsingRecordSize.value = (personInfo.browsingRecord?.length ?? 0).toString();
+      List<MovieInfo>? topTen = personInfo.browsingRecord?.take(MAX_RECORD_SIZE).toList();
+      if(topTen != null && topTen.isNotEmpty) {
+        personState.browsingRecord.value = topTen;
+      }
+    }
+  }
+
+  /// 更新收藏
+  void _updateFavourite(PersonInfo? personInfo) {
+    if(personInfo != null) {
+      personState.favouriteSize.value = (personInfo.favourite?.length ?? 0).toString();
+      List<MovieInfo>? topTen = personInfo.favourite?.take(MAX_RECORD_SIZE).toList();
+      if(topTen != null && topTen.isNotEmpty) {
+        personState.favourite.value = topTen;
+      }
+    }
   }
 }

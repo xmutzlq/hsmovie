@@ -6,10 +6,11 @@ import 'package:keframe/frame_separate_widget.dart';
 import 'package:keframe/size_cache_widget.dart';
 
 class MovieListView extends StatefulWidget {
+  final double leftPaddingControl;
   final List<VodInfo> items;
   final Function(int movieId)? onItemInteraction;
 
-  MovieListView({Key? key, required this.items, this.onItemInteraction})
+  MovieListView({Key? key, required this.items, this.onItemInteraction, this.leftPaddingControl = 0})
       : super(key: key);
 
   @override
@@ -23,7 +24,7 @@ class _MovieListViewState extends State<MovieListView> {
       stream: Stream.value(widget.items),
       builder: (context, AsyncSnapshot<List<VodInfo>> snapshot) {
         if (snapshot.hasData) {
-          return _buildContent(snapshot, context);
+          return _buildContent(snapshot, context, widget.leftPaddingControl);
         } else if (snapshot.hasError) {
           return Text(snapshot.error.toString());
         }
@@ -33,7 +34,7 @@ class _MovieListViewState extends State<MovieListView> {
   }
 
   Widget _buildContent(
-      AsyncSnapshot<List<VodInfo>> snapshot, BuildContext context) {
+      AsyncSnapshot<List<VodInfo>> snapshot, BuildContext context, double leftPaddingControl) {
     var width = MediaQuery.of(context).size.width;
     return Container(
       height: width / 1.75,
@@ -41,6 +42,7 @@ class _MovieListViewState extends State<MovieListView> {
       child: SizeCacheWidget(
         // estimateCount: snapshot.data!.length,
         child: ListView.builder(
+          shrinkWrap: true,
           cacheExtent: 500,
           scrollDirection: Axis.horizontal,
           itemCount: snapshot.data!.length > 10 ? 10 : snapshot.data!.length,
@@ -63,7 +65,7 @@ class _MovieListViewState extends State<MovieListView> {
                   snapshot.data![index].vodPic,
                   snapshot.data![index].vodPic,
                   width / 4,
-                  index == 0)
+                  index == 0, leftPaddingControl)
               ),
             )
           )
@@ -72,14 +74,14 @@ class _MovieListViewState extends State<MovieListView> {
   }
 
   _buildItem(String name, String imagePath, String backdropPath,
-      double itemHeight, bool isFirst) {
+      double itemHeight, bool isFirst, double leftPaddingControl) {
     return Column(
       children: [
         Expanded(
           child: Card(
             clipBehavior: Clip.antiAliasWithSaveLayer,
             elevation: 10.0,
-            margin: EdgeInsets.only(left: isFirst ? 20 : 10, right: 10, bottom: 15),
+            margin: EdgeInsets.only(left: (isFirst ? 20 : 10) + leftPaddingControl, right: 10, bottom: 15),
             shape: RoundedRectangleBorder(
                 borderRadius: const BorderRadius.all(Radius.circular(10.0))),
             child: Image(

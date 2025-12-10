@@ -3,6 +3,7 @@ import 'package:ble_project/configs/page_config.dart';
 import 'package:ble_project/model/detail/movie_detail_entity.dart';
 import 'package:ble_project/model/vod_info.dart';
 import 'package:ble_project/ui/home/home_page_mixin_controller/logic.dart';
+import 'package:ble_project/ui/user/personal/logic.dart';
 import 'package:ble_project/util/class_util.dart';
 import 'package:ble_project/util/my_scroll_behavior.dart';
 import 'package:ble_project/util/toast_util.dart';
@@ -137,7 +138,7 @@ class MovieDetailControllerPage extends GetView<MovieDetailControllerLogic> {
                               child: Container(),
                             ),
                             IconButton(icon: const Icon(Icons.favorite_border,), onPressed: () {
-                              ToastUtil.showToast("即将开放");
+                              logic.saveFavourite();
                             },),
                           ],
                         ),
@@ -150,19 +151,25 @@ class MovieDetailControllerPage extends GetView<MovieDetailControllerLogic> {
                   top: width,
                   child: FractionalTranslation(
                     translation: const Offset(0.0, -0.5),
-                    child: FloatingActionButton(onPressed: () => {
+                    child: FloatingActionButton(onPressed: () {
                       ///播放
                       if(logic.detailState.entity == null
                           || logic.detailState.entity!.vod.vodPlayServer == null
                           || logic.detailState.entity!.vod.vodPlayServer!.isEmpty) {
-                        ToastUtil.showToast("暂无无播放资源")
+                        ToastUtil.showToast("暂无无播放资源");
                       } else {
                         // 加入观看记录
+                        debugPrint('加入观看记录');
+                        final PersonalLogic personalController = Get.put(PersonalLogic());
+                        personalController.saveViewingRecord(
+                            (logic.detailState.entity?.vod.vodID ?? 999).toString(),
+                            logic.detailState.entity?.vod.vodPic ?? "",
+                            logic.detailState.entity?.vod.vodName ?? "");
 
                         Navigator.of(context).pushNamed(RouterConfigs.player, arguments: {
                           'playServers' : logic.detailState.entity?.vod.vodPlayServer,
                           'playUrlInfo' : logic.detailState.entity?.vod.vodPlayUrls,
-                          'videoTitle' : logic.detailState.entity?.vod.vodName})
+                          'videoTitle' : logic.detailState.entity?.vod.vodName});
                         // Get.toNamed(RouterConfigs.player, arguments: {
                         //       'playServers' : logic.detailState.entity?.vod.vodPlayServer,
                         //       'playUrlInfo' : logic.detailState.entity?.vod.vodPlayUrls,
