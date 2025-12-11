@@ -164,7 +164,8 @@ class MovieDetailControllerPage extends GetView<MovieDetailControllerLogic> {
                         personalController.saveViewingRecord(
                             (logic.detailState.entity?.vod.vodID ?? 999).toString(),
                             logic.detailState.entity?.vod.vodPic ?? "",
-                            logic.detailState.entity?.vod.vodName ?? "");
+                            logic.detailState.entity?.vod.vodName ?? "",
+                            (logic.detailState.entity?.vod.typeID ?? -1).toString());
 
                         Navigator.of(context).pushNamed(RouterConfigs.player, arguments: {
                           'playServers' : logic.detailState.entity?.vod.vodPlayServer,

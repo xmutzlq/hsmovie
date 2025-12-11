@@ -9,20 +9,23 @@ class MovieAdapter extends TypeAdapter<MovieInfo> {
   @override
   MovieInfo read(BinaryReader reader) {
     return MovieInfo(movieId: reader.readString(),
-        movieName: reader.readString(), movieImg: reader.readString());
+        movieName: reader.readString(), movieImg: reader.readString(),
+        movieType: reader.readString());
   }
 
   @override
   void write(BinaryWriter writer, MovieInfo obj) {
-    writer.writeString(obj.movieId ?? "-1");
-    writer.writeString(obj.movieName ?? "unknown");
-    writer.writeString(obj.movieImg ?? "");
+    writer.writeString(obj.movieId ?? '-1');
+    writer.writeString(obj.movieName ?? 'unknown');
+    writer.writeString(obj.movieImg ?? '');
+    writer.writeString(obj.movieType ?? '');
   }
 }
 
 @HiveType(typeId: 1)
 class MovieInfo {
-  MovieInfo({required this.movieId, required this.movieName, required this.movieImg});
+  MovieInfo({required this.movieId, required this.movieName, required this.movieImg,
+    required this.movieType});
 
   @HiveField(0)
   final String? movieId;
@@ -32,4 +35,7 @@ class MovieInfo {
 
   @HiveField(2)
   final String? movieImg;
+
+  @HiveField(3)
+  final String? movieType;
 }

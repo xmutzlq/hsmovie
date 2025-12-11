@@ -124,3 +124,23 @@ Widget screenEmptyStateForTabViewDark() {
     ),
   );
 }
+
+Widget screenEmptyStateForCard() {
+  return Center(
+    child: Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        SizedBox(height: 15),
+        SvgPicture.asset(
+          'assets/page_empty.svg',
+          width: 150,
+          height: 150,
+          semanticsLabel: 'PageEmpty Logo',
+        ),
+        SizedBox(height: 15),
+        const Text('暂无播放源，请切换到其他播放源'),
+        SizedBox(height: 15),
+      ],
+    ),
+  );
+}

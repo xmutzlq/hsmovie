@@ -17,6 +17,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "9.0.0"
+  animated_flip_widget:
+    dependency: "direct main"
+    description:
+      name: animated_flip_widget
+      sha256: "26b79a396219ce1702f4648eec95b857deb788dc835ab0f73a7c32a4cafa72fe"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.2"
   ansicolor:
     dependency: transitive
     description:
@@ -976,6 +984,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.1"
+  save_points_chart:
+    dependency: "direct main"
+    description:
+      name: save_points_chart
+      sha256: a6caef915f4ecd5b16f831d64ff375dc00e46b3e0b03fc014013887721a99609
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.3.1"
   shared_preferences:
     dependency: "direct main"
     description:

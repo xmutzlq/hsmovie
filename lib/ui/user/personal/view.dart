@@ -1,13 +1,16 @@
+import 'package:animated_flip_widget/animated_flip_widget.dart';
 import 'package:ble_project/base/theme/app_theme.dart';
 import 'package:ble_project/configs/page_config.dart';
 import 'package:ble_project/model/vod_class.dart';
 import 'package:ble_project/model/vod_info.dart';
+import 'package:ble_project/ui/user/components/movie_chart.dart';
 import 'package:ble_project/util/my_scroll_behavior.dart';
 import 'package:ble_project/widget/list/movie_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:save_points_chart/save_points_chart.dart';
 import 'package:zo_animated_border/zo_animated_border.dart';
 
 import 'logic.dart';
@@ -138,52 +141,83 @@ class PersonalPage extends StatelessWidget {
 
   /// 收藏、观看记录、浏览记录
   Widget _buildRecordContent() {
-    return Card(
-      color: cardBgColor,
-      clipBehavior: Clip.antiAliasWithSaveLayer,
-      elevation: cardElevation,
-      margin: const EdgeInsets.only(left: 15, right: 15, top: 0, bottom: 15),
-      shape: RoundedRectangleBorder(
-        borderRadius: const BorderRadius.all(Radius.circular(10.0)),
+    return AnimatedFlipWidget(
+      front: Card(
+        color: cardBgColor,
+        clipBehavior: Clip.antiAliasWithSaveLayer,
+        elevation: cardElevation,
+        margin: const EdgeInsets.only(left: 15, right: 15, top: 0, bottom: 15),
+        shape: RoundedRectangleBorder(
+          borderRadius: const BorderRadius.all(Radius.circular(10.0)),
+        ),
+        child: LayoutBuilder(
+          builder: (BuildContext context, BoxConstraints constraints) {
+            return Container(
+              padding: const EdgeInsets.only(left: 15, right: 15, top: 10, bottom: 10,),
+              child: Row(
+                spacing: 15,
+                children: <Widget>[
+                  Expanded(
+                    child: InkWell(
+                      onTap: () { personalController.personState.flipController.flip(); },
+                      borderRadius: const BorderRadius.all(Radius.circular(5)),
+                      child: _buildFavouriteItem('收藏'),
+                    ),
+                  ),
+                  Expanded(
+                    child: InkWell(
+                      onTap: () { personalController.personState.flipController.flip(); },
+                      borderRadius: const BorderRadius.all(Radius.circular(5)),
+                      child: _buildViewingRecordItem('观看记录'),
+                    ),
+                  ),
+                  Expanded(
+                    child: InkWell(
+                      onTap: () { personalController.personState.flipController.flip(); },
+                      borderRadius: const BorderRadius.all(Radius.circular(5)),
+                      child: _buildBrowsingRecordItem('浏览记录'),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+        ),
       ),
-      child: LayoutBuilder(
-        builder: (BuildContext context, BoxConstraints constraints) {
-          return Container(
-            padding: const EdgeInsets.only(
-              left: 15,
-              right: 15,
-              top: 10,
-              bottom: 10,
-            ),
-            child: Row(
-              spacing: 15,
-              children: <Widget>[
-                Expanded(
-                  child: InkWell(
-                    onTap: () {},
-                    borderRadius: const BorderRadius.all(Radius.circular(5)),
-                    child: _buildFavouriteItem('收藏'),
-                  ),
-                ),
-                Expanded(
-                  child: InkWell(
-                    onTap: () {},
-                    borderRadius: const BorderRadius.all(Radius.circular(5)),
-                    child: _buildViewingRecordItem('观看记录'),
-                  ),
-                ),
-                Expanded(
-                  child: InkWell(
-                    onTap: () {},
-                    borderRadius: const BorderRadius.all(Radius.circular(5)),
-                    child: _buildBrowsingRecordItem('浏览记录'),
-                  ),
-                ),
-              ],
-            ),
-          );
-        },
-      ),
+      back: _buildChart(),
+      clickable: false,
+      flipDuration: const Duration(milliseconds: 600),
+      flipDirection: personalController.personState.flipDirection,
+      controller: personalController.personState.flipController,
+    );
+  }
+
+  Widget _buildChart() {
+    return Stack( // 1. 使用Stack作为底层布局
+      children: [
+        Card(
+          color: cardBgColor,
+          clipBehavior: Clip.antiAliasWithSaveLayer,
+          elevation: cardElevation,
+          margin: const EdgeInsets.only(left: 15, right: 15, top: 0, bottom: 15),
+          shape: RoundedRectangleBorder(
+            borderRadius: const BorderRadius.all(Radius.circular(10.0)),
+          ),
+          child: buildViewingRecordChart(),
+        ),
+        // 2. 使用Positioned将Icon精确定位在右上角
+        Positioned(
+          top: 8.0,
+          right: 8.0,
+          child: IconButton(
+            icon: const Icon(Icons.swap_vert_outlined), // 使用更多选项图标
+            onPressed: () {
+              // 处理图标点击事件，例如弹出菜单
+              personalController.personState.flipController.flip();
+            },
+          ),
+        )
+      ],
     );
   }
 

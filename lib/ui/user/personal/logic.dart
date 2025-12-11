@@ -2,6 +2,7 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:ble_project/base/log/app_log.dart';
+import 'package:ble_project/ui/home/home_page_mixin_controller/logic.dart';
 import 'package:ble_project/ui/user/personal/model/person_info.dart';
 import 'package:ble_project/ui/user/personal/state.dart';
 import 'package:ble_project/util/keyboard_util.dart';
@@ -18,6 +19,9 @@ class PersonalLogic extends GetxController with StateMixin<List<String>> {
   static const String BOX_NAME_PERSONAL = "box_personal";
   static const String BOX_KEY_PERSONAL = "key_personal";
   static const int MAX_RECORD_SIZE = 10;
+
+  final homeLogic = Get.find<HomePageMixinControllerLogic>();
+
   final Random _random = Random();
   final PersonalState personState = PersonalState();
   /// 当前保存的头像index
@@ -137,7 +141,8 @@ class PersonalLogic extends GetxController with StateMixin<List<String>> {
   }
 
   /// 保存观看记录到DB
-  void saveViewingRecord(String movieId, String movieImg, String movieName) async {
+  void saveViewingRecord(String movieId, String movieImg, String movieName,
+      String movieType) async {
     logD('movieId : $movieId, movieImg : $movieImg, movieName : $movieName');
     var personBox = await Hive.openBox<PersonInfo>(BOX_NAME_PERSONAL);
     PersonInfo personInfo = personBox.get(BOX_KEY_PERSONAL)
@@ -152,7 +157,8 @@ class PersonalLogic extends GetxController with StateMixin<List<String>> {
       }
     }
     if(hasSame) return;
-    MovieInfo movieInfo = MovieInfo(movieId: movieId, movieName: movieName, movieImg: movieImg);
+    MovieInfo movieInfo = MovieInfo(movieId: movieId, movieName: movieName, movieImg: movieImg,
+        movieType: movieType);
     viewingMovies.insert(0, movieInfo);
     // 暂时不同去掉超过项
     // if (viewingMovies.length > MAX_RECORD_SIZE) {
@@ -169,7 +175,8 @@ class PersonalLogic extends GetxController with StateMixin<List<String>> {
   }
 
   /// 保存收藏DB
-  void saveFavouriteRecord(String movieId, String movieImg, String movieName) async {
+  void saveFavouriteRecord(String movieId, String movieImg, String movieName,
+      String movieType) async {
     logD('movieId : $movieId, movieImg : $movieImg, movieName : $movieName');
     var personBox = await Hive.openBox<PersonInfo>(BOX_NAME_PERSONAL);
     PersonInfo personInfo = personBox.get(BOX_KEY_PERSONAL)
@@ -184,7 +191,8 @@ class PersonalLogic extends GetxController with StateMixin<List<String>> {
       }
     }
     if(hasSame) return;
-    MovieInfo movieInfo = MovieInfo(movieId: movieId, movieName: movieName, movieImg: movieImg);
+    MovieInfo movieInfo = MovieInfo(movieId: movieId, movieName: movieName, movieImg: movieImg,
+        movieType: movieType);
     favouriteMovies.insert(0, movieInfo);
     // 暂时不同去掉超过项
     // if (viewingMovies.length > MAX_RECORD_SIZE) {
@@ -201,7 +209,8 @@ class PersonalLogic extends GetxController with StateMixin<List<String>> {
   }
 
   /// 保存浏览记录到DB
-  void saveBrowsingRecord(String movieId, String movieImg, String movieName) async {
+  void saveBrowsingRecord(String movieId, String movieImg, String movieName,
+      String movieType) async {
     logD('movieId : $movieId, movieImg : $movieImg, movieName : $movieName');
     var personBox = await Hive.openBox<PersonInfo>(BOX_NAME_PERSONAL);
     PersonInfo personInfo = personBox.get(BOX_KEY_PERSONAL)
@@ -216,7 +225,8 @@ class PersonalLogic extends GetxController with StateMixin<List<String>> {
       }
     }
     if(hasSame) return;
-    MovieInfo movieInfo = MovieInfo(movieId: movieId, movieName: movieName, movieImg: movieImg);
+    MovieInfo movieInfo = MovieInfo(movieId: movieId, movieName: movieName, movieImg: movieImg,
+        movieType: movieType);
     browsingMovies.insert(0, movieInfo);
     // 暂时不同去掉超过项
     // if (viewingMovies.length > MAX_RECORD_SIZE) {
@@ -284,5 +294,44 @@ class PersonalLogic extends GetxController with StateMixin<List<String>> {
         personState.favourite.value = topTen;
       }
     }
+  }
+
+  /// 只更新特定项的状态
+  Future<void> analysisMovieTypes() async {
+    var personBox = await Hive.openBox<PersonInfo>(BOX_NAME_PERSONAL);
+    PersonInfo? personInfo = personBox.get(BOX_KEY_PERSONAL);
+    List<MovieInfo>? viewingRecord = personInfo?.viewingRecord;
+    viewingRecord?.forEach((element) {
+      // 电影
+      homeLogic.filterTypes?.movieFilter?.forEach((el) {
+        if(element.movieType == el.id) {
+          personState.statistics.movieFilter?.add(element);
+          return;
+        };
+      });
+      // 电视剧
+      homeLogic.filterTypes?.tvFilter?.forEach((el) {
+        if(element.movieType == el.id) {
+          personState.statistics.tvFilter?.add(element);
+          return;
+        };
+      });
+      // 综艺
+      homeLogic.filterTypes?.showFilter?.forEach((el) {
+        if(element.movieType == el.id) {
+          personState.statistics.showFilter?.add(element);
+          return;
+        };
+      });
+      // 动漫
+      homeLogic.filterTypes?.cartoonFilter?.forEach((el) {
+        if(element.movieType == el.id) {
+          personState.statistics.cartoonFilter?.add(element);
+          return;
+        };
+      });
+    });
+    // 使用 updateId 只更新特定项
+    update(['movie_types_statistics']);
   }
 }

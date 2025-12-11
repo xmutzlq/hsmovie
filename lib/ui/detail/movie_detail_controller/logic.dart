@@ -32,7 +32,8 @@ class MovieDetailControllerLogic extends GetxController with StateMixin<MovieDet
       // logD('${JsonEncoder.withIndent('  ').convert(entity)}');
       detailState.entity = entity;
       // 增加浏览记录
-      personalLogic.saveBrowsingRecord(entity.vod.vodID.toString(), entity.vod.vodPic, entity.vod.vodName);
+      personalLogic.saveBrowsingRecord(entity.vod.vodID.toString(), entity.vod.vodPic, entity.vod.vodName,
+          (entity.vod.typeID ?? -1).toString());
       change(entity, status: RxStatus.success());
     } else {
       change(null, status: RxStatus.error(movieDetailData.error?.message));
@@ -45,7 +46,8 @@ class MovieDetailControllerLogic extends GetxController with StateMixin<MovieDet
       personalLogic.saveFavouriteRecord(
           entity.vod.vodID.toString(),
           entity.vod.vodPic,
-          entity.vod.vodName);
+          entity.vod.vodName,
+          (entity.vod.typeID ?? -1).toString());
     }
   }
 
