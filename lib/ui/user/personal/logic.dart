@@ -301,35 +301,51 @@ class PersonalLogic extends GetxController with StateMixin<List<String>> {
     var personBox = await Hive.openBox<PersonInfo>(BOX_NAME_PERSONAL);
     PersonInfo? personInfo = personBox.get(BOX_KEY_PERSONAL);
     List<MovieInfo>? viewingRecord = personInfo?.viewingRecord;
+    if((viewingRecord?.length ?? 0) > 0) personState.statistics.clear();
     viewingRecord?.forEach((element) {
       // 电影
+      bool belongFilm = false;
       homeLogic.filterTypes?.movieFilter?.forEach((el) {
-        if(element.movieType == el.id) {
+        if(element.movieType == el.id.toString()) {
+          belongFilm = true;
           personState.statistics.movieFilter?.add(element);
           return;
         };
       });
-      // 电视剧
-      homeLogic.filterTypes?.tvFilter?.forEach((el) {
-        if(element.movieType == el.id) {
-          personState.statistics.tvFilter?.add(element);
-          return;
-        };
-      });
-      // 综艺
-      homeLogic.filterTypes?.showFilter?.forEach((el) {
-        if(element.movieType == el.id) {
-          personState.statistics.showFilter?.add(element);
-          return;
-        };
-      });
-      // 动漫
-      homeLogic.filterTypes?.cartoonFilter?.forEach((el) {
-        if(element.movieType == el.id) {
-          personState.statistics.cartoonFilter?.add(element);
-          return;
-        };
-      });
+
+      if(!belongFilm) {
+        // 电视剧
+        bool belongSerial = false;
+        homeLogic.filterTypes?.tvFilter?.forEach((el) {
+          if(element.movieType == el.id.toString()) {
+            belongSerial = true;
+            personState.statistics.tvFilter?.add(element);
+            return;
+          };
+        });
+
+        if(!belongSerial) {
+          // 综艺
+          bool belongShow = false;
+          homeLogic.filterTypes?.showFilter?.forEach((el) {
+            if(element.movieType == el.id.toString()) {
+              belongShow = true;
+              personState.statistics.showFilter?.add(element);
+              return;
+            };
+          });
+
+          if(!belongShow) {
+            // 动漫
+            homeLogic.filterTypes?.cartoonFilter?.forEach((el) {
+              if(element.movieType == el.id.toString()) {
+                personState.statistics.cartoonFilter?.add(element);
+                return;
+              };
+            });
+          }
+        }
+      }
     });
     // 使用 updateId 只更新特定项
     update(['movie_types_statistics']);

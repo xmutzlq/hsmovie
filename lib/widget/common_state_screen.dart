@@ -125,7 +125,7 @@ Widget screenEmptyStateForTabViewDark() {
   );
 }
 
-Widget screenEmptyStateForCard() {
+Widget screenEmptyStateForCard(String msg) {
   return Center(
     child: Column(
       mainAxisSize: MainAxisSize.min,
@@ -138,7 +138,7 @@ Widget screenEmptyStateForCard() {
           semanticsLabel: 'PageEmpty Logo',
         ),
         SizedBox(height: 15),
-        const Text('暂无播放源，请切换到其他播放源'),
+        Text(msg),
         SizedBox(height: 15),
       ],
     ),

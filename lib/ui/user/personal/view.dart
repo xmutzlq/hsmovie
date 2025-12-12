@@ -10,7 +10,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:save_points_chart/save_points_chart.dart';
 import 'package:zo_animated_border/zo_animated_border.dart';
 
 import 'logic.dart';
@@ -166,7 +165,10 @@ class PersonalPage extends StatelessWidget {
                   ),
                   Expanded(
                     child: InkWell(
-                      onTap: () { personalController.personState.flipController.flip(); },
+                      onTap: () async {
+                        personalController.personState.flipController.flip();
+                        await personalController.analysisMovieTypes();
+                      },
                       borderRadius: const BorderRadius.all(Radius.circular(5)),
                       child: _buildViewingRecordItem('观看记录'),
                     ),
@@ -207,8 +209,8 @@ class PersonalPage extends StatelessWidget {
         ),
         // 2. 使用Positioned将Icon精确定位在右上角
         Positioned(
-          top: 8.0,
-          right: 8.0,
+          top: 6.0,
+          right: 15.0,
           child: IconButton(
             icon: const Icon(Icons.swap_vert_outlined), // 使用更多选项图标
             onPressed: () {

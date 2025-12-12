@@ -6,4 +6,11 @@ class MovieTypeStatistics {
   List<MovieInfo>? tvFilter = [];
   List<MovieInfo>? showFilter = [];
   List<MovieInfo>? cartoonFilter = [];
+
+  void clear() {
+    movieFilter?.clear();
+    tvFilter?.clear();
+    showFilter?.clear();
+    cartoonFilter?.clear();
+  }
 }

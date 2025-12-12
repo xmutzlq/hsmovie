@@ -4,6 +4,7 @@ import 'package:ble_project/base/theme/app_theme.dart';
 import 'package:ble_project/ui/user/personal/logic.dart';
 import 'package:ble_project/ui/user/personal/model/moive_typs_statistics.dart';
 import 'package:ble_project/widget/common_state_screen.dart';
+import 'package:ble_project/widget/fix_donut_chart_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:save_points_chart/save_points_chart.dart';
@@ -21,32 +22,30 @@ Widget buildViewingRecordChart() {
         debugPrint('movieFilterLength : $movieFilterLength, tvFilterLength : $tvFilterLength,'
             ' showFilterLength : $showFilterLength, cartoonFilterLength : $cartoonFilterLength');
 
+        bool haveRecord = movieFilterLength > 0 || tvFilterLength > 0
+            || showFilterLength > 0 || cartoonFilterLength > 0;
+
         List<PieData> _pieList = [];
-        if(movieFilterLength > 0) {
+
+        if(haveRecord) {
           _pieList.add(PieData(
             label: '电影',
             value: movieFilterLength,
             color: Color(0xFF6366F1),
           ));
-        }
 
-        if(tvFilterLength > 0) {
           _pieList.add(PieData(
             label: '连续剧',
             value: tvFilterLength,
             color: Color(0xFF10B981),
           ));
-        }
 
-        if(showFilterLength > 0) {
           _pieList.add(PieData(
             label: '综艺',
             value: showFilterLength,
             color: Color(0xFFEC4899),
           ));
-        }
 
-        if(cartoonFilterLength > 0) {
           _pieList.add(PieData(
             label: '动漫',
             value: cartoonFilterLength,
@@ -55,14 +54,14 @@ Widget buildViewingRecordChart() {
         }
 
         if(_pieList.length == 0) {
-          return screenEmptyStateForCard();
+          return screenEmptyStateForCard('暂无观看记录');
         } else {
-          return DonutChartWidget(
+          return FixDonutChartWidget(
             data: _pieList,
             theme: ChartTheme.fromMaterialTheme(appThemeData).copyWith(
                 backgroundColor: Colors.white54, borderRadius: 10),
             title: '观看记录统计',
-            isError: _pieList.length == 0,
+            centerTitle: '总数',
             centerSpaceRadius: 50,
             onSegmentTap: (segment, index, position) {
               logI('Tapped: ${segment.label} - Value: ${segment.value}');
