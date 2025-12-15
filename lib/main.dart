@@ -1,7 +1,4 @@
 import 'dart:async';
-import 'dart:io';
-
-import 'package:ble_project/base/log/app_log.dart';
 import 'package:ble_project/base/theme/app_theme.dart';
 import 'package:ble_project/configs/global_config.dart';
 import 'package:ble_project/configs/page_config.dart';
@@ -12,9 +9,9 @@ import 'package:ble_project/ui/user/personal/model/person_info.dart';
 import 'package:ble_project/util/sp.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
 import 'package:flutter_autosize_screen_pro/flutter_autosize_screen_pro.dart';
-import 'package:hive_ce/hive.dart';
 import 'package:hive_ce_flutter/adapters.dart';
 import 'package:media_kit/media_kit.dart';
 import 'package:statsfl/statsfl.dart';
@@ -69,13 +66,20 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     FlutterAutosizeScreenPro.getSize(context);
     return GetMaterialApp(
-      builder: FlutterAutosizeScreenPro.appBuilder,
+      builder: FlutterSmartDialog.init(
+        builder: (context, child) {
+          Widget result = child!;
+          result = FlutterAutosizeScreenPro.appBuilder(context, result);
+          // 以上个result为基准，添加其他builder
+          return result;
+        }
+      ),
       theme: appThemeData,
       darkTheme: appThemeDarkData,
       debugShowCheckedModeBanner: false,
       defaultTransition: Transition.fade,
       navigatorKey: Get.key,
-      navigatorObservers: [defaultLifecycleObserver],
+      navigatorObservers: [defaultLifecycleObserver, FlutterSmartDialog.observer],
       initialRoute: RouterConfigs.root,
       getPages: PageConfig.getPages,
       initialBinding: NavigationPageBinding(),

@@ -1,4 +1,5 @@
 import 'package:animated_flip_widget/animated_flip_widget.dart';
+import 'package:ble_project/model/movie_enum.dart';
 import 'package:ble_project/ui/user/personal/model/moive_typs_statistics.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -24,8 +25,10 @@ class PersonalState {
   /// 收藏数量
   RxString favouriteSize = '0'.obs;
 
-  /// 观看记录统计
+  /// 记录统计
   MovieTypeStatistics statistics = MovieTypeStatistics();
+  /// 当前统计项
+  RecordType currentRecordType = RecordType.unknown;
 
   late ScrollController scrollController;
   late FlipController flipController;

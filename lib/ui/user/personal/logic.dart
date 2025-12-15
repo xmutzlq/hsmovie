@@ -2,6 +2,7 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:ble_project/base/log/app_log.dart';
+import 'package:ble_project/model/movie_enum.dart';
 import 'package:ble_project/ui/home/home_page_mixin_controller/logic.dart';
 import 'package:ble_project/ui/user/personal/model/person_info.dart';
 import 'package:ble_project/ui/user/personal/state.dart';
@@ -271,6 +272,9 @@ class PersonalLogic extends GetxController with StateMixin<List<String>> {
       if(topTen != null && topTen.isNotEmpty) {
         personState.viewingRecord.value = topTen;
       }
+
+      // 更新观看记录的统计
+      analysisMovieTypes(RecordType.viewingRecord);
     }
   }
 
@@ -282,6 +286,9 @@ class PersonalLogic extends GetxController with StateMixin<List<String>> {
       if(topTen != null && topTen.isNotEmpty) {
         personState.browsingRecord.value = topTen;
       }
+
+      // 更新浏览记录的统计
+      analysisMovieTypes(RecordType.browsingRecord);
     }
   }
 
@@ -293,61 +300,113 @@ class PersonalLogic extends GetxController with StateMixin<List<String>> {
       if(topTen != null && topTen.isNotEmpty) {
         personState.favourite.value = topTen;
       }
+
+      // 更新收藏的统计
+      analysisMovieTypes(RecordType.favourite);
     }
   }
 
-  /// 只更新特定项的状态
-  Future<void> analysisMovieTypes() async {
+  /// 更新观影统计
+  Future<void> analysisMovieTypes(RecordType recordType) async {
     var personBox = await Hive.openBox<PersonInfo>(BOX_NAME_PERSONAL);
     PersonInfo? personInfo = personBox.get(BOX_KEY_PERSONAL);
-    List<MovieInfo>? viewingRecord = personInfo?.viewingRecord;
-    if((viewingRecord?.length ?? 0) > 0) personState.statistics.clear();
-    viewingRecord?.forEach((element) {
-      // 电影
-      bool belongFilm = false;
-      homeLogic.filterTypes?.movieFilter?.forEach((el) {
-        if(element.movieType == el.id.toString()) {
-          belongFilm = true;
-          personState.statistics.movieFilter?.add(element);
-          return;
-        };
-      });
+    List<MovieInfo>? record = [];
+    switch(recordType) {
+      case RecordType.favourite:
+        record = personInfo?.favourite;
+        break;
+      case RecordType.viewingRecord:
+        record = personInfo?.viewingRecord;
+        break;
+      case RecordType.browsingRecord:
+        record = personInfo?.browsingRecord;
+        break;
+      default: RecordType.unknown;
+    }
+    personState.currentRecordType = recordType;
+    personState.statistics.clear();
+    record?.forEach((element) {
+      if(element.movieType == '3') {
+        personState.statistics.showFilter?.add(element);
+      } else {
+        // 电影
+        homeLogic.filterTypes?.movieFilter?.forEach((el) {
+          if(element.movieType == el.id.toString()) {
+            personState.statistics.movieFilter?.add(element);
+            return;
+          };
+        });
 
-      if(!belongFilm) {
         // 电视剧
-        bool belongSerial = false;
         homeLogic.filterTypes?.tvFilter?.forEach((el) {
           if(element.movieType == el.id.toString()) {
-            belongSerial = true;
             personState.statistics.tvFilter?.add(element);
             return;
           };
         });
 
-        if(!belongSerial) {
-          // 综艺
-          bool belongShow = false;
-          homeLogic.filterTypes?.showFilter?.forEach((el) {
-            if(element.movieType == el.id.toString()) {
-              belongShow = true;
-              personState.statistics.showFilter?.add(element);
-              return;
-            };
-          });
-
-          if(!belongShow) {
-            // 动漫
-            homeLogic.filterTypes?.cartoonFilter?.forEach((el) {
-              if(element.movieType == el.id.toString()) {
-                personState.statistics.cartoonFilter?.add(element);
-                return;
-              };
-            });
-          }
-        }
+        // 动漫
+        homeLogic.filterTypes?.cartoonFilter?.forEach((el) {
+          if(element.movieType == el.id.toString()) {
+            personState.statistics.cartoonFilter?.add(element);
+            return;
+          };
+        });
       }
     });
+
     // 使用 updateId 只更新特定项
     update(['movie_types_statistics']);
+  }
+
+  /// 更新电影类型雷达统计
+  Future<void> analysisMovieRadarTypes(MovieType movieType) async {
+    switch(movieType) {
+      case MovieType.film:
+        final _categories = personState.statistics.orgFilmRadarCategories;
+        personState.statistics.resetFilmRadarSize();
+        List<MovieInfo>? radarDataOrg = personState.statistics.movieFilter;
+        radarDataOrg?.forEach((element) {
+          final categoryIndex = _categories.indexWhere((c) => c.id == element.movieType);
+          if (categoryIndex != -1) {
+            _categories[categoryIndex] = _categories[categoryIndex].copyWith(
+              size: _categories[categoryIndex].size + 1,
+            );
+          }
+        });
+        update(['movie_radar_statistics']);
+        break;
+      case MovieType.series:
+        final _categories = personState.statistics.orgSerialRadarCategories;
+        personState.statistics.resetSerialRadarSize();
+        List<MovieInfo>? radarDataOrg = personState.statistics.tvFilter;
+        radarDataOrg?.forEach((element) {
+          final categoryIndex = _categories.indexWhere((c) => c.id == element.movieType);
+          if (categoryIndex != -1) {
+            _categories[categoryIndex] = _categories[categoryIndex].copyWith(
+              size: _categories[categoryIndex].size + 1,
+            );
+          }
+        });
+        update(['movie_radar_statistics']);
+        break;
+      case MovieType.cartoon:
+        final _categories = personState.statistics.orgAnimateRadarCategories;
+        personState.statistics.resetAnimateRadarSize();
+        List<MovieInfo>? radarDataOrg = personState.statistics.cartoonFilter;
+        radarDataOrg?.forEach((element) {
+          final categoryIndex = _categories.indexWhere((c) => c.id == element.movieType);
+          if (categoryIndex != -1) {
+            _categories[categoryIndex] = _categories[categoryIndex].copyWith(
+              size: _categories[categoryIndex].size + 1,
+            );
+          }
+        });
+        update(['movie_radar_statistics']);
+        break;
+      case MovieType.show:
+        // 综艺暂无雷达图分类
+        break;
+    }
   }
 }

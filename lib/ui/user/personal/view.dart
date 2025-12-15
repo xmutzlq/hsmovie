@@ -1,6 +1,7 @@
 import 'package:animated_flip_widget/animated_flip_widget.dart';
 import 'package:ble_project/base/theme/app_theme.dart';
 import 'package:ble_project/configs/page_config.dart';
+import 'package:ble_project/model/movie_enum.dart';
 import 'package:ble_project/model/vod_class.dart';
 import 'package:ble_project/model/vod_info.dart';
 import 'package:ble_project/ui/user/components/movie_chart.dart';
@@ -158,7 +159,10 @@ class PersonalPage extends StatelessWidget {
                 children: <Widget>[
                   Expanded(
                     child: InkWell(
-                      onTap: () { personalController.personState.flipController.flip(); },
+                      onTap: () async {
+                        personalController.personState.flipController.flip();
+                        await personalController.analysisMovieTypes(RecordType.favourite);
+                      },
                       borderRadius: const BorderRadius.all(Radius.circular(5)),
                       child: _buildFavouriteItem('收藏'),
                     ),
@@ -167,7 +171,7 @@ class PersonalPage extends StatelessWidget {
                     child: InkWell(
                       onTap: () async {
                         personalController.personState.flipController.flip();
-                        await personalController.analysisMovieTypes();
+                        await personalController.analysisMovieTypes(RecordType.viewingRecord);
                       },
                       borderRadius: const BorderRadius.all(Radius.circular(5)),
                       child: _buildViewingRecordItem('观看记录'),
@@ -175,7 +179,10 @@ class PersonalPage extends StatelessWidget {
                   ),
                   Expanded(
                     child: InkWell(
-                      onTap: () { personalController.personState.flipController.flip(); },
+                      onTap: () async {
+                        personalController.personState.flipController.flip();
+                        await personalController.analysisMovieTypes(RecordType.browsingRecord);
+                      },
                       borderRadius: const BorderRadius.all(Radius.circular(5)),
                       child: _buildBrowsingRecordItem('浏览记录'),
                     ),
@@ -195,7 +202,7 @@ class PersonalPage extends StatelessWidget {
   }
 
   Widget _buildChart() {
-    return Stack( // 1. 使用Stack作为底层布局
+    return Stack(
       children: [
         Card(
           color: cardBgColor,
@@ -205,16 +212,14 @@ class PersonalPage extends StatelessWidget {
           shape: RoundedRectangleBorder(
             borderRadius: const BorderRadius.all(Radius.circular(10.0)),
           ),
-          child: buildViewingRecordChart(),
+          child: buildRecordStatisticsChart(),
         ),
-        // 2. 使用Positioned将Icon精确定位在右上角
         Positioned(
           top: 6.0,
           right: 15.0,
           child: IconButton(
-            icon: const Icon(Icons.swap_vert_outlined), // 使用更多选项图标
+            icon: const Icon(Icons.swap_vert_outlined),
             onPressed: () {
-              // 处理图标点击事件，例如弹出菜单
               personalController.personState.flipController.flip();
             },
           ),
