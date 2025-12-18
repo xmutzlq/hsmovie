@@ -176,7 +176,7 @@ class PersonalLogic extends GetxController with StateMixin<List<String>> {
   }
 
   /// 保存收藏DB
-  void saveFavouriteRecord(String movieId, String movieImg, String movieName,
+  Future<void> saveFavouriteRecord(String movieId, String movieImg, String movieName,
       String movieType) async {
     logD('movieId : $movieId, movieImg : $movieImg, movieName : $movieName');
     var personBox = await Hive.openBox<PersonInfo>(BOX_NAME_PERSONAL);

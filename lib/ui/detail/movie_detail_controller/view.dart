@@ -3,6 +3,7 @@ import 'package:ble_project/base/theme/app_theme.dart';
 import 'package:ble_project/configs/page_config.dart';
 import 'package:ble_project/model/detail/movie_detail_entity.dart';
 import 'package:ble_project/model/vod_info.dart';
+import 'package:ble_project/ui/detail/components/film_box.dart';
 import 'package:ble_project/ui/home/home_page_mixin_controller/logic.dart';
 import 'package:ble_project/ui/user/personal/logic.dart';
 import 'package:ble_project/util/class_util.dart';
@@ -41,6 +42,16 @@ class MovieDetailControllerPage extends GetView<MovieDetailControllerLogic> {
   }
 
   Widget _buildDetailContent(MovieDetailEntity entity) {
+
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      try {
+        int filmSize = await logic.getFilmsInBoxSize();
+        await logic.cartKey.currentState!.runCartAnimation(filmSize.toString());
+      } catch(e) {
+        debugPrint('获取盒子中的影视数量异常: $e');
+      }
+    });
+
     return AddToCartAnimation(
       cartKey: logic.cartKey,
       dragAnimation: const DragToCartAnimationOptions(
@@ -86,8 +97,20 @@ class MovieDetailControllerPage extends GetView<MovieDetailControllerLogic> {
             ],
           ),
         ),
-        floatingWidget: FloatingActionButton(
-          onPressed: () {},
+        floatingWidget: Obx(() => logic.detailState.isFilm.value ?
+        FloatingActionButton(
+          onPressed: () async {
+            await logic.getFilmsInBox();
+            showFilmInBoxDialog(logic.boxMovies, () async {
+              // 清空播放盒子内容
+              bool isSuccess = await logic.clearFilmsInBox();
+              if(isSuccess) {
+                logic.updateFilmBox();
+              } else {
+                ToastUtil.showToast("清除失败");
+              }
+            });
+          },
           tooltip: '影视盒子',
           child: AddToCartIcon(
             key: logic.cartKey,
@@ -98,11 +121,11 @@ class MovieDetailControllerPage extends GetView<MovieDetailControllerLogic> {
               fit: BoxFit.cover,
             ),
             badgeOptions: const BadgeOptions(
-              active: false,
+              active: true,
               backgroundColor: Colors.red,
             ),
           ),
-        ),
+        ): SizedBox()),
         floatingWidgetHeight: 50,
         floatingWidgetWidth: 50,
         autoAlign: true
@@ -169,32 +192,47 @@ class MovieDetailControllerPage extends GetView<MovieDetailControllerLogic> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: <Widget>[
-                            Container(
-                              key: widgetKey,
-                              child: IconButton(
-                                icon: Image.asset(
-                                  width: 26,
-                                  height: 26,
-                                  'assets/add_play.png',
-                                  fit: BoxFit.cover,
-                                ),
-                                onPressed: () async {
-                                  String addValue = (++logic.cartQuantityItems).toString();
-                                  debugPrint('addValue : $addValue');
-                                  try {
-                                    await logic.runAddToCart(widgetKey);
-                                  } catch(e) {
-                                    debugPrint('runAddToCart加载失败: $e');
+                            Obx(() => logic.detailState.isFilm.value ?
+                              Container(
+                                key: widgetKey,
+                                child: IconButton(
+                                  icon: Image.asset(
+                                    width: 26,
+                                    height: 26,
+                                    'assets/add_play.png',
+                                    fit: BoxFit.cover,
+                                  ),
+                                  onPressed: () async {
+                                    try {
+                                      bool isSuccess = await logic.saveFilm2Box(
+                                          (logic.detailState.entity?.vod.vodID ?? 0).toString());
+                                      if(isSuccess) {
+                                        String addValue = (await logic.getFilmsInBoxSize()).toString();
+                                        debugPrint('addValue : $addValue');
+                                        try {
+                                          await logic.runAddToCart(widgetKey);
+                                        } catch(e) {
+                                          debugPrint('runAddToCart加载失败: $e');
+                                        }
+                                        await logic.cartKey.currentState!.runCartAnimation(addValue);
+                                      }
+                                    } catch(e) {
+                                      debugPrint('添加到盒子异常 : $e');
+                                    }
                                   }
-                                  await logic.cartKey.currentState!.runCartAnimation(addValue);
-                                }
-                              ),
+                                ),
+                              ): SizedBox()
                             ),
                             Expanded(
                               child: Container(),
                             ),
-                            IconButton(icon: const Icon(Icons.favorite_border, size: 26,), onPressed: () {
-                              logic.saveFavourite();
+                            IconButton(icon: const Icon(Icons.favorite_border, size: 26,), onPressed: () async {
+                              try {
+                                await logic.saveFavourite();
+                                ToastUtil.showToast("收藏成功");
+                              } catch(e) {
+                                ToastUtil.showToast("收藏失败");
+                              }
                             },),
                           ],
                         ),

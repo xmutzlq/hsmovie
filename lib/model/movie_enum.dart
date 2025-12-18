@@ -32,6 +32,10 @@ enum FilmType {
   final String name;
   final String type;
   const FilmType(this.name, this.type);
+
+  static bool containsType(String type) {
+    return values.any((film) => film.type == type);
+  }
 }
 
 /// 连续剧类型

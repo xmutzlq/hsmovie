@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:ble_project/base/theme/app_theme.dart';
 import 'package:ble_project/configs/global_config.dart';
 import 'package:ble_project/configs/page_config.dart';
+import 'package:ble_project/ui/detail/movie_detail_controller/model/film_box_info.dart';
 import 'package:ble_project/ui/navigation/navigation/binding.dart';
 import 'package:ble_project/ui/navigation/navigation/view.dart';
 import 'package:ble_project/ui/user/personal/model/movie_info.dart';
@@ -30,7 +31,8 @@ void main() async {
     Hive
       ..initFlutter()
       ..registerAdapter(MovieInfoAdapter())
-      ..registerAdapter(PersonInfoAdapter());
+      ..registerAdapter(PersonInfoAdapter())
+      ..registerAdapter(FilmBoxInfoAdapter());
 
     MediaKit.ensureInitialized();
 
