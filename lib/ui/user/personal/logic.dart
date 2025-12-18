@@ -243,6 +243,27 @@ class PersonalLogic extends GetxController with StateMixin<List<String>> {
     _updateBrowsingRecord(updatedPerson);
   }
 
+  /// 根据记录类型获取记录数据
+  Future<List<MovieInfo>> getRecordsByType(RecordType type) async {
+    var personBox = await Hive.openBox<PersonInfo>(BOX_NAME_PERSONAL);
+    PersonInfo? personInfo = personBox.get(BOX_KEY_PERSONAL);
+    List<MovieInfo> records = [];
+    switch(type) {
+      case RecordType.favourite:
+        records.addAll(personInfo?.favourite ?? []);
+        break;
+      case RecordType.viewingRecord:
+        records.addAll(personInfo?.viewingRecord ?? []);
+        break;
+      case RecordType.browsingRecord:
+        records.addAll(personInfo?.browsingRecord ?? []);
+        break;
+      case RecordType.unknown:
+        break;
+    }
+    return records;
+  }
+
   /// 获取观看记录列表
   Future<void> _getViewingRecord() async {
     var personBox = await Hive.openBox<PersonInfo>(BOX_NAME_PERSONAL);

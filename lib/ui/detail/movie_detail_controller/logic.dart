@@ -1,3 +1,4 @@
+import 'package:add_to_cart_animation/add_to_cart_icon.dart';
 import 'package:ble_project/model/detail/movie_detail_entity.dart';
 import 'package:ble_project/repository/movie_repository.dart';
 import 'package:ble_project/ui/detail/movie_detail_controller/state.dart';
@@ -10,9 +11,20 @@ class MovieDetailControllerLogic extends GetxController with StateMixin<MovieDet
   MovieDetailControllerState detailState = MovieDetailControllerState();
   final personalLogic = Get.find<PersonalLogic>();
 
+  final GlobalKey<CartIconKey> cartKey = GlobalKey<CartIconKey>();
+  Function(GlobalKey)? runAddToCartAnimation;
+  var cartQuantityItems = 0;
+
   void changeExpanded(bool isExpanded) {
     detailState.isExpanded = isExpanded;
     update();
+  }
+
+  Future<void> runAddToCart(GlobalKey key) async {
+    if(runAddToCartAnimation != null) {
+      debugPrint('11111111');
+      await runAddToCartAnimation!(key);
+    }
   }
 
   @override

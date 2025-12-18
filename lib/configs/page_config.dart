@@ -5,6 +5,8 @@ import 'package:ble_project/ui/discover/discovery/view.dart';
 import 'package:ble_project/ui/home/home_page_mixin_controller/binding.dart';
 import 'package:ble_project/ui/more/more/binding.dart';
 import 'package:ble_project/ui/more/more/view.dart';
+import 'package:ble_project/ui/more/record_list/binding.dart';
+import 'package:ble_project/ui/more/record_list/view.dart';
 import 'package:ble_project/ui/more/simple_list/binding.dart';
 import 'package:ble_project/ui/more/simple_list/view.dart';
 import 'package:ble_project/ui/player/player_controller/binding.dart';
@@ -37,6 +39,11 @@ abstract class PageConfig {
         name: RouterConfigs.simple_list,
         page: () => SimpleListPage(),
         binding: SimpleListBinding()
+    ),
+    GetPage(
+        name: RouterConfigs.record_list,
+        page: () => RecordListPage(),
+        binding: RecordListBinding()
     ),
     GetPage(
       name: RouterConfigs.discovery,

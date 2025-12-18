@@ -1,3 +1,4 @@
+import 'package:add_to_cart_animation/add_to_cart_animation.dart';
 import 'package:ble_project/base/theme/app_theme.dart';
 import 'package:ble_project/configs/page_config.dart';
 import 'package:ble_project/model/detail/movie_detail_entity.dart';
@@ -12,6 +13,7 @@ import 'package:ble_project/widget/list/guess_like_list.dart';
 import 'package:ble_project/widget/list/recommend_list.dart';
 import 'package:ble_project/widget/scrollview_background.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:floating_draggable_widget/floating_draggable_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_autosize_screen_pro/flutter_autosize_screen_pro.dart';
@@ -24,6 +26,7 @@ class MovieDetailControllerPage extends GetView<MovieDetailControllerLogic> {
 
   final logic = Get.find<MovieDetailControllerLogic>();
   final homeLogic = Get.find<HomePageMixinControllerLogic>();
+  final GlobalKey widgetKey = GlobalKey();
 
   MovieDetailControllerPage({Key? key}) : super(key: key);
 
@@ -38,37 +41,72 @@ class MovieDetailControllerPage extends GetView<MovieDetailControllerLogic> {
   }
 
   Widget _buildDetailContent(MovieDetailEntity entity) {
-    return Scaffold(
-      body: Stack(
-        children: <Widget>[
-          _buildContent(entity),
-          Positioned( //Place it at the top, and not use the entire screen
-            top: 0.0,
-            left: 0.0,
-            right: 0.0,
-            child: AppBar(
-              title: const Text(''),
-              centerTitle: true,
-              iconTheme: const IconThemeData(
-                color: Colors.white, //change your color here
-              ),
-              elevation: 0.0,
-              backgroundColor: Colors.transparent,
-              //No more green
-              actions: <Widget>[
-                IconButton(
-                  icon: const Icon(
-                    Icons.share_outlined,
-                    color: Colors.white, // Here
-                  ),
-                  onPressed: () {
-                    ToastUtil.showToast("即将开放");
-                  },
-                ),
-              ], systemOverlayStyle: SystemUiOverlayStyle.dark,
-            ),),
-        ],
+    return AddToCartAnimation(
+      cartKey: logic.cartKey,
+      dragAnimation: const DragToCartAnimationOptions(
+        rotation: true,
+        duration: const Duration(milliseconds: 500)
       ),
+      jumpAnimation: const JumpAnimationOptions(
+          active: false,
+          duration: const Duration(milliseconds: 300)),
+      createAddToCartAnimation: (runAddToCartAnimation) {
+        logic.runAddToCartAnimation = runAddToCartAnimation;
+      },
+      child: FloatingDraggableWidget(
+        mainScreenWidget: Scaffold(
+          body: Stack(
+            children: <Widget>[
+              _buildContent(entity),
+              Positioned( //Place it at the top, and not use the entire screen
+                top: 0.0,
+                left: 0.0,
+                right: 0.0,
+                child: AppBar(
+                  title: const Text(''),
+                  centerTitle: true,
+                  iconTheme: const IconThemeData(
+                    color: Colors.white, //change your color here
+                  ),
+                  elevation: 0.0,
+                  backgroundColor: Colors.transparent,
+                  //No more green
+                  actions: <Widget>[
+                    IconButton(
+                      icon: const Icon(
+                        Icons.share_outlined,
+                        color: Colors.white, // Here
+                      ),
+                      onPressed: () {
+                        ToastUtil.showToast("即将开放");
+                      },
+                    ),
+                  ], systemOverlayStyle: SystemUiOverlayStyle.dark,
+                ),),
+            ],
+          ),
+        ),
+        floatingWidget: FloatingActionButton(
+          onPressed: () {},
+          tooltip: '影视盒子',
+          child: AddToCartIcon(
+            key: logic.cartKey,
+            icon: Image.asset(
+              width: 28,
+              height: 28,
+              'assets/film_list.png',
+              fit: BoxFit.cover,
+            ),
+            badgeOptions: const BadgeOptions(
+              active: false,
+              backgroundColor: Colors.red,
+            ),
+          ),
+        ),
+        floatingWidgetHeight: 50,
+        floatingWidgetWidth: 50,
+        autoAlign: true
+      )
     );
   }
 
@@ -131,13 +169,31 @@ class MovieDetailControllerPage extends GetView<MovieDetailControllerLogic> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: <Widget>[
-                            IconButton(icon: const Icon(Icons.add_outlined,), onPressed: () {
-                              ToastUtil.showToast("即将开放");
-                            },),
+                            Container(
+                              key: widgetKey,
+                              child: IconButton(
+                                icon: Image.asset(
+                                  width: 26,
+                                  height: 26,
+                                  'assets/add_play.png',
+                                  fit: BoxFit.cover,
+                                ),
+                                onPressed: () async {
+                                  String addValue = (++logic.cartQuantityItems).toString();
+                                  debugPrint('addValue : $addValue');
+                                  try {
+                                    await logic.runAddToCart(widgetKey);
+                                  } catch(e) {
+                                    debugPrint('runAddToCart加载失败: $e');
+                                  }
+                                  await logic.cartKey.currentState!.runCartAnimation(addValue);
+                                }
+                              ),
+                            ),
                             Expanded(
                               child: Container(),
                             ),
-                            IconButton(icon: const Icon(Icons.favorite_border,), onPressed: () {
+                            IconButton(icon: const Icon(Icons.favorite_border, size: 26,), onPressed: () {
                               logic.saveFavourite();
                             },),
                           ],

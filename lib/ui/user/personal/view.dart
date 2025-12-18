@@ -39,6 +39,7 @@ class PersonalPage extends StatelessWidget {
                   _buildHeader(),
                   _buildRecordContent(),
                   _buildViewingRecord(context),
+                  _buildRecordEntrance()
                 ],
               ),
             ),
@@ -80,7 +81,7 @@ class PersonalPage extends StatelessWidget {
                       Get.toNamed(RouterConfigs.person_edit);
                     },
                     borderRadius: const BorderRadius.all(Radius.circular(5)),
-                    child: const Icon(Icons.edit_note, size: 30),
+                    child: const Icon(Icons.edit_note, size: 30, color: Colors.black54,),
                   ),
                 ),
               ],
@@ -134,7 +135,7 @@ class PersonalPage extends StatelessWidget {
         '${personalController.personState.nickName}',
         style: Theme.of(
           Get.context!,
-        ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w500),
+        ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w500, color: Colors.black87),
       ),
     );
   }
@@ -265,7 +266,7 @@ class PersonalPage extends StatelessWidget {
   Widget _buildFavouriteItem(String recordName) {
     return Column(
       children: [
-        Text(recordName, style: const TextStyle(fontSize: 16)),
+        Text(recordName, style: const TextStyle(fontSize: 16, color: Colors.black87)),
         const SizedBox(height: 10),
         Obx(() => Text(
           personalController.personState.favouriteSize.value,
@@ -303,11 +304,11 @@ class PersonalPage extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             SizedBox(width: 10),
-                            const Icon(Icons.history, size: 25),
+                            const Icon(Icons.history, size: 25, color: Colors.black54,),
                             SizedBox(width: 3),
                             Text(
                               '观看记录',
-                              style: const TextStyle(fontSize: 16),
+                              style: const TextStyle(fontSize: 16, color: Colors.black87),
                             ),
                           ],
                         ),
@@ -343,6 +344,91 @@ class PersonalPage extends StatelessWidget {
         },
         leftPaddingControl: -10,
       )
+    );
+  }
+
+  /// 记录列表数据
+  Widget _buildRecordEntrance() {
+    return Card(
+      color: cardBgColor,
+      clipBehavior: Clip.antiAliasWithSaveLayer,
+      elevation: cardElevation,
+      margin: const EdgeInsets.only(left: 15, right: 15, top: 0, bottom: 15),
+      shape: RoundedRectangleBorder(
+        borderRadius: const BorderRadius.all(Radius.circular(10.0)),
+      ),
+      child: LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints constraints) {
+          return Container(
+            child: Column(
+              children: [
+                InkWell(
+                  onTap: () {
+                    Get.toNamed(RouterConfigs.record_list, arguments: {'recordListTitle' : "我的观看" , 'recordType' : RecordType.viewingRecord});
+                  },
+                  child: Padding(padding: const EdgeInsets.all(15), child:
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    spacing: 5,
+                    children: <Widget>[
+                      const Icon(Icons.history, size: 25, color: Colors.black54,),
+                      Text('我的观看', style: const TextStyle(fontSize: 15, color: Colors.black87)),
+                      Expanded(child: SizedBox()),
+                      const Icon(Icons.keyboard_arrow_right, size: 25, color: Colors.black54,),
+                    ],
+                  )
+                  )
+                ),
+                Divider(
+                  height: 1, // 分割线高度
+                  thickness: 1,    // 分割线粗细
+                  indent: 5,       // 左边缩进
+                  endIndent: 5,    // 右边缩进
+                  color: Colors.grey[300]),
+                InkWell(
+                  onTap: () {
+                    Get.toNamed(RouterConfigs.record_list, arguments: {'recordListTitle' : "我的收藏" , 'recordType' : RecordType.favourite});
+                  },
+                  child: Padding(padding: const EdgeInsets.all(15), child:
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      spacing: 5,
+                      children: <Widget>[
+                        const Icon(Icons.favorite_border_outlined, size: 25, color: Colors.black54,),
+                        Text('我的收藏', style: const TextStyle(fontSize: 15, color: Colors.black87)),
+                        Expanded(child: SizedBox()),
+                        const Icon(Icons.keyboard_arrow_right, size: 25, color: Colors.black54,),
+                      ],
+                    )
+                  )
+                ),
+                Divider(height: 1, // 分割线高度
+                  thickness: 1,    // 分割线粗细
+                  indent: 5,       // 左边缩进
+                  endIndent: 5,    // 右边缩进
+                  color: Colors.grey[300]),
+                InkWell(
+                  onTap: () {
+                    Get.toNamed(RouterConfigs.record_list, arguments: {'recordListTitle' : "我的浏览" , 'recordType' : RecordType.browsingRecord});
+                  },
+                  child: Padding(padding: const EdgeInsets.all(15), child:
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      spacing: 5,
+                      children: <Widget>[
+                        const Icon(Icons.browse_gallery_outlined, size: 25, color: Colors.black54,),
+                        Text('我的浏览', style: const TextStyle(fontSize: 15, color: Colors.black87)),
+                        Expanded(child: SizedBox()),
+                        const Icon(Icons.keyboard_arrow_right, size: 25, color: Colors.black54,),
+                      ],
+                    )
+                  )
+                ),
+              ],
+            ),
+          );
+        },
+      ),
     );
   }
 }

@@ -5,10 +5,12 @@ abstract class RouterConfigs {
   static const String root = "/";
   ///首页
   static const String home = "/home";
-  ///更多
+  ///更多列表
   static const String more = "/more";
   ///普通列表
   static const String simple_list = "/simple_list";
+  ///记录列表
+  static const String record_list = "/record_list";
   ///发现
   static const String discovery = "/discovery";
   ///排行
