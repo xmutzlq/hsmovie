@@ -7,6 +7,7 @@ import 'package:ble_project/ui/detail/movie_detail_controller/state.dart';
 import 'package:ble_project/ui/user/personal/logic.dart';
 import 'package:ble_project/ui/user/personal/model/movie_info.dart';
 import 'package:ble_project/util/toast_util.dart';
+import 'package:ble_project/widget/fix_vertical_card_pager.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:hive_ce/hive.dart';
@@ -14,10 +15,12 @@ import 'package:hive_ce/hive.dart';
 class MovieDetailControllerLogic extends GetxController with StateMixin<MovieDetailEntity> {
   static const String BOX_NAME_FILM_BOX = "box_film_box";
   static const String BOX_KEY_FILM_BOX = "key_film_box";
+  static const int MAX_BOX_SIZE = 5;
   final MovieDetailControllerState detailState = MovieDetailControllerState();
   final personalLogic = Get.find<PersonalLogic>();
 
   final GlobalKey<CartIconKey> cartKey = GlobalKey<CartIconKey>();
+  final GlobalKey<FixVerticalCardPagerState> slideKey = GlobalKey<FixVerticalCardPagerState>();
   Function(GlobalKey)? runAddToCartAnimation;
   late List<MovieInfo> boxMovies;
 
@@ -77,6 +80,7 @@ class MovieDetailControllerLogic extends GetxController with StateMixin<MovieDet
     var filmBox = await Hive.openBox<FilmBoxInfo>(BOX_NAME_FILM_BOX);
     FilmBoxInfo filmBoxInfo = filmBox.get(BOX_KEY_FILM_BOX) ?? FilmBoxInfo(filmBoxRecord: []);
     boxMovies = filmBoxInfo.filmBoxRecord ?? [];
+    debugPrint('getFilmsInBox_length : ${boxMovies.length}');
     return filmBoxInfo.filmBoxRecord ?? [];
   }
 
@@ -84,7 +88,7 @@ class MovieDetailControllerLogic extends GetxController with StateMixin<MovieDet
   Future<bool> saveFilm2Box(String? movieId) async {
     bool isSuccess = false;
     if(movieId == null) {
-      ToastUtil.showToast("id异常");
+      ToastUtil.showToast("movieId不能为空");
       return false;
     }
     MovieDetailEntity? entity = detailState.entity;
@@ -97,6 +101,11 @@ class MovieDetailControllerLogic extends GetxController with StateMixin<MovieDet
     List<MovieInfo> movies = filmBoxInfo.filmBoxRecord ?? [];
     bool hasInside = false;
     if(movies.length > 0) {
+      if(MAX_BOX_SIZE <= movies.length) {
+        ToastUtil.showToast("盒子最多只能添加5个电影");
+        return false;
+      }
+
       int foundIndex = movies.indexWhere((item) => item.movieId == movieId);
       hasInside = foundIndex != -1;
     }
@@ -120,11 +129,33 @@ class MovieDetailControllerLogic extends GetxController with StateMixin<MovieDet
     bool isSuccess = false;
     try {
       var filmBox = await Hive.openBox<FilmBoxInfo>(BOX_NAME_FILM_BOX);
-      FilmBoxInfo filmBoxInfo = filmBox.get(BOX_KEY_FILM_BOX) ?? FilmBoxInfo(filmBoxRecord: []);
-      filmBoxInfo.copyWith(filmBoxRecord: []);
-      await filmBox.put(BOX_KEY_FILM_BOX, filmBoxInfo);
+      await filmBox.clear();
+      // FilmBoxInfo filmBoxInfo = filmBox.get(BOX_KEY_FILM_BOX) ?? FilmBoxInfo(filmBoxRecord: []);
+      // filmBoxInfo.copyWith(filmBoxRecord: []);
+      // await filmBox.put(BOX_KEY_FILM_BOX, filmBoxInfo);
       boxMovies = [];
       isSuccess = true;
+    } catch(e) {
+      isSuccess = false;
+    }
+    return isSuccess;
+  }
+
+  /// 删除影视盒子中的某个Film
+  Future<bool> deleteAFilmInBox(int index) async {
+    bool isSuccess = false;
+    try {
+      var filmBox = await Hive.openBox<FilmBoxInfo>(BOX_NAME_FILM_BOX);
+      FilmBoxInfo filmBoxInfo = filmBox.get(BOX_KEY_FILM_BOX) ?? FilmBoxInfo(filmBoxRecord: []);
+      MovieInfo? info = filmBoxInfo.filmBoxRecord?.removeAt(index);
+      if(info != null) {
+        await filmBox.put(BOX_KEY_FILM_BOX, filmBoxInfo);
+        boxMovies = filmBoxInfo.filmBoxRecord!;
+        debugPrint('getDeletedFilmsInBox_length : ${boxMovies.length}');
+        isSuccess = true;
+      } else {
+        isSuccess = false;
+      }
     } catch(e) {
       isSuccess = false;
     }

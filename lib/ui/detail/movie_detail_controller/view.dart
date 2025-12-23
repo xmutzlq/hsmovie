@@ -101,15 +101,8 @@ class MovieDetailControllerPage extends GetView<MovieDetailControllerLogic> {
         FloatingActionButton(
           onPressed: () async {
             await logic.getFilmsInBox();
-            showFilmInBoxDialog(logic.boxMovies, () async {
-              // 清空播放盒子内容
-              bool isSuccess = await logic.clearFilmsInBox();
-              if(isSuccess) {
-                logic.updateFilmBox();
-              } else {
-                ToastUtil.showToast("清除失败");
-              }
-            });
+            debugPrint('box_length : ${logic.boxMovies.length}');
+            showFilmInBoxDialog();
           },
           tooltip: '影视盒子',
           child: AddToCartIcon(
