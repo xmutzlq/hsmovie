@@ -238,32 +238,34 @@ class MovieDetailControllerPage extends GetView<MovieDetailControllerLogic> {
                   top: width,
                   child: FractionalTranslation(
                     translation: const Offset(0.0, -0.5),
-                    child: FloatingActionButton(onPressed: () {
-                      ///播放
-                      if(logic.detailState.entity == null
-                          || logic.detailState.entity!.vod.vodPlayServer == null
-                          || logic.detailState.entity!.vod.vodPlayServer!.isEmpty) {
-                        ToastUtil.showToast("暂无无播放资源");
-                      } else {
-                        // 加入观看记录
-                        debugPrint('加入观看记录');
-                        final PersonalLogic personalController = Get.put(PersonalLogic());
-                        personalController.saveViewingRecord(
-                            (logic.detailState.entity?.vod.vodID ?? 999).toString(),
-                            logic.detailState.entity?.vod.vodPic ?? "",
-                            logic.detailState.entity?.vod.vodName ?? "",
-                            (logic.detailState.entity?.vod.typeID ?? -1).toString());
+                    child: FloatingActionButton(
+                      onPressed: () {
+                        ///播放
+                        if(logic.detailState.entity == null
+                            || logic.detailState.entity!.vod.vodPlayServer == null
+                            || logic.detailState.entity!.vod.vodPlayServer!.isEmpty) {
+                          ToastUtil.showToast("暂无无播放资源");
+                        } else {
+                          // 加入观看记录
+                          debugPrint('加入观看记录');
+                          final PersonalLogic personalController = Get.put(PersonalLogic());
+                          personalController.saveViewingRecord(
+                              (logic.detailState.entity?.vod.vodID ?? 999).toString(),
+                              logic.detailState.entity?.vod.vodPic ?? "",
+                              logic.detailState.entity?.vod.vodName ?? "",
+                              (logic.detailState.entity?.vod.typeID ?? -1).toString());
 
-                        Navigator.of(context).pushNamed(RouterConfigs.player, arguments: {
-                          'playServers' : logic.detailState.entity?.vod.vodPlayServer,
-                          'playUrlInfo' : logic.detailState.entity?.vod.vodPlayUrls,
-                          'videoTitle' : logic.detailState.entity?.vod.vodName});
-                        // Get.toNamed(RouterConfigs.player, arguments: {
-                        //       'playServers' : logic.detailState.entity?.vod.vodPlayServer,
-                        //       'playUrlInfo' : logic.detailState.entity?.vod.vodPlayUrls,
-                        //       'videoTitle' : logic.detailState.entity?.vod.vodName})
-                      }
-                    },
+                          Navigator.of(context).pushNamed(RouterConfigs.player, arguments: {
+                            'playServers' : logic.detailState.entity?.vod.vodPlayServer, // 播放源
+                            'playUrlInfo' : logic.detailState.entity?.vod.vodPlayUrls, // 播放地址
+                            'videoTitle' : logic.detailState.entity?.vod.vodName});
+                          // Get.toNamed(RouterConfigs.player, arguments: {
+                          //       'playServers' : logic.detailState.entity?.vod.vodPlayServer,
+                          //       'playUrlInfo' : logic.detailState.entity?.vod.vodPlayUrls,
+                          //       'videoTitle' : logic.detailState.entity?.vod.vodName})
+                        }
+                      },
+                      heroTag: null,
                       backgroundColor: Colors.white,
                       child: const Icon(Icons.play_arrow, color: Colors.red, size: 40,),
                     ),

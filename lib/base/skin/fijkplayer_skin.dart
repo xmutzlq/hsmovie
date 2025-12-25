@@ -6,9 +6,14 @@ import 'package:ble_project/base/log/app_log.dart';
 import 'package:ble_project/configs/page_config.dart';
 import 'package:ble_project/repository/movie_repository.dart';
 import 'package:ble_project/ui/player/components/lazy_tab_page.dart';
+import 'package:ble_project/ui/player/player_controller/logic.dart';
 import 'package:ble_project/widget/common_state_screen.dart';
+import 'package:ble_project/widget/dlna_device_list.dart';
 import 'package:fijkplayer_plus/fijkplayer_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
+
+import 'package:get/get.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 
 import './schema.dart' show VideoSourceFormat;
@@ -82,6 +87,7 @@ class CustomFijkPanel extends StatefulWidget {
 
 class _CustomFijkPanelState extends State<CustomFijkPanel>
     with TickerProviderStateMixin, AutomaticKeepAliveClientMixin {
+  final logic = Get.find<PlayerControllerLogic>();
   FijkPlayer get player => widget.player;
   ShowConfigAbs get showConfig => widget.showConfig;
   VideoSourceFormat get _videoSourceTabs => widget.videoFormat!;
@@ -183,6 +189,7 @@ class _CustomFijkPanelState extends State<CustomFijkPanel>
       _videoSourceTabs.video![tabIdx]!.list![activeIdx]!.url!;
       String? playUrl = await MovieRepository().getPlayUrl(curTabActiveUrl);
       logD("realPlayUrl : $playUrl");
+      logic.currentPlayUrl = playUrl ?? curTabActiveUrl;
       player.setDataSource(
         playUrl ?? curTabActiveUrl,
         autoPlay: true,
@@ -585,6 +592,7 @@ class _buildGestureDetector extends StatefulWidget {
 
 // ignore: camel_case_types
 class _buildGestureDetectorState extends State<_buildGestureDetector> {
+  final logic = Get.find<PlayerControllerLogic>();
   FijkPlayer get player => widget.player;
   ShowConfigAbs get showConfig => widget.showConfig;
   VideoSourceFormat get _videoSourceTabs => widget.videoFormat!;
@@ -661,6 +669,7 @@ class _buildGestureDetectorState extends State<_buildGestureDetector> {
     if (state == FijkState.idle ||
         state == FijkState.initialized ||
         state == FijkState.prepared) {
+      logic.currentPlayUrl = playUrl ?? url;
       player.setDataSource(playUrl ?? url, autoPlay: true);
     } else {
       // 先重置到合适的状态
@@ -900,6 +909,7 @@ class _buildGestureDetectorState extends State<_buildGestureDetector> {
       debugPrint('curTabActiveUrl : $curTabActiveUrl');
       String? playUrl = await MovieRepository().getPlayUrl(curTabActiveUrl);
       logD("realPlayUrl : $playUrl");
+      logic.currentPlayUrl = playUrl ?? curTabActiveUrl;
       player.setDataSource(
         playUrl ?? curTabActiveUrl,
         autoPlay: true,
@@ -1266,6 +1276,40 @@ class _buildGestureDetectorState extends State<_buildGestureDetector> {
                     ),
                   ),
                 ),
+              ),
+              IconButton(
+                padding: const EdgeInsets.only(
+                  left: 10.0,
+                  right: 10.0,
+                ),
+                splashColor: Colors.transparent,
+                highlightColor: Colors.transparent,
+                onPressed: () {
+                  debugPrint('action cast┏ (゜ω゜)=☞');
+                  SmartDialog.show(
+                    debounce: true,
+                    clickMaskDismiss: false,
+                    builder: (BuildContext context) {
+                      return Container(
+                        height: Get.height * 2 / 3,
+                        width: Get.width - 40,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        alignment: Alignment.center,
+                        child: const DlnaDeviceList(),
+                      );
+                    }
+                  );
+                },
+                icon: Image.asset(
+                  'assets/cast.png',
+                  width: 28,
+                  height: 28,
+                  fit: BoxFit.cover,
+                  color: Colors.white,
+                )
               )
             ],
           ),

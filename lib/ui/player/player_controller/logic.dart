@@ -18,6 +18,8 @@ class PlayerControllerLogic extends GetxController with SingleGetTickerProviderM
 
   RxInt curTabPageIdx = 0.obs;
 
+  var currentPlayUrl = "";
+
   void onChangeVideo(int curTabIdx, int curActiveIdx) {
     this.curTabIdx.value = curTabIdx;
     this.curActiveIdx.value = curActiveIdx;

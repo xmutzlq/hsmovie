@@ -82,13 +82,38 @@ void showFilmInBoxDialog() {
                 ]
               ),
               const SizedBox(height: 15),
-              Text(
-                '您添加的电影将会被全部播放，\n按添加的顺序自动播放盒子中的电影',
-                style: const TextStyle(
-                  fontSize: 13.0,
-                  fontWeight: FontWeight.normal,
-                  letterSpacing: 1.0,
-                ),
+              RichText(
+                text: TextSpan(
+                  children: [
+                    TextSpan(
+                      text: '您添加的电影将会被全部播放(',
+                      style: const TextStyle(
+                        color: Colors.black54,
+                        fontSize: 13.0,
+                        fontWeight: FontWeight.normal,
+                        letterSpacing: 1.0,
+                      ),
+                    ),
+                    TextSpan(
+                      text: '最多可添加5部电影',
+                      style: const TextStyle(
+                        color: Colors.red,
+                        fontSize: 14.0,
+                        fontWeight: FontWeight.w500,
+                        letterSpacing: 1.0,
+                      ),
+                    ),
+                    TextSpan(
+                      text: ')，按添加的顺序自动播放',
+                      style: const TextStyle(
+                        color: Colors.black54,
+                        fontSize: 13.0,
+                        fontWeight: FontWeight.normal,
+                        letterSpacing: 1.0,
+                      ),
+                    ),
+                  ]
+                )
               ),
               SizedBox(height: 15),
               Expanded(
