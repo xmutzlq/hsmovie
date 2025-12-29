@@ -14,7 +14,7 @@ Widget rankingTabBarView() {
       labelColor: appThemeData.tabBarTheme.labelColor,
       unselectedLabelColor: appThemeData.tabBarTheme.unselectedLabelColor,
       labelStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-      unselectedLabelStyle: const TextStyle(color: kPrimaryLightColor),
+      unselectedLabelStyle: TextStyle(fontSize: 14, color: kPrimaryLightColor),
       tabs: logic.rankingTabs,
     )
   );

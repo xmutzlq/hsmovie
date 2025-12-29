@@ -7,10 +7,11 @@ import 'package:ble_project/model/vod_info.dart';
 import 'package:ble_project/ui/user/components/movie_chart.dart';
 import 'package:ble_project/util/my_scroll_behavior.dart';
 import 'package:ble_project/widget/list/movie_list.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:get/get.dart';
+import 'package:get/get.dart' show Obx, Get, Inst, GetNavigation;
 import 'package:zo_animated_border/zo_animated_border.dart';
 
 import 'logic.dart';
@@ -165,7 +166,7 @@ class PersonalPage extends StatelessWidget {
                         await personalController.analysisMovieTypes(RecordType.favourite);
                       },
                       borderRadius: const BorderRadius.all(Radius.circular(5)),
-                      child: _buildFavouriteItem('收藏'),
+                      child: _buildFavouriteItem('mine.mine_favorites'.tr()),
                     ),
                   ),
                   Expanded(
@@ -175,7 +176,7 @@ class PersonalPage extends StatelessWidget {
                         await personalController.analysisMovieTypes(RecordType.viewingRecord);
                       },
                       borderRadius: const BorderRadius.all(Radius.circular(5)),
-                      child: _buildViewingRecordItem('观看记录'),
+                      child: _buildViewingRecordItem('mine.mine_watch_history'.tr()),
                     ),
                   ),
                   Expanded(
@@ -185,7 +186,7 @@ class PersonalPage extends StatelessWidget {
                         await personalController.analysisMovieTypes(RecordType.browsingRecord);
                       },
                       borderRadius: const BorderRadius.all(Radius.circular(5)),
-                      child: _buildBrowsingRecordItem('浏览记录'),
+                      child: _buildBrowsingRecordItem('mine.mine_browsing_history'.tr()),
                     ),
                   ),
                 ],
@@ -232,7 +233,9 @@ class PersonalPage extends StatelessWidget {
   Widget _buildViewingRecordItem(String recordName) {
     return Column(
       children: [
-        Text(recordName, style: const TextStyle(fontSize: 16)),
+        Text(recordName,
+            textAlign: TextAlign.center,
+            style: const TextStyle(fontSize: 16)),
         const SizedBox(height: 10),
         Obx(() => Text(
           personalController.personState.viewingRecordSize.value,
@@ -249,7 +252,9 @@ class PersonalPage extends StatelessWidget {
   Widget _buildBrowsingRecordItem(String recordName) {
     return Column(
       children: [
-        Text(recordName, style: const TextStyle(fontSize: 16)),
+        Text(recordName,
+            textAlign: TextAlign.center,
+            style: const TextStyle(fontSize: 16)),
         const SizedBox(height: 10),
         Obx(() => Text(
           personalController.personState.browsingRecordSize.value,
@@ -266,7 +271,9 @@ class PersonalPage extends StatelessWidget {
   Widget _buildFavouriteItem(String recordName) {
     return Column(
       children: [
-        Text(recordName, style: const TextStyle(fontSize: 16, color: Colors.black87)),
+        Text(recordName,
+            textAlign: TextAlign.center,
+            style: const TextStyle(fontSize: 16, color: Colors.black87)),
         const SizedBox(height: 10),
         Obx(() => Text(
           personalController.personState.favouriteSize.value,
@@ -307,7 +314,7 @@ class PersonalPage extends StatelessWidget {
                             const Icon(Icons.history, size: 25, color: Colors.black54,),
                             SizedBox(width: 3),
                             Text(
-                              '观看记录',
+                              'mine.mine_watch_history'.tr(),
                               style: const TextStyle(fontSize: 16, color: Colors.black87),
                             ),
                           ],
@@ -364,7 +371,9 @@ class PersonalPage extends StatelessWidget {
               children: [
                 InkWell(
                   onTap: () {
-                    Get.toNamed(RouterConfigs.record_list, arguments: {'recordListTitle' : "我的观看" , 'recordType' : RecordType.viewingRecord});
+                    Get.toNamed(RouterConfigs.record_list, arguments: {
+                      'recordListTitle' : 'mine.mine_my_watch_history'.tr(),
+                      'recordType' : RecordType.viewingRecord});
                   },
                   child: Padding(padding: const EdgeInsets.all(15), child:
                   Row(
@@ -372,7 +381,7 @@ class PersonalPage extends StatelessWidget {
                     spacing: 5,
                     children: <Widget>[
                       const Icon(Icons.history, size: 25, color: Colors.black54,),
-                      Text('我的观看', style: const TextStyle(fontSize: 15, color: Colors.black87)),
+                      Text('mine.mine_my_watch_history'.tr(), style: const TextStyle(fontSize: 15, color: Colors.black87)),
                       Expanded(child: SizedBox()),
                       const Icon(Icons.keyboard_arrow_right, size: 25, color: Colors.black54,),
                     ],
@@ -387,7 +396,9 @@ class PersonalPage extends StatelessWidget {
                   color: Colors.grey[300]),
                 InkWell(
                   onTap: () {
-                    Get.toNamed(RouterConfigs.record_list, arguments: {'recordListTitle' : "我的收藏" , 'recordType' : RecordType.favourite});
+                    Get.toNamed(RouterConfigs.record_list, arguments: {
+                      'recordListTitle' : 'mine.mine_my_favorites'.tr(),
+                      'recordType' : RecordType.favourite});
                   },
                   child: Padding(padding: const EdgeInsets.all(15), child:
                     Row(
@@ -395,7 +406,7 @@ class PersonalPage extends StatelessWidget {
                       spacing: 5,
                       children: <Widget>[
                         const Icon(Icons.favorite_border_outlined, size: 25, color: Colors.black54,),
-                        Text('我的收藏', style: const TextStyle(fontSize: 15, color: Colors.black87)),
+                        Text('mine.mine_my_favorites'.tr(), style: const TextStyle(fontSize: 15, color: Colors.black87)),
                         Expanded(child: SizedBox()),
                         const Icon(Icons.keyboard_arrow_right, size: 25, color: Colors.black54,),
                       ],
@@ -409,7 +420,9 @@ class PersonalPage extends StatelessWidget {
                   color: Colors.grey[300]),
                 InkWell(
                   onTap: () {
-                    Get.toNamed(RouterConfigs.record_list, arguments: {'recordListTitle' : "我的浏览" , 'recordType' : RecordType.browsingRecord});
+                    Get.toNamed(RouterConfigs.record_list, arguments: {
+                      'recordListTitle' : 'mine.mine_my_browsing_history'.tr(),
+                      'recordType' : RecordType.browsingRecord});
                   },
                   child: Padding(padding: const EdgeInsets.all(15), child:
                     Row(
@@ -417,7 +430,7 @@ class PersonalPage extends StatelessWidget {
                       spacing: 5,
                       children: <Widget>[
                         const Icon(Icons.browse_gallery_outlined, size: 25, color: Colors.black54,),
-                        Text('我的浏览', style: const TextStyle(fontSize: 15, color: Colors.black87)),
+                        Text('mine.mine_my_browsing_history'.tr(), style: const TextStyle(fontSize: 15, color: Colors.black87)),
                         Expanded(child: SizedBox()),
                         const Icon(Icons.keyboard_arrow_right, size: 25, color: Colors.black54,),
                       ],

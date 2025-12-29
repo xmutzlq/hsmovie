@@ -1,8 +1,8 @@
 import 'package:ble_project/model/discovery/discovery_entity.dart';
 import 'package:ble_project/repository/movie_repository.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:get/get.dart' show GetxController, GetSingleTickerProviderStateMixin;
 
 import 'state.dart';
 
@@ -18,19 +18,19 @@ class DiscoveryLogic extends GetxController with GetSingleTickerProviderStateMix
       ..add(Tab(
           child: GestureDetector(
             onDoubleTap: () => listScrollTop(),
-            child: Text("电影"),
+            child: Text('common.movie'.tr()),
           )
       ))
       ..add(Tab(
           child: GestureDetector(
             onDoubleTap: ()  => listScrollTop(),
-            child: Text("电视剧"),
+            child: Text('common.tv_series'.tr()),
           )
       ))
       ..add(Tab(
           child: GestureDetector(
             onDoubleTap: ()  => listScrollTop(),
-            child: Text("综艺"),
+            child: Text('common.variety_show'.tr()),
           )
       ));
     scrollController = ScrollController();

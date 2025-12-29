@@ -14,12 +14,13 @@ import 'package:ble_project/widget/list/guess_like_list.dart';
 import 'package:ble_project/widget/list/recommend_list.dart';
 import 'package:ble_project/widget/scrollview_background.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:floating_draggable_widget/floating_draggable_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_autosize_screen_pro/flutter_autosize_screen_pro.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:get/get.dart';
+import 'package:get/get.dart' show Obx, Get, GetView, Inst, StateExt, GetNavigation;
 
 import 'logic.dart';
 
@@ -349,9 +350,9 @@ class MovieDetailControllerPage extends GetView<MovieDetailControllerLogic> {
           Expanded(
             child: Container(),
           ),
-          _buildMovieMoreInfoItem("年份", year ?? "--"),
-          _buildMovieMoreInfoItem("地区", productionCountry ?? "--"),
-          _buildMovieMoreInfoItem("类型", type ?? "--"),
+          _buildMovieMoreInfoItem('detail.detail_year'.tr(), year ?? "--"),
+          _buildMovieMoreInfoItem('detail.detail_area'.tr(), productionCountry ?? "--"),
+          _buildMovieMoreInfoItem('detail.detail_type'.tr(), type ?? "--"),
           Expanded(
             child: Container(),
           ),
@@ -405,8 +406,8 @@ class MovieDetailControllerPage extends GetView<MovieDetailControllerLogic> {
             padding: const EdgeInsets.only(left: 15, right: 15),
             child: Row(
               children: <Widget>[
-                const Expanded(
-                  child: const Text("猜你喜欢", style: const TextStyle(
+                Expanded(
+                  child: Text('detail.detail_you_might_like'.tr(), style: const TextStyle(
                     color: Colors.black,
                     fontSize: 16.0,
                     fontWeight: FontWeight.bold,
@@ -440,12 +441,14 @@ class MovieDetailControllerPage extends GetView<MovieDetailControllerLogic> {
             padding: const EdgeInsets.only(left: 15, right: 15),
             child: Row(
               children: <Widget>[
-                const Expanded(
-                  child: const Text("相关推荐", style: const TextStyle(
+                Expanded(
+                  child: Text('detail.detail_recommended_for_you'.tr(),
+                    style: const TextStyle(
                       color: Colors.black,
                       fontSize: 16.0,
                       fontWeight: FontWeight.bold,
-                      fontFamily: "Muli"),
+                      fontFamily: "Muli"
+                    ),
                   ),
                 ),
                 // InkWell(

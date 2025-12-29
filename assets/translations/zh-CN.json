@@ -1,0 +1,54 @@
+{
+  "button": "切换语言",
+  "common": {
+    "movie": "电影",
+    "tv_series": "电视剧",
+    "variety_show": "综艺",
+    "tv_anime": "动漫",
+    "search_film": "搜索电影、电视剧、演员",
+    "search_history": "搜索记录",
+    "search_result_none": "无搜索结果"
+  },
+  "detail": {
+    "detail_year": "年份",
+    "detail_area": "地区",
+    "detail_type": "类型",
+    "detail_you_might_like": "猜你喜欢",
+    "detail_recommended_for_you": "相关推荐",
+    "detail_overall_rating": "综合评分：",
+    "detail_year_area": "年份|地区：",
+    "detail_year_area_": "年份|地区：{vodYear} {vodArea}",
+    "detail_actor": "主演：{vodActor}",
+    "detail_publish_time": "上映时间：{vodTime}"
+  },
+  "home": {
+    "title": "首页",
+    "categories_trending_this_week": "本周热播",
+    "categories_latest_movies": "最新电影",
+    "categories_latest_tv_series": "最新连续剧",
+    "categories_latest_variety_shows": "最新综艺",
+    "categories_latest_anime": "最新动漫"
+  },
+  "discovery": {
+    "title": "发现"
+  },
+  "ranking": {
+    "title": "排行",
+    "ranking_weekly": "周榜",
+    "ranking_monthly": "周榜",
+    "ranking_overall": "周榜"
+  },
+  "mine": {
+    "title": "我的",
+    "mine_favorites": "收藏",
+    "mine_my_favorites": "我的收藏",
+    "mine_watch_history": "观看记录",
+    "mine_my_watch_history": "我的观看",
+    "mine_browsing_history": "浏览记录",
+    "mine_my_browsing_history": "我的浏览"
+  },
+  "settings": {
+    "theme": "主题设置",
+    "language": "语言"
+  }
+}

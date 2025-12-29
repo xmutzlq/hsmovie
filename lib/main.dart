@@ -8,6 +8,7 @@ import 'package:ble_project/ui/navigation/navigation/view.dart';
 import 'package:ble_project/ui/user/personal/model/movie_info.dart';
 import 'package:ble_project/ui/user/personal/model/person_info.dart';
 import 'package:ble_project/util/sp.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
@@ -22,6 +23,8 @@ import 'base/log/log_helper.dart';
 import 'base/log/size_based_logger.dart';
 import 'base/screen/binding.dart';
 
+import 'package:intl/date_symbol_data_local.dart';
+
 void main() async {
   runZonedGuarded(() async {
     FlutterAutosizeScreenPro.setStandard(360, isAutoTextSize: true);
@@ -35,7 +38,10 @@ void main() async {
       ..registerAdapter(FilmBoxInfoAdapter());
 
     MediaKit.ensureInitialized();
-
+    // 初始化 EasyLocalization
+    await EasyLocalization.ensureInitialized();
+    await initializeDateFormatting('zh_CN', null); // 简体中文
+    await initializeDateFormatting('en_US', null); // 英文
     // 初始化基于大小的日志系统
     await SizeBasedLoggerConfig.instance.initialize();
     // 如果需要使用基于时间的日志系统，注释上面的行，取消注释下面的行
@@ -48,7 +54,19 @@ void main() async {
     };
 
     Log.info('Application starting...');
-    runApp(StatsFl(isEnabled: Global.showFPS, child: const MyApp()));
+    runApp(StatsFl(isEnabled: Global.showFPS, child:
+      EasyLocalization(
+        supportedLocales: const [
+          Locale('zh', 'CN'),  // 中文（中国）
+          Locale('en', 'US')   // 英语（美国）
+        ],
+        path: 'assets/translations',  // 语言文件路径
+        // 可选：设置默认语言、回退语言等
+        fallbackLocale: const Locale('zh', 'CN'),
+        startLocale: const Locale('en', 'US'),
+        child: const MyApp())
+      )
+    );
   }, (error, stack) {
     // 在日志系统初始化之前发生的错误，直接打印到控制台
     if (SizeBasedLoggerConfig.instance.isInitialized) {
@@ -80,6 +98,9 @@ class MyApp extends StatelessWidget {
       darkTheme: appThemeDarkData,
       debugShowCheckedModeBanner: false,
       defaultTransition: Transition.fade,
+      localizationsDelegates: context.localizationDelegates,
+      supportedLocales: context.supportedLocales,
+      locale: context.locale,
       navigatorKey: Get.key,
       navigatorObservers: [defaultLifecycleObserver, FlutterSmartDialog.observer],
       initialRoute: RouterConfigs.root,

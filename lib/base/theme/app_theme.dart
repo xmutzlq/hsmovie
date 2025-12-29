@@ -1,7 +1,8 @@
 import 'package:ble_project/widget/search/searchbar_delegate.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:get/get.dart';
+import 'package:get/get.dart' show Get, GetNavigation;
 import 'package:google_fonts/google_fonts.dart';
 
 ///theme
@@ -79,7 +80,7 @@ class _SearchBar extends StatelessWidget {
             SizedBox(
               width: width - 100,
               child: Text(
-                '搜索电影、电视剧、演员',
+                'common.search_film'.tr(),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: const TextStyle(color: kPrimaryLightColor, fontSize: 13),

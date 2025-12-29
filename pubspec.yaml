@@ -44,6 +44,8 @@ dependencies:
   # DB
   hive_ce: ^2.15.1
   hive_ce_flutter: ^2.3.3
+  # localization
+  easy_localization: ^3.0.8
   # tools
   animated_flip_widget: ^0.0.2
   zo_animated_border: ^1.0.4
@@ -114,6 +116,7 @@ flutter:
   assets:
   - res/graphic/
   - assets/
+  - assets/translations/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

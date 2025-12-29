@@ -8,16 +8,15 @@ import 'package:ble_project/ui/discover/discovery/logic.dart';
 import 'package:ble_project/util/time_util.dart';
 import 'package:ble_project/widget/keepalive_widget.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:get/get.dart' show GetBuilder, Get, GetNavigation;
 import 'package:grouped_list/grouped_list.dart';
 import 'package:keframe/frame_separate_widget.dart';
 import 'package:keframe/size_cache_widget.dart';
 import 'package:shimmer/shimmer.dart';
 
 Widget tvView() {
-
-  final logic = Get.find<DiscoveryLogic>();
 
   int groupComparator(String value1, String value2) {
     String compareStr2 = value2.substring(0, value2.indexOf("-"));
@@ -223,7 +222,8 @@ class _ItemCell extends StatelessWidget {
                   ),
                   const SizedBox(height: 5),
                   Text(
-                    "年份地区：${data.vodYear + " " + data.vodArea}",
+                    'detail.detail_year_area_'.tr(
+                        namedArgs: {'vodYear': '${data.vodYear}', 'vodArea': '${data.vodArea}'}),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
@@ -231,7 +231,7 @@ class _ItemCell extends StatelessWidget {
                         fontWeight: FontWeight.normal, fontSize: 14),
                   ),
                   Text(
-                    "演员：${data.vodActor}",
+                    'detail.detail_actor'.tr(namedArgs: {'vodActor': '${data.vodActor}'}),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
@@ -240,7 +240,8 @@ class _ItemCell extends StatelessWidget {
                   ),
                   const SizedBox(height: 3),
                   Text(
-                    "时间：${TimeUtil.timeStampToTimeStr(data.vodTime)}",
+                    'detail.detail_publish_time'.tr(
+                        namedArgs: {'vodTime': '${TimeUtil.timeStampToTimeStr(data.vodTime)}'}),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(

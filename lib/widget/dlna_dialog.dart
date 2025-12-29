@@ -2,7 +2,6 @@
 
 import 'dart:async';
 
-import 'package:ble_project/base/log/app_log.dart';
 import 'package:ble_project/ui/player/player_controller/logic.dart';
 import 'package:ble_project/util/toast_util.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +10,7 @@ import 'package:dlna_dart/xmlParser.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
+import 'package:zo_animated_border/widget/zo_breathing_border.dart';
 
 import 'dlna_stream_items.dart';
 
@@ -30,7 +30,6 @@ class _DlnaDialogState extends State<DlnaDialog> {
   static const OperateBtnWidth_100 = 100.0;
   static const OperateBtnHeight = 35.0;
   PositionParser? position;
-  TextEditingController videoUrl = TextEditingController();
   Timer timer = Timer(const Duration(seconds: 1), () {});
 
   @override
@@ -39,7 +38,6 @@ class _DlnaDialogState extends State<DlnaDialog> {
     callback(_) async {
       try {
         final text = await widget.dev.position();
-        logV('text1111 : $text');
         final p = PositionParser(text);
         setState(() {
           position = p;
@@ -49,6 +47,7 @@ class _DlnaDialogState extends State<DlnaDialog> {
       }
     }
 
+    // 每5秒执行一次更新
     timer = Timer.periodic(const Duration(seconds: 5), callback);
     callback(null);
   }
@@ -80,10 +79,16 @@ class _DlnaDialogState extends State<DlnaDialog> {
                     ),
                   ),
                   IconButton(
-                      icon: const Icon(Icons.close),
-                      onPressed: () {
-                        SmartDialog.dismiss();
+                    icon: const Icon(Icons.close),
+                    onPressed: () async {
+                      // 关闭对话框，停止投屏
+                      try {
+                        await widget.dev.stop();
+                      } catch (e) {
+                        ToastUtil.showToast("$e");
                       }
+                      SmartDialog.dismiss();
+                    }
                   )
                 ]
             ),
@@ -112,8 +117,11 @@ class _DlnaDialogState extends State<DlnaDialog> {
             style: TextStyle(fontSize: 14, color: Colors.grey[400]),
           ),
         ),
-        SizedBox(height: 160, child: buildCurrUri()),
+        SizedBox(height: 15),
+        SizedBox(child: buildCurrUri()),
+        SizedBox(height: 20),
         buildActions(),
+        SizedBox(height: 15)
       ],
     );
 
@@ -143,6 +151,7 @@ class _DlnaDialogState extends State<DlnaDialog> {
     if (currUrl.length > 100) {
       currUrl = '${currUrl.substring(0, 100)}...';
     }
+    // 播放链接显示
     sList.add(
       Container(
         margin: const EdgeInsets.symmetric(vertical: 10),
@@ -164,6 +173,7 @@ class _DlnaDialogState extends State<DlnaDialog> {
       ),
     );
     if (position!.AbsTime.isNotEmpty) {
+      // 时间显示
       sList.add(
         Align(
           alignment: Alignment.topLeft,
@@ -171,91 +181,58 @@ class _DlnaDialogState extends State<DlnaDialog> {
         ),
       );
     }
-    return Container(
-      alignment: Alignment.topLeft,
-      padding: const EdgeInsets.all(10),
-      child: Card(
-        elevation: 1,
-        color: Colors.white70,
-        child: Container(
-          padding: const EdgeInsets.all(10),
-          child: Column(children: sList),
+
+    return ZoBreathingBorder(
+      borderWidth: 2.0,
+      borderRadius: BorderRadius.circular(10),
+      colors: [
+        Colors.blue,
+        Colors.purple,
+        Colors.red,
+        Colors.orange,
+      ],
+      animationDuration: const Duration(seconds: 4),
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(10),
         ),
-      ),
+        alignment: Alignment.center,
+        padding: EdgeInsets.all(10),
+        child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: sList)
+      )
     );
   }
 
   Widget buildActions() {
     const style = TextStyle(fontSize: 12);
-    final ok = ElevatedButton(
-      child: const Text("确认"),
-      onPressed: () async {
-        final logic = Get.find<PlayerControllerLogic>();
-        var v = videoUrl.value.text;
-        if (v.isEmpty) {
-          v = logic.currentPlayUrl;
-          // ToastUtil.showToast("请输入http地址");
-          // return;
-        }
-        try {
-          await widget.dev.setUrl(v);
-          await widget.dev.play();
-        } catch (e) {
-          ToastUtil.showToast("$e");
-        }
-        Navigator.pop(context);
-        Timer(const Duration(seconds: 2), () async {
-          final text = await widget.dev.position();
-          position = PositionParser(text);
-        });
-      },
-    );
-    final content = widget.videoId != null && widget.videoId!.isNotEmpty
-        ? DlnaStreamItems(widget.dev, widget.videoId!)
-        : Column(
-      children: [
-        TextField(
-          controller: videoUrl,
-          decoration: const InputDecoration(
-            icon: Icon(Icons.link),
-            labelText: "http地址",
-          ),
-        ),
-        OverflowBar(alignment: MainAxisAlignment.center, children: [ok]),
-      ],
-    );
     final push = ElevatedButton(
       child: const Text("投屏"),
       onPressed: () async {
-        final logic = Get.find<PlayerControllerLogic>();
-        var v = logic.currentPlayUrl;
-        try {
-          await widget.dev.setUrl(v);
-          await widget.dev.play();
-        } catch (e) {
-          ToastUtil.showToast("$e");
-        }
-        Timer(const Duration(seconds: 2), () async {
-          final text = await widget.dev.position();
-          position = PositionParser(text);
-        });
 
-      //   showModalBottomSheet(
-      //     isScrollControlled: true,
-      //     context: Get.context!,
-      //     builder: (BuildContext context) =>
-      //         SingleChildScrollView(
-      //           child: Container(
-      //             padding: EdgeInsets.fromLTRB(10, 10, 10,
-      //               MediaQuery
-      //                   .of(context)
-      //                   .viewInsets
-      //                   .bottom,
-      //             ),
-      //             child: content,
-      //           ),
-      //         ),
-      //   );
+        if(widget.videoId != null && widget.videoId!.isNotEmpty) {
+          SmartDialog.show(
+            alignment: Alignment.bottomCenter,
+            builder: (_) {
+              return DlnaStreamItems(widget.dev, widget.videoId!);
+            },
+          );
+        } else {
+          final logic = Get.find<PlayerControllerLogic>();
+          var url = logic.currentPlayUrl;
+          try {
+            await widget.dev.setUrl(url);
+            await widget.dev.play();
+          } catch (e) {
+            ToastUtil.showToast("投屏失败：$e");
+          }
+          Timer(const Duration(seconds: 2), () async {
+            final text = await widget.dev.position();
+            position = PositionParser(text);
+          });
+        }
       }
     );
     final play = SizedBox(

@@ -3,7 +3,8 @@ import 'package:ble_project/ui/home/home_page_mixin_controller/logic.dart';
 import 'package:ble_project/util/toast_util.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:get/get.dart' show GetBuilder, Get, Inst, GetNavigation;
 
 class MovieCategory extends StatelessWidget {
   @override
@@ -35,29 +36,39 @@ class MovieCategory extends StatelessWidget {
     final logic = Get.find<HomePageMixinControllerLogic>();
     return GestureDetector(
       onTap: () => {
-        if("本周热播" == cate) {
-          Get.toNamed(RouterConfigs.simple_list, arguments: {'simpleListTitle' : "本周热播" , 'simpleListArgument' : logic.weekHot})
+        if('home.categories_trending_this_week'.tr() == cate) {
+          Get.toNamed(RouterConfigs.simple_list, arguments: {
+            'simpleListTitle' : 'home.categories_trending_this_week'.tr() ,
+            'simpleListArgument' : logic.weekHot})
         } else {
           if(logic.filterTypes == null) {
             ToastUtil.showToast("查不到分类列表，请刷新界面")
           } else {
-            if("最新电影" == cate) {
+            if('home.categories_latest_movies'.tr() == cate) {
               if(logic.filterTypes!.movieFilter != null && logic.filterTypes!.movieFilter!.length > 0) {
-                Get.toNamed(RouterConfigs.more, arguments: {'title':'电影', 'vodTypeId' : logic.filterTypes!.movieFilter![0].id})
+                Get.toNamed(RouterConfigs.more, arguments: {
+                  'title':'home.categories_latest_movies'.tr(),
+                  'vodTypeId' : logic.filterTypes!.movieFilter![0].id})
               } else {
                 ToastUtil.showToast("查不到电影分类，请刷新界面")
               }
-            } else if("最新连续剧" == cate) {
+            } else if('home.categories_latest_tv_series'.tr() == cate) {
               if(logic.filterTypes!.tvFilter != null && logic.filterTypes!.tvFilter!.length > 0) {
-                Get.toNamed(RouterConfigs.more, arguments: {'title':'连续剧', 'vodTypeId' : logic.filterTypes!.tvFilter![0].id})
+                Get.toNamed(RouterConfigs.more, arguments: {
+                  'title':'home.categories_latest_tv_series'.tr(),
+                  'vodTypeId' : logic.filterTypes!.tvFilter![0].id})
               } else {
                 ToastUtil.showToast("查不到连续剧分类，请刷新界面")
               }
-            } else if("最新综艺" == cate) {
-              Get.toNamed(RouterConfigs.more, arguments: {'title':'综艺', 'vodTypeId' : 3})
-            } else if("最新动漫" == cate) {
+            } else if('home.categories_latest_variety_shows'.tr() == cate) {
+              Get.toNamed(RouterConfigs.more, arguments: {
+                'title':'home.categories_latest_variety_shows'.tr(),
+                'vodTypeId' : 3})
+            } else if('home.categories_latest_anime'.tr() == cate) {
               if(logic.filterTypes!.cartoonFilter != null && logic.filterTypes!.cartoonFilter!.length > 0) {
-                Get.toNamed(RouterConfigs.more, arguments: {'title':'动漫', 'vodTypeId' : logic.filterTypes!.cartoonFilter![0].id})
+                Get.toNamed(RouterConfigs.more, arguments: {
+                  'title':'home.categories_latest_anime'.tr(),
+                  'vodTypeId' : logic.filterTypes!.cartoonFilter![0].id})
               } else {
                 ToastUtil.showToast("查不到动漫分类，请刷新界面")
               }

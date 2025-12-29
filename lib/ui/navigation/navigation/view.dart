@@ -1,6 +1,7 @@
 import 'package:ble_project/base/theme/app_theme.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:get/get.dart' show GetBuilder;
 
 import 'logic.dart';
 
@@ -35,10 +36,10 @@ class NavigationPage extends StatelessWidget {
               fixedColor: primaryDarkColor,
               type: BottomNavigationBarType.fixed,
               items: [
-                BottomNavigationBarItem(icon: Icon(Icons.home), label: "首页"),
-                BottomNavigationBarItem(icon: Icon(Icons.movie), label: "发现"),
-                BottomNavigationBarItem(icon: Icon(Icons.sort), label: "排行"),
-                BottomNavigationBarItem(icon: Icon(Icons.person), label: "我的")
+                BottomNavigationBarItem(icon: Icon(Icons.home), label: 'home.title'.tr()),
+                BottomNavigationBarItem(icon: Icon(Icons.movie), label: 'discovery.title'.tr()),
+                BottomNavigationBarItem(icon: Icon(Icons.sort), label: 'ranking.title'.tr()),
+                BottomNavigationBarItem(icon: Icon(Icons.person), label: 'mine.title'.tr())
               ],
             ),
           ),

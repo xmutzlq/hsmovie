@@ -25,4 +25,6 @@ abstract class RouterConfigs {
   static const String person = "/person";
   ///个人编辑
   static const String person_edit = "/person_edit";
+  ///设置
+  static const String setting = "/setting";
 }

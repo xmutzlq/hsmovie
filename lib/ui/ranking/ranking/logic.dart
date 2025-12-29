@@ -1,8 +1,9 @@
 import 'package:ble_project/model/ranking/ranking_entity.dart';
 import 'package:ble_project/model/vod_info.dart';
 import 'package:ble_project/repository/movie_repository.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:get/get.dart' show SingleGetTickerProviderMixin, GetxController;
 
 import 'state.dart';
 
@@ -84,25 +85,25 @@ class RankingLogic extends GetxController with SingleGetTickerProviderMixin {
       ..add(Tab(
         child: GestureDetector(
           onDoubleTap: () => listScrollTop(),
-          child: Text("电影"),
+          child: Text('common.movie'.tr()),
         )
       ))
       ..add(Tab(
         child: GestureDetector(
           onDoubleTap: ()  => listScrollTop(),
-          child: Text("电视剧"),
+          child: Text('common.tv_series'.tr()),
         )
       ))
       ..add(Tab(
         child: GestureDetector(
           onDoubleTap: ()  => listScrollTop(),
-          child: Text("综艺"),
+          child: Text('common.variety_show'.tr()),
         )
       ))
       ..add(Tab(
         child: GestureDetector(
           onDoubleTap: ()  => listScrollTop(),
-          child: Text("动漫"),
+          child: Text('common.tv_anime'.tr()),
         )
       ));
     scrollController = ScrollController();

@@ -1,0 +1,54 @@
+{
+  "button": "Switch Language",
+  "common": {
+    "movie": "Movies",
+    "tv_series": "Series",
+    "variety_show": "Shows",
+    "tv_anime": "Anime",
+    "search_film": "Search film、series、actor",
+    "search_history": "Search History",
+    "search_result_none": "no search result"
+  },
+  "detail": {
+    "detail_year": "year",
+    "detail_area": "area",
+    "detail_type": "type",
+    "detail_you_might_like": "you might like",
+    "detail_recommended_for_you": "recommended for you",
+    "detail_overall_rating": "overall rating：",
+    "detail_year_area": "year|area：",
+    "detail_year_area_": "year|area：{vodYear} {vodArea}",
+    "detail_actor": "actors：{vodActor}",
+    "detail_publish_time": "date：{vodTime}"
+  },
+  "home": {
+    "title": "Home",
+    "categories_trending_this_week": "Week Trending",
+    "categories_latest_movies": "Latest Movies",
+    "categories_latest_tv_series": "Latest TV Series",
+    "categories_latest_variety_shows": "Latest TV Shows",
+    "categories_latest_anime": "Latest Anime"
+  },
+  "discovery": {
+    "title": "Discovery"
+  },
+  "ranking": {
+    "title": "Ranking",
+    "ranking_weekly": "Weekly",
+    "ranking_monthly": "Monthly",
+    "ranking_overall": "Overall"
+  },
+  "mine": {
+    "title": "Mine",
+    "mine_favorites": "Favorites",
+    "mine_my_favorites": "My Favorites",
+    "mine_watch_history": "Watch History",
+    "mine_my_watch_history": "My Watch",
+    "mine_browsing_history": "Browsing History",
+    "mine_my_browsing_history": "My Browsing"
+  },
+  "settings": {
+    "theme": "Theme Settings",
+    "language": "Language"
+  }
+}

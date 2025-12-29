@@ -12,8 +12,9 @@ import 'package:ble_project/util/sp.dart';
 import 'package:ble_project/util/time_util.dart';
 import 'package:ble_project/widget/common_state_screen.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:get/get.dart' show Get, Inst, GetNavigation;
 
 /// 搜索逻辑委托类
 class SearchBarDelegate extends SearchDelegate<SearchEntity> {
@@ -26,7 +27,7 @@ class SearchBarDelegate extends SearchDelegate<SearchEntity> {
   bool needRequest = false;
 
   @override
-  String? get searchFieldLabel => "搜索电影、电视剧、演员";
+  String? get searchFieldLabel => 'common.search_film'.tr();
 
   @override
   List<Widget> buildActions(BuildContext context) {
@@ -89,7 +90,7 @@ class SearchBarDelegate extends SearchDelegate<SearchEntity> {
         debugPrint("buildResults -> search result : ${snapshot.connectionState}");
         switch (snapshot.connectionState) {
           case ConnectionState.none:
-            return Container(child: const Center(child: const Text('无搜索结果')));
+            return Container(child: Center(child: Text('common.search_result_none'.tr())));
           case ConnectionState.active:
           case ConnectionState.waiting:
             return _buildLoading(30);
@@ -204,8 +205,8 @@ class SearchBarDelegate extends SearchDelegate<SearchEntity> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
-                        const Text(
-                          '搜索记录',
+                        Text(
+                          'common.search_history'.tr(),
                           style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 15,
@@ -257,7 +258,7 @@ class SearchBarDelegate extends SearchDelegate<SearchEntity> {
                         )
                       : Container(
                           padding: const EdgeInsets.only(left: 15, top: 10),
-                          child: const Text('无搜索记录'),
+                          child: Text('common.search_history'.tr()),
                         ),
                 ],
               ),
@@ -413,7 +414,7 @@ Widget _buildResultCell(VodInfo vodInfo, BuildContext ctx) {
                       fontSize: 14,
                     ),
                     children: <InlineSpan>[
-                      const TextSpan(text: "年份地区："),
+                      TextSpan(text: 'detail.detail_year_area'.tr()),
                       TextSpan(
                         text: vodInfo.vodYear,
                         style: TextStyle(
@@ -429,7 +430,7 @@ Widget _buildResultCell(VodInfo vodInfo, BuildContext ctx) {
                   overflow: TextOverflow.ellipsis,
                 ),
                 Text(
-                  "主演：${vodInfo.vodActor}",
+                  'detail.detail_actor'.tr(namedArgs: {'vodActor': '${vodInfo.vodActor}'}),
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
@@ -440,7 +441,8 @@ Widget _buildResultCell(VodInfo vodInfo, BuildContext ctx) {
                 ),
                 SizedBox(height: 3),
                 Text(
-                  "时间：${TimeUtil.timeStampToTimeStr(vodInfo.vodTime)}",
+                  'detail.detail_publish_time'.tr(
+                      namedArgs: {'vodTime': '${TimeUtil.timeStampToTimeStr(vodInfo.vodTime)}'}),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(

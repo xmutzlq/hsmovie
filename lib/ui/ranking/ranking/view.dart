@@ -8,9 +8,10 @@ import 'package:ble_project/ui/ranking/ranking/state.dart';
 import 'package:ble_project/util/my_scroll_behavior.dart';
 import 'package:ble_project/util/toast_util.dart';
 import 'package:ble_project/widget/sliverappbar_delegate.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart' show Obx, Get, Inst;
 import 'package:shimmer/shimmer.dart';
 
 import 'logic.dart';
@@ -247,17 +248,17 @@ class _TapPanel extends StatelessWidget {
         Obx(() => Row(children: [
           _TapCell(
             onTap: () => logic.updateRanking(RankingState.RANKING_TYPE_WEEK),
-            title: '周版',
+            title: 'ranking.ranking_weekly'.tr(),
             textStyle: RankingState.RANKING_TYPE_WEEK == logic.state.currentRankingIndex.value ? _selectedStyle : _unSelectedStyle,
           ),
           _TapCell(
             onTap: () => logic.updateRanking(RankingState.RANKING_TYPE_MONTH),
-            title: '月版',
+            title: 'ranking.ranking_monthly'.tr(),
             textStyle: RankingState.RANKING_TYPE_MONTH == logic.state.currentRankingIndex.value ? _selectedStyle : _unSelectedStyle,
           ),
           _TapCell(
             onTap: () => logic.updateRanking(RankingState.RANKING_TYPE_ALL),
-            title: '总版',
+            title: 'ranking.ranking_overall'.tr(),
             textStyle: RankingState.RANKING_TYPE_ALL == logic.state.currentRankingIndex.value ? _selectedStyle : _unSelectedStyle,
           )
         ])),
@@ -265,7 +266,7 @@ class _TapPanel extends StatelessWidget {
       position: logic.positionAnimation,
       child: Container(
         padding: const EdgeInsets.only(top: 32),
-        width: 50,
+        width: context.locale.toString().startsWith('en') ? 70 : 50,
         child: Container(
           width: 5,
           height: 5,
@@ -289,10 +290,11 @@ class _TapCell extends StatelessWidget {
   const _TapCell({required this.title, required this.onTap, required this.textStyle});
   @override
   Widget build(BuildContext context) {
+    debugPrint('context.locale.toString() : ${context.locale.toString()}');
     return GestureDetector(
       onTap: onTap,
       child: SizedBox(
-        width: 50,
+        width: context.locale.toString().startsWith('en') ? 70 : 50,
         child: Center(
           child: Text(
             title,
