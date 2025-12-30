@@ -81,31 +81,8 @@ class RankingLogic extends GetxController with SingleGetTickerProviderMixin {
 
   @override
   void onInit() {
-    rankingTabs = []
-      ..add(Tab(
-        child: GestureDetector(
-          onDoubleTap: () => listScrollTop(),
-          child: Text('common.movie'.tr()),
-        )
-      ))
-      ..add(Tab(
-        child: GestureDetector(
-          onDoubleTap: ()  => listScrollTop(),
-          child: Text('common.tv_series'.tr()),
-        )
-      ))
-      ..add(Tab(
-        child: GestureDetector(
-          onDoubleTap: ()  => listScrollTop(),
-          child: Text('common.variety_show'.tr()),
-        )
-      ))
-      ..add(Tab(
-        child: GestureDetector(
-          onDoubleTap: ()  => listScrollTop(),
-          child: Text('common.tv_anime'.tr()),
-        )
-      ));
+    resetTabs();
+
     scrollController = ScrollController();
 
     tabController = TabController(vsync: this, length: rankingTabs.length)..addListener(() {
@@ -131,6 +108,34 @@ class RankingLogic extends GetxController with SingleGetTickerProviderMixin {
     positionTween = Tween<Offset>(begin: Offset.zero, end: Offset.zero);
     positionAnimation = positionTween.animate(CurvedAnimation(parent: controller, curve: Curves.easeOut));
     super.onInit();
+  }
+
+  void resetTabs() {
+    rankingTabs = []
+      ..add(Tab(
+          child: GestureDetector(
+            onDoubleTap: () => listScrollTop(),
+            child: Text('common.movie'.tr()),
+          )
+      ))
+      ..add(Tab(
+          child: GestureDetector(
+            onDoubleTap: ()  => listScrollTop(),
+            child: Text('common.tv_series'.tr()),
+          )
+      ))
+      ..add(Tab(
+          child: GestureDetector(
+            onDoubleTap: ()  => listScrollTop(),
+            child: Text('common.variety_show'.tr()),
+          )
+      ))
+      ..add(Tab(
+          child: GestureDetector(
+            onDoubleTap: ()  => listScrollTop(),
+            child: Text('common.tv_anime'.tr()),
+          )
+      ));
   }
 
   void listScrollTop() {

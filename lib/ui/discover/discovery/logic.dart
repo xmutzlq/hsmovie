@@ -14,25 +14,8 @@ class DiscoveryLogic extends GetxController with GetSingleTickerProviderStateMix
 
   @override
   void onInit() {
-    discoveryTabs = []
-      ..add(Tab(
-          child: GestureDetector(
-            onDoubleTap: () => listScrollTop(),
-            child: Text('common.movie'.tr()),
-          )
-      ))
-      ..add(Tab(
-          child: GestureDetector(
-            onDoubleTap: ()  => listScrollTop(),
-            child: Text('common.tv_series'.tr()),
-          )
-      ))
-      ..add(Tab(
-          child: GestureDetector(
-            onDoubleTap: ()  => listScrollTop(),
-            child: Text('common.variety_show'.tr()),
-          )
-      ));
+    resetTabs();
+
     scrollController = ScrollController();
 
     tabController = TabController(length: discoveryTabs.length, vsync: this)..addListener(() {
@@ -53,6 +36,28 @@ class DiscoveryLogic extends GetxController with GetSingleTickerProviderStateMix
       }
     });
     super.onInit();
+  }
+
+  void resetTabs() {
+    discoveryTabs = []
+      ..add(Tab(
+          child: GestureDetector(
+            onDoubleTap: () => listScrollTop(),
+            child: Text('common.movie'.tr()),
+          )
+      ))
+      ..add(Tab(
+          child: GestureDetector(
+            onDoubleTap: ()  => listScrollTop(),
+            child: Text('common.tv_series'.tr()),
+          )
+      ))
+      ..add(Tab(
+          child: GestureDetector(
+            onDoubleTap: ()  => listScrollTop(),
+            child: Text('common.variety_show'.tr()),
+          )
+      ));
   }
 
   void listScrollTop() {

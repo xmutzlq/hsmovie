@@ -437,6 +437,28 @@ class PersonalPage extends StatelessWidget {
                     )
                   )
                 ),
+                Divider(height: 1, // 分割线高度
+                    thickness: 1,    // 分割线粗细
+                    indent: 5,       // 左边缩进
+                    endIndent: 5,    // 右边缩进
+                    color: Colors.grey[300]),
+                InkWell(
+                    onTap: () {
+                      Get.toNamed(RouterConfigs.setting);
+                    },
+                    child: Padding(padding: const EdgeInsets.all(15), child:
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      spacing: 5,
+                      children: <Widget>[
+                        const Icon(Icons.settings, size: 25, color: Colors.black54,),
+                        Text('mine.mine_settings'.tr(), style: const TextStyle(fontSize: 15, color: Colors.black87)),
+                        Expanded(child: SizedBox()),
+                        const Icon(Icons.keyboard_arrow_right, size: 25, color: Colors.black54,),
+                      ],
+                    )
+                    )
+                ),
               ],
             ),
           );

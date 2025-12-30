@@ -46,6 +46,7 @@ class HomePageMixinControllerLogic extends GetxController with StateMixin<HomeRe
 
   @override
   void onReady() {
+    logD('onReady');
     getHomeRemoteData();
     super.onReady();
   }

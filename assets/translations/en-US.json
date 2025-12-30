@@ -1,5 +1,7 @@
 {
-  "button": "Switch Language",
+  "change_lang": "Switch Language",
+  "lang_zh": "Chinese(Simplified)",
+  "lang_en": "English",
   "common": {
     "movie": "Movies",
     "tv_series": "Series",
@@ -7,7 +9,10 @@
     "tv_anime": "Anime",
     "search_film": "Search film、series、actor",
     "search_history": "Search History",
-    "search_result_none": "no search result"
+    "search_result_none": "No search result",
+    "save_success": "Save success",
+    "save_fail": "Save fail：{reason}",
+    "refresh_more": "Refresh"
   },
   "detail": {
     "detail_year": "year",
@@ -40,14 +45,18 @@
   },
   "mine": {
     "title": "Mine",
+    "mine_nick_name": "Nickname",
     "mine_favorites": "Favorites",
     "mine_my_favorites": "My Favorites",
     "mine_watch_history": "Watch History",
     "mine_my_watch_history": "My Watch",
     "mine_browsing_history": "Browsing History",
-    "mine_my_browsing_history": "My Browsing"
+    "mine_my_browsing_history": "My Browsing",
+    "mine_settings": "Settings",
+    "mine_edit": "Edit"
   },
   "settings": {
+    "title": "Settings",
     "theme": "Theme Settings",
     "language": "Language"
   }

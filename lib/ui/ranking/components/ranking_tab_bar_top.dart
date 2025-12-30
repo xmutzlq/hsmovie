@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 
 Widget rankingTabBarView() {
   final logic = Get.find<RankingLogic>();
+  logic.resetTabs();
   return Container(
     color: commBgColor,
     child: TabBar(

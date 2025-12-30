@@ -3,11 +3,12 @@ import 'package:ble_project/base/theme/app_theme.dart';
 import 'package:ble_project/ui/user/personal/logic.dart';
 import 'package:ble_project/util/my_scroll_behavior.dart';
 import 'package:ble_project/util/toast_util.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:get/get.dart';
+import 'package:get/get.dart' show GetView, Get, StateExt, GetBuilder, GetNavigation;
 import 'package:shimmer/shimmer.dart';
 import 'package:zo_animated_border/widget/zo_dual_border.dart';
 import 'package:zo_animated_border/widget/zo_snake_border.dart';
@@ -23,7 +24,7 @@ class PersonalInfoEditPage extends GetView<PersonalLogic> {
       body: Column(
         children: [
           AppBar(
-            title: const Text('编辑'),
+            title: Text('mine.mine_edit'.tr()),
             centerTitle: true,
             iconTheme: const IconThemeData(
               color: kPrimaryColor, //change your color here
@@ -40,11 +41,11 @@ class PersonalInfoEditPage extends GetView<PersonalLogic> {
                   try {
                     var saveResult = await controller.saveNicknameAndAvatarSvgToDB();
                     if(saveResult) {
-                      ToastUtil.showToast('保存成功');
+                      ToastUtil.showToast('common.save_success'.tr());
                       Get.back();
                     }
                   } on Exception catch (e) {
-                    ToastUtil.showToast('保存失败 : ${e.toString()}');
+                    ToastUtil.showToast('common.save_fail'.tr(namedArgs: {'reason' : '${e.toString()}'}));
                   }
                 },
               ),
@@ -84,7 +85,7 @@ class PersonalInfoEditPage extends GetView<PersonalLogic> {
       child:  FormBuilderTextField(
         name: 'nickname',
         decoration: InputDecoration(
-          labelText: '昵称',
+          labelText: 'mine.mine_nick_name'.tr(),
           suffix: IconButton(
             icon: const Icon(Icons.clear),
             onPressed: () {
@@ -176,7 +177,7 @@ class PersonalInfoEditPage extends GetView<PersonalLogic> {
             borderRadius: BorderRadius.circular(10),
           ),
           child: Text(
-            "换一批",
+            'common.refresh_more'.tr(),
             style: const TextStyle(color: Colors.black, fontSize: 16),
           ),
         ),
