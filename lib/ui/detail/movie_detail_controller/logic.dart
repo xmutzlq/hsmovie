@@ -75,6 +75,15 @@ class MovieDetailControllerLogic extends GetxController with StateMixin<MovieDet
     return films.length;
   }
 
+  Future<void> updateFilmBoxBadge([int? filmSize]) async {
+    final cartState = cartKey.currentState;
+    if (cartState == null || !cartState.mounted) return;
+
+    final size = filmSize ?? await getFilmsInBoxSize();
+    if (!cartState.mounted || !identical(cartKey.currentState, cartState)) return;
+    await cartState.runCartAnimation(size.toString());
+  }
+
   /// 获取影视盒子里的影视
   Future<List<MovieInfo>> getFilmsInBox() async {
     var filmBox = await Hive.openBox<FilmBoxInfo>(BOX_NAME_FILM_BOX);

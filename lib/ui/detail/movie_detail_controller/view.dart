@@ -46,8 +46,7 @@ class MovieDetailControllerPage extends GetView<MovieDetailControllerLogic> {
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       try {
-        int filmSize = await logic.getFilmsInBoxSize();
-        await logic.cartKey.currentState!.runCartAnimation(filmSize.toString());
+        await logic.updateFilmBoxBadge();
       } catch(e) {
         debugPrint('获取盒子中的影视数量异常: $e');
       }
@@ -201,14 +200,15 @@ class MovieDetailControllerPage extends GetView<MovieDetailControllerLogic> {
                                       bool isSuccess = await logic.saveFilm2Box(
                                           (logic.detailState.entity?.vod.vodID ?? 0).toString());
                                       if(isSuccess) {
-                                        String addValue = (await logic.getFilmsInBoxSize()).toString();
+                                        int filmSize = await logic.getFilmsInBoxSize();
+                                        String addValue = filmSize.toString();
                                         debugPrint('addValue : $addValue');
                                         try {
                                           await logic.runAddToCart(widgetKey);
                                         } catch(e) {
                                           debugPrint('runAddToCart加载失败: $e');
                                         }
-                                        await logic.cartKey.currentState!.runCartAnimation(addValue);
+                                        await logic.updateFilmBoxBadge(filmSize);
                                       }
                                     } catch(e) {
                                       debugPrint('添加到盒子异常 : $e');
@@ -259,7 +259,10 @@ class MovieDetailControllerPage extends GetView<MovieDetailControllerLogic> {
                           Navigator.of(context).pushNamed(RouterConfigs.player, arguments: {
                             'playServers' : logic.detailState.entity?.vod.vodPlayServer, // 播放源
                             'playUrlInfo' : logic.detailState.entity?.vod.vodPlayUrls, // 播放地址
-                            'videoTitle' : logic.detailState.entity?.vod.vodName});
+                            'videoTitle' : logic.detailState.entity?.vod.vodName,
+                            'videoYear' : logic.detailState.entity?.vod.vodYear,
+                            'videoId' : logic.detailState.entity?.vod.vodID,
+                          });
                           // Get.toNamed(RouterConfigs.player, arguments: {
                           //       'playServers' : logic.detailState.entity?.vod.vodPlayServer,
                           //       'playUrlInfo' : logic.detailState.entity?.vod.vodPlayUrls,

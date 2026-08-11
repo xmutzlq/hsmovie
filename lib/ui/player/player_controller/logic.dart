@@ -1,9 +1,13 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:ble_project/base/skin/fijkplayer_skin.dart';
 import 'package:ble_project/base/skin/schema.dart';
 import 'package:ble_project/model/detail/play_server_info.dart';
 import 'package:ble_project/model/detail/play_url_info.dart';
+import 'package:ble_project/model/player/playback_models.dart';
+import 'package:ble_project/repository/playback_resolver.dart';
+import 'package:fijkplayer_plus/fijkplayer_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -18,7 +22,31 @@ class PlayerControllerLogic extends GetxController with SingleGetTickerProviderM
 
   RxInt curTabPageIdx = 0.obs;
 
+  RxString currentSourceId = ''.obs;
+  RxString currentSourceName = '正在解析播放源'.obs;
+
   var currentPlayUrl = "";
+
+  bool get isCmsSource =>
+      currentSourceId.value.isNotEmpty && currentSourceId.value != 'legacy';
+
+  final PlaybackResolver _playbackResolver = PlaybackResolver();
+  final List<PlaybackCandidate> _playbackCandidates = [];
+  final Set<String> _failedCandidateUrls = {};
+  StreamSubscription<Duration>? _positionSubscription;
+  Timer? _stallTimer;
+  PlaybackRequest? _currentRequest;
+  Duration _lastPosition = Duration.zero;
+  DateTime _lastProgressAt = DateTime.now();
+  Duration? _pendingResumePosition;
+  int _candidateIndex = 0;
+  int _recoveryAttempts = 0;
+  int _playGeneration = 0;
+  bool _recovering = false;
+  bool _refreshedCandidates = false;
+
+  late String videoYear;
+  late String legacyMovieId;
 
   void onChangeVideo(int curTabIdx, int curActiveIdx) {
     this.curTabIdx.value = curTabIdx;
@@ -42,6 +70,8 @@ class PlayerControllerLogic extends GetxController with SingleGetTickerProviderM
     debugPrint('play info : ');
     // logD('${JsonEncoder.withIndent('  ').convert(map)}');
     String title = map['videoTitle'];
+    videoYear = map['videoYear']?.toString() ?? '';
+    legacyMovieId = map['videoId']?.toString() ?? '';
     List<PlayServerInfo> playServers = map['playServers'];
     PlayUrlInfo playUrlInfo = map['playUrlInfo'];
     List<VideoSourceFormatVideo> videoList = _buildVideoList(playServers, playUrlInfo);
@@ -55,9 +85,196 @@ class PlayerControllerLogic extends GetxController with SingleGetTickerProviderM
     state.tabController?.addListener(() {
       curTabPageIdx.value = state.tabController?.index ?? 0;
     });
+    _startPlaybackMonitoring();
     // 这句不能省，必须有
     speed = 1.0;
     super.onInit();
+  }
+
+  Future<void> playEpisode(
+    String legacyUrl,
+    String episodeLabel, {
+    bool force = false,
+  }) async {
+    final episodeKey = '$episodeLabel|$legacyUrl';
+    final currentKey = _currentRequest == null
+        ? ''
+        : '${_currentRequest!.episodeLabel}|${_currentRequest!.legacyUrl}';
+    if (!force &&
+        episodeKey == currentKey &&
+        currentPlayUrl.isNotEmpty &&
+        state.player.state != FijkState.error &&
+        state.player.state != FijkState.idle) {
+      return;
+    }
+
+    _setCurrentSource(null);
+
+    final generation = ++_playGeneration;
+    final request = PlaybackRequest(
+      legacyMovieId: legacyMovieId,
+      title: title.value,
+      year: videoYear,
+      episodeLabel: episodeLabel,
+      episodeNumber: PlaybackResolver.extractEpisodeNumber(episodeLabel),
+      legacyUrl: legacyUrl,
+    );
+    final resolved = await _playbackResolver.resolve(request);
+    if (generation != _playGeneration) return;
+
+    _currentRequest = request;
+    _playbackCandidates
+      ..clear()
+      ..addAll(resolved.candidates);
+    _failedCandidateUrls.clear();
+    _candidateIndex = 0;
+    _recoveryAttempts = 0;
+    _refreshedCandidates = false;
+
+    if (_playbackCandidates.isEmpty) {
+      currentPlayUrl = '';
+      _setCurrentSource(null);
+      Get.rawSnackbar(message: '未找到可播放的视频地址');
+      return;
+    }
+    final opened = await _openCandidate(_candidateIndex, Duration.zero);
+    if (!opened) await _recoverPlayback();
+  }
+
+  Future<bool> _openCandidate(int index, Duration resumeAt) async {
+    if (index < 0 || index >= _playbackCandidates.length) return false;
+    final candidate = _playbackCandidates[index];
+    _candidateIndex = index;
+    _pendingResumePosition = resumeAt > Duration.zero ? resumeAt : null;
+    _lastPosition = resumeAt;
+    _lastProgressAt = DateTime.now();
+    _setCurrentSource(null);
+
+    try {
+      if (state.player.state != FijkState.idle &&
+          state.player.state != FijkState.initialized &&
+          state.player.state != FijkState.end) {
+        try {
+          await state.player.stop();
+        } catch (_) {}
+        await state.player.reset();
+      } else if (state.player.state == FijkState.initialized) {
+        await state.player.reset();
+      }
+
+      final headers = candidate.headers.entries
+          .map((entry) => '${entry.key}:${entry.value}')
+          .join('\r\n');
+      await state.player.setOption(FijkOption.formatCategory, 'headers', headers);
+      await state.player.setOption(
+        FijkOption.playerCategory,
+        'pos-update-interval',
+        500,
+      );
+      currentPlayUrl = candidate.url;
+      await state.player.setDataSource(candidate.url, autoPlay: true);
+      _setCurrentSource(candidate);
+      return true;
+    } catch (_) {
+      _failedCandidateUrls.add(candidate.url);
+      return false;
+    }
+  }
+
+  void _setCurrentSource(PlaybackCandidate? candidate) {
+    if (candidate == null) {
+      currentSourceId.value = '';
+      currentSourceName.value = '正在解析播放源';
+      return;
+    }
+
+    currentSourceId.value = candidate.sourceId;
+    currentSourceName.value = candidate.sourceName;
+    if (kDebugMode) {
+      debugPrint(
+        '[Playback] source=${candidate.sourceId}, '
+        'name=${candidate.sourceName}, cms=${candidate.sourceId != 'legacy'}',
+      );
+    }
+  }
+
+  void _startPlaybackMonitoring() {
+    _positionSubscription = state.player.onCurrentPosUpdate.listen((position) {
+      if (position > _lastPosition + const Duration(milliseconds: 500)) {
+        _lastPosition = position;
+        _lastProgressAt = DateTime.now();
+        _recoveryAttempts = 0;
+      }
+    });
+    state.player.addListener(_handlePlayerState);
+    _stallTimer = Timer.periodic(const Duration(seconds: 3), (_) {
+      if (_recovering || currentPlayUrl.isEmpty) return;
+      if (state.player.state != FijkState.started) return;
+      final stalledFor = DateTime.now().difference(_lastProgressAt);
+      if (stalledFor >= const Duration(seconds: 12)) {
+        _recoverPlayback();
+      }
+    });
+  }
+
+  void _handlePlayerState() {
+    final pending = _pendingResumePosition;
+    if (pending != null && state.player.value.prepared) {
+      _pendingResumePosition = null;
+      state.player.seekTo(pending.inMilliseconds);
+    }
+    if (state.player.state == FijkState.error && !_recovering) {
+      _recoverPlayback();
+    }
+  }
+
+  Future<void> _recoverPlayback() async {
+    if (_recovering || _currentRequest == null || _playbackCandidates.isEmpty) {
+      return;
+    }
+    if (_recoveryAttempts >= 4) {
+      Get.rawSnackbar(message: '播放线路不可用，请手动重试');
+      return;
+    }
+
+    _recovering = true;
+    final resumeAt = _lastPosition;
+    try {
+      while (_recoveryAttempts < 4) {
+        _recoveryAttempts++;
+        var nextIndex = _candidateIndex;
+        if (_recoveryAttempts > 1 ||
+            _failedCandidateUrls.contains(
+              _playbackCandidates[_candidateIndex].url,
+            )) {
+          _failedCandidateUrls.add(_playbackCandidates[_candidateIndex].url);
+          nextIndex = _nextHealthyCandidateIndex() ?? -1;
+        }
+        if (nextIndex < 0 && !_refreshedCandidates) {
+          _refreshedCandidates = true;
+          final refreshed = await _playbackResolver.resolve(_currentRequest!);
+          _playbackCandidates
+            ..clear()
+            ..addAll(refreshed.candidates);
+          nextIndex = _nextHealthyCandidateIndex() ?? -1;
+        }
+        if (nextIndex < 0) break;
+        if (await _openCandidate(nextIndex, resumeAt)) return;
+      }
+      Get.rawSnackbar(message: '没有可用的备用播放线路');
+    } finally {
+      _recovering = false;
+      _lastProgressAt = DateTime.now();
+    }
+  }
+
+  int? _nextHealthyCandidateIndex() {
+    for (var index = 0; index < _playbackCandidates.length; index++) {
+      if (!_failedCandidateUrls.contains(_playbackCandidates[index].url)) {
+        return index;
+      }
+    }
+    return null;
   }
 
   @override
@@ -287,6 +504,9 @@ class PlayerControllerLogic extends GetxController with SingleGetTickerProviderM
 
   @override
   void onClose() {
+    _stallTimer?.cancel();
+    _positionSubscription?.cancel();
+    state.player.removeListener(_handlePlayerState);
     super.onClose();
   }
 

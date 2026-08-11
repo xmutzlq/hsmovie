@@ -10,6 +10,8 @@ import 'package:ble_project/widget/list/movie_list.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_live2d_ffi/live2d_view.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart' show Obx, Get, Inst, GetNavigation;
 import 'package:zo_animated_border/zo_animated_border.dart';
@@ -40,7 +42,7 @@ class PersonalPage extends StatelessWidget {
                   _buildHeader(),
                   _buildRecordContent(),
                   _buildViewingRecord(context),
-                  _buildRecordEntrance()
+                  _buildRecordEntrance(),
                 ],
               ),
             ),
@@ -82,7 +84,11 @@ class PersonalPage extends StatelessWidget {
                       Get.toNamed(RouterConfigs.person_edit);
                     },
                     borderRadius: const BorderRadius.all(Radius.circular(5)),
-                    child: const Icon(Icons.edit_note, size: 30, color: Colors.black54,),
+                    child: const Icon(
+                      Icons.edit_note,
+                      size: 30,
+                      color: Colors.black54,
+                    ),
                   ),
                 ),
               ],
@@ -121,10 +127,18 @@ class PersonalPage extends StatelessWidget {
   Widget _buildAvatar() {
     return Obx(
       () => personalController.personState.avatarSVGStr.value.isNotEmpty
-          ? SvgPicture.string(
-              '${personalController.personState.avatarSVGStr}',
-              width: 60,
-              height: 60,
+          ? InkWell(
+              onTap: () {
+                SmartDialog.show(
+                  builder: (context) =>
+                      Live2DView('assets/live2d/haru_01.model.json')
+                );
+              },
+              child: SvgPicture.string(
+                '${personalController.personState.avatarSVGStr}',
+                width: 60,
+                height: 60,
+              ),
             )
           : _buildUnknownAvatar(),
     );
@@ -134,9 +148,10 @@ class PersonalPage extends StatelessWidget {
     return Obx(
       () => Text(
         '${personalController.personState.nickName}',
-        style: Theme.of(
-          Get.context!,
-        ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w500, color: Colors.black87),
+        style: Theme.of(Get.context!).textTheme.bodyLarge?.copyWith(
+          fontWeight: FontWeight.w500,
+          color: Colors.black87,
+        ),
       ),
     );
   }
@@ -155,7 +170,12 @@ class PersonalPage extends StatelessWidget {
         child: LayoutBuilder(
           builder: (BuildContext context, BoxConstraints constraints) {
             return Container(
-              padding: const EdgeInsets.only(left: 15, right: 15, top: 10, bottom: 10,),
+              padding: const EdgeInsets.only(
+                left: 15,
+                right: 15,
+                top: 10,
+                bottom: 10,
+              ),
               child: Row(
                 spacing: 15,
                 children: <Widget>[
@@ -163,7 +183,9 @@ class PersonalPage extends StatelessWidget {
                     child: InkWell(
                       onTap: () async {
                         personalController.personState.flipController.flip();
-                        await personalController.analysisMovieTypes(RecordType.favourite);
+                        await personalController.analysisMovieTypes(
+                          RecordType.favourite,
+                        );
                       },
                       borderRadius: const BorderRadius.all(Radius.circular(5)),
                       child: _buildFavouriteItem('mine.mine_favorites'.tr()),
@@ -173,20 +195,28 @@ class PersonalPage extends StatelessWidget {
                     child: InkWell(
                       onTap: () async {
                         personalController.personState.flipController.flip();
-                        await personalController.analysisMovieTypes(RecordType.viewingRecord);
+                        await personalController.analysisMovieTypes(
+                          RecordType.viewingRecord,
+                        );
                       },
                       borderRadius: const BorderRadius.all(Radius.circular(5)),
-                      child: _buildViewingRecordItem('mine.mine_watch_history'.tr()),
+                      child: _buildViewingRecordItem(
+                        'mine.mine_watch_history'.tr(),
+                      ),
                     ),
                   ),
                   Expanded(
                     child: InkWell(
                       onTap: () async {
                         personalController.personState.flipController.flip();
-                        await personalController.analysisMovieTypes(RecordType.browsingRecord);
+                        await personalController.analysisMovieTypes(
+                          RecordType.browsingRecord,
+                        );
                       },
                       borderRadius: const BorderRadius.all(Radius.circular(5)),
-                      child: _buildBrowsingRecordItem('mine.mine_browsing_history'.tr()),
+                      child: _buildBrowsingRecordItem(
+                        'mine.mine_browsing_history'.tr(),
+                      ),
                     ),
                   ),
                 ],
@@ -210,7 +240,12 @@ class PersonalPage extends StatelessWidget {
           color: cardBgColor,
           clipBehavior: Clip.antiAliasWithSaveLayer,
           elevation: cardElevation,
-          margin: const EdgeInsets.only(left: 15, right: 15, top: 0, bottom: 15),
+          margin: const EdgeInsets.only(
+            left: 15,
+            right: 15,
+            top: 0,
+            bottom: 15,
+          ),
           shape: RoundedRectangleBorder(
             borderRadius: const BorderRadius.all(Radius.circular(10.0)),
           ),
@@ -225,7 +260,7 @@ class PersonalPage extends StatelessWidget {
               personalController.personState.flipController.flip();
             },
           ),
-        )
+        ),
       ],
     );
   }
@@ -233,18 +268,22 @@ class PersonalPage extends StatelessWidget {
   Widget _buildViewingRecordItem(String recordName) {
     return Column(
       children: [
-        Text(recordName,
-            textAlign: TextAlign.center,
-            style: const TextStyle(fontSize: 16)),
+        Text(
+          recordName,
+          textAlign: TextAlign.center,
+          style: const TextStyle(fontSize: 16),
+        ),
         const SizedBox(height: 10),
-        Obx(() => Text(
-          personalController.personState.viewingRecordSize.value,
-          style: const TextStyle(
-            color: const Color(0xFF109E9E),
-            fontWeight: FontWeight.w500,
-            fontSize: 14,
+        Obx(
+          () => Text(
+            personalController.personState.viewingRecordSize.value,
+            style: const TextStyle(
+              color: const Color(0xFF109E9E),
+              fontWeight: FontWeight.w500,
+              fontSize: 14,
+            ),
           ),
-        )),
+        ),
       ],
     );
   }
@@ -252,18 +291,22 @@ class PersonalPage extends StatelessWidget {
   Widget _buildBrowsingRecordItem(String recordName) {
     return Column(
       children: [
-        Text(recordName,
-            textAlign: TextAlign.center,
-            style: const TextStyle(fontSize: 16)),
+        Text(
+          recordName,
+          textAlign: TextAlign.center,
+          style: const TextStyle(fontSize: 16),
+        ),
         const SizedBox(height: 10),
-        Obx(() => Text(
-          personalController.personState.browsingRecordSize.value,
-          style: const TextStyle(
-            color: const Color(0xFF109E9E),
-            fontWeight: FontWeight.w500,
-            fontSize: 14,
+        Obx(
+          () => Text(
+            personalController.personState.browsingRecordSize.value,
+            style: const TextStyle(
+              color: const Color(0xFF109E9E),
+              fontWeight: FontWeight.w500,
+              fontSize: 14,
+            ),
           ),
-        )),
+        ),
       ],
     );
   }
@@ -271,24 +314,29 @@ class PersonalPage extends StatelessWidget {
   Widget _buildFavouriteItem(String recordName) {
     return Column(
       children: [
-        Text(recordName,
-            textAlign: TextAlign.center,
-            style: const TextStyle(fontSize: 16, color: Colors.black87)),
+        Text(
+          recordName,
+          textAlign: TextAlign.center,
+          style: const TextStyle(fontSize: 16, color: Colors.black87),
+        ),
         const SizedBox(height: 10),
-        Obx(() => Text(
-          personalController.personState.favouriteSize.value,
-          style: const TextStyle(
-            color: const Color(0xFF109E9E),
-            fontWeight: FontWeight.w500,
-            fontSize: 14,
+        Obx(
+          () => Text(
+            personalController.personState.favouriteSize.value,
+            style: const TextStyle(
+              color: const Color(0xFF109E9E),
+              fontWeight: FontWeight.w500,
+              fontSize: 14,
+            ),
           ),
-        )),
+        ),
       ],
     );
   }
 
   Widget _buildViewingRecord(BuildContext context) {
-    bool hasViewingRecord = personalController.personState.viewingRecord.isNotEmpty;
+    bool hasViewingRecord =
+        personalController.personState.viewingRecord.isNotEmpty;
     debugPrint('hasViewingRecord : $hasViewingRecord');
     return Obx(
       () => personalController.personState.viewingRecord.isNotEmpty
@@ -296,14 +344,24 @@ class PersonalPage extends StatelessWidget {
               color: cardBgColor,
               clipBehavior: Clip.antiAliasWithSaveLayer,
               elevation: cardElevation,
-              margin: const EdgeInsets.only(left: 15, right: 15, top: 0, bottom: 15,),
+              margin: const EdgeInsets.only(
+                left: 15,
+                right: 15,
+                top: 0,
+                bottom: 15,
+              ),
               shape: RoundedRectangleBorder(
                 borderRadius: const BorderRadius.all(Radius.circular(10.0)),
               ),
               child: LayoutBuilder(
                 builder: (BuildContext context, BoxConstraints constraints) {
                   return Container(
-                    padding: const EdgeInsets.only(left: 0, right: 0, top: 10, bottom: 10,),
+                    padding: const EdgeInsets.only(
+                      left: 0,
+                      right: 0,
+                      top: 10,
+                      bottom: 10,
+                    ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -311,11 +369,18 @@ class PersonalPage extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             SizedBox(width: 10),
-                            const Icon(Icons.history, size: 25, color: Colors.black54,),
+                            const Icon(
+                              Icons.history,
+                              size: 25,
+                              color: Colors.black54,
+                            ),
                             SizedBox(width: 3),
                             Text(
                               'mine.mine_watch_history'.tr(),
-                              style: const TextStyle(fontSize: 16, color: Colors.black87),
+                              style: const TextStyle(
+                                fontSize: 16,
+                                color: Colors.black87,
+                              ),
                             ),
                           ],
                         ),
@@ -338,7 +403,15 @@ class PersonalPage extends StatelessWidget {
         int.parse(item.movieId ?? '0'),
         item.movieName ?? '',
         item.movieImg ?? '',
-        '', '', '', 0, '', '', 0, 0, VodClass(0, ''),
+        '',
+        '',
+        '',
+        0,
+        '',
+        '',
+        0,
+        0,
+        VodClass(0, ''),
       );
       vodInfos.add(info);
     });
@@ -350,7 +423,7 @@ class PersonalPage extends StatelessWidget {
           Get.toNamed(RouterConfigs.detail, arguments: {'movieId': movieId});
         },
         leftPaddingControl: -10,
-      )
+      ),
     );
   }
 
@@ -371,93 +444,182 @@ class PersonalPage extends StatelessWidget {
               children: [
                 InkWell(
                   onTap: () {
-                    Get.toNamed(RouterConfigs.record_list, arguments: {
-                      'recordListTitle' : 'mine.mine_my_watch_history'.tr(),
-                      'recordType' : RecordType.viewingRecord});
+                    Get.toNamed(
+                      RouterConfigs.record_list,
+                      arguments: {
+                        'recordListTitle': 'mine.mine_my_watch_history'.tr(),
+                        'recordType': RecordType.viewingRecord,
+                      },
+                    );
                   },
-                  child: Padding(padding: const EdgeInsets.all(15), child:
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    spacing: 5,
-                    children: <Widget>[
-                      const Icon(Icons.history, size: 25, color: Colors.black54,),
-                      Text('mine.mine_my_watch_history'.tr(), style: const TextStyle(fontSize: 15, color: Colors.black87)),
-                      Expanded(child: SizedBox()),
-                      const Icon(Icons.keyboard_arrow_right, size: 25, color: Colors.black54,),
-                    ],
-                  )
-                  )
+                  child: Padding(
+                    padding: const EdgeInsets.all(15),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      spacing: 5,
+                      children: <Widget>[
+                        const Icon(
+                          Icons.history,
+                          size: 25,
+                          color: Colors.black54,
+                        ),
+                        Text(
+                          'mine.mine_my_watch_history'.tr(),
+                          style: const TextStyle(
+                            fontSize: 15,
+                            color: Colors.black87,
+                          ),
+                        ),
+                        Expanded(child: SizedBox()),
+                        const Icon(
+                          Icons.keyboard_arrow_right,
+                          size: 25,
+                          color: Colors.black54,
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
                 Divider(
-                  height: 1, // 分割线高度
-                  thickness: 1,    // 分割线粗细
-                  indent: 5,       // 左边缩进
-                  endIndent: 5,    // 右边缩进
-                  color: Colors.grey[300]),
+                  height: 1,
+                  // 分割线高度
+                  thickness: 1,
+                  // 分割线粗细
+                  indent: 5,
+                  // 左边缩进
+                  endIndent: 5,
+                  // 右边缩进
+                  color: Colors.grey[300],
+                ),
                 InkWell(
                   onTap: () {
-                    Get.toNamed(RouterConfigs.record_list, arguments: {
-                      'recordListTitle' : 'mine.mine_my_favorites'.tr(),
-                      'recordType' : RecordType.favourite});
+                    Get.toNamed(
+                      RouterConfigs.record_list,
+                      arguments: {
+                        'recordListTitle': 'mine.mine_my_favorites'.tr(),
+                        'recordType': RecordType.favourite,
+                      },
+                    );
                   },
-                  child: Padding(padding: const EdgeInsets.all(15), child:
-                    Row(
+                  child: Padding(
+                    padding: const EdgeInsets.all(15),
+                    child: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       spacing: 5,
                       children: <Widget>[
-                        const Icon(Icons.favorite_border_outlined, size: 25, color: Colors.black54,),
-                        Text('mine.mine_my_favorites'.tr(), style: const TextStyle(fontSize: 15, color: Colors.black87)),
+                        const Icon(
+                          Icons.favorite_border_outlined,
+                          size: 25,
+                          color: Colors.black54,
+                        ),
+                        Text(
+                          'mine.mine_my_favorites'.tr(),
+                          style: const TextStyle(
+                            fontSize: 15,
+                            color: Colors.black87,
+                          ),
+                        ),
                         Expanded(child: SizedBox()),
-                        const Icon(Icons.keyboard_arrow_right, size: 25, color: Colors.black54,),
+                        const Icon(
+                          Icons.keyboard_arrow_right,
+                          size: 25,
+                          color: Colors.black54,
+                        ),
                       ],
-                    )
-                  )
+                    ),
+                  ),
                 ),
-                Divider(height: 1, // 分割线高度
-                  thickness: 1,    // 分割线粗细
-                  indent: 5,       // 左边缩进
-                  endIndent: 5,    // 右边缩进
-                  color: Colors.grey[300]),
+                Divider(
+                  height: 1,
+                  // 分割线高度
+                  thickness: 1,
+                  // 分割线粗细
+                  indent: 5,
+                  // 左边缩进
+                  endIndent: 5,
+                  // 右边缩进
+                  color: Colors.grey[300],
+                ),
                 InkWell(
                   onTap: () {
-                    Get.toNamed(RouterConfigs.record_list, arguments: {
-                      'recordListTitle' : 'mine.mine_my_browsing_history'.tr(),
-                      'recordType' : RecordType.browsingRecord});
+                    Get.toNamed(
+                      RouterConfigs.record_list,
+                      arguments: {
+                        'recordListTitle': 'mine.mine_my_browsing_history'.tr(),
+                        'recordType': RecordType.browsingRecord,
+                      },
+                    );
                   },
-                  child: Padding(padding: const EdgeInsets.all(15), child:
-                    Row(
+                  child: Padding(
+                    padding: const EdgeInsets.all(15),
+                    child: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       spacing: 5,
                       children: <Widget>[
-                        const Icon(Icons.browse_gallery_outlined, size: 25, color: Colors.black54,),
-                        Text('mine.mine_my_browsing_history'.tr(), style: const TextStyle(fontSize: 15, color: Colors.black87)),
+                        const Icon(
+                          Icons.browse_gallery_outlined,
+                          size: 25,
+                          color: Colors.black54,
+                        ),
+                        Text(
+                          'mine.mine_my_browsing_history'.tr(),
+                          style: const TextStyle(
+                            fontSize: 15,
+                            color: Colors.black87,
+                          ),
+                        ),
                         Expanded(child: SizedBox()),
-                        const Icon(Icons.keyboard_arrow_right, size: 25, color: Colors.black54,),
+                        const Icon(
+                          Icons.keyboard_arrow_right,
+                          size: 25,
+                          color: Colors.black54,
+                        ),
                       ],
-                    )
-                  )
+                    ),
+                  ),
                 ),
-                Divider(height: 1, // 分割线高度
-                    thickness: 1,    // 分割线粗细
-                    indent: 5,       // 左边缩进
-                    endIndent: 5,    // 右边缩进
-                    color: Colors.grey[300]),
+                Divider(
+                  height: 1,
+                  // 分割线高度
+                  thickness: 1,
+                  // 分割线粗细
+                  indent: 5,
+                  // 左边缩进
+                  endIndent: 5,
+                  // 右边缩进
+                  color: Colors.grey[300],
+                ),
                 InkWell(
-                    onTap: () {
-                      Get.toNamed(RouterConfigs.setting);
-                    },
-                    child: Padding(padding: const EdgeInsets.all(15), child:
-                    Row(
+                  onTap: () {
+                    Get.toNamed(RouterConfigs.setting);
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(15),
+                    child: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       spacing: 5,
                       children: <Widget>[
-                        const Icon(Icons.settings, size: 25, color: Colors.black54,),
-                        Text('mine.mine_settings'.tr(), style: const TextStyle(fontSize: 15, color: Colors.black87)),
+                        const Icon(
+                          Icons.settings,
+                          size: 25,
+                          color: Colors.black54,
+                        ),
+                        Text(
+                          'mine.mine_settings'.tr(),
+                          style: const TextStyle(
+                            fontSize: 15,
+                            color: Colors.black87,
+                          ),
+                        ),
                         Expanded(child: SizedBox()),
-                        const Icon(Icons.keyboard_arrow_right, size: 25, color: Colors.black54,),
+                        const Icon(
+                          Icons.keyboard_arrow_right,
+                          size: 25,
+                          color: Colors.black54,
+                        ),
                       ],
-                    )
-                    )
+                    ),
+                  ),
                 ),
               ],
             ),

@@ -2,16 +2,13 @@ import 'dart:async';
 import 'dart:math';
 import 'dart:ui';
 
-import 'package:ble_project/base/log/app_log.dart';
 import 'package:ble_project/configs/page_config.dart';
-import 'package:ble_project/repository/movie_repository.dart';
 import 'package:ble_project/ui/player/components/lazy_tab_page.dart';
 import 'package:ble_project/ui/player/player_controller/logic.dart';
 import 'package:ble_project/widget/common_state_screen.dart';
 import 'package:ble_project/widget/dlna_device_list.dart';
 import 'package:fijkplayer_plus/fijkplayer_plus.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 
 import 'package:get/get.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
@@ -182,18 +179,16 @@ class _CustomFijkPanelState extends State<CustomFijkPanel>
 
   // 切换播放源
   Future<void> changeCurPlayVideo(int tabIdx, int activeIdx) async {
-    debugPrint('changeCurPlayVideo => tabIdx : $tabIdx, activeIdx : $activeIdx');
+    debugPrint(
+      'changeCurPlayVideo => tabIdx : $tabIdx, activeIdx : $activeIdx',
+    );
     await player.stop();
     player.reset().then((_) async {
       String curTabActiveUrl =
-      _videoSourceTabs.video![tabIdx]!.list![activeIdx]!.url!;
-      String? playUrl = await MovieRepository().getPlayUrl(curTabActiveUrl);
-      logD("realPlayUrl : $playUrl");
-      logic.currentPlayUrl = playUrl ?? curTabActiveUrl;
-      player.setDataSource(
-        playUrl ?? curTabActiveUrl,
-        autoPlay: true,
-      );
+          _videoSourceTabs.video![tabIdx]!.list![activeIdx]!.url!;
+      final episodeName =
+          _videoSourceTabs.video![tabIdx]!.list![activeIdx]!.name ?? '';
+      await logic.playEpisode(curTabActiveUrl, episodeName);
       // 回调
       widget.onChangeVideo(tabIdx, activeIdx);
     });
@@ -218,7 +213,7 @@ class _CustomFijkPanelState extends State<CustomFijkPanel>
   }
 
   /// 锁 组件
-  Widget _buidLockStateDetctor() {
+  Widget _buildLockStateDetector() {
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: _cancelAndRestartLockTimer,
@@ -260,10 +255,7 @@ class _CustomFijkPanelState extends State<CustomFijkPanel>
       alignment: Alignment.centerLeft,
       child: IconButton(
         icon: const Icon(Icons.arrow_back),
-        padding: const EdgeInsets.only(
-          left: 10.0,
-          right: 10.0,
-        ),
+        padding: const EdgeInsets.only(left: 10.0, right: 10.0),
         splashColor: Colors.transparent,
         highlightColor: Colors.transparent,
         color: Colors.white,
@@ -294,11 +286,7 @@ class _CustomFijkPanelState extends State<CustomFijkPanel>
                 : 0,
           ),
           // 失败图标
-          const Icon(
-            Icons.error,
-            size: 50,
-            color: Colors.white,
-          ),
+          const Icon(Icons.error, size: 50, color: Colors.white),
           // 错误信息
           Text(
             "播放失败，您可以点击重试！",
@@ -313,9 +301,7 @@ class _CustomFijkPanelState extends State<CustomFijkPanel>
           ElevatedButton(
             style: ButtonStyle(
               shape: WidgetStateProperty.all(
-                RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20),
-                ),
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
               ),
               elevation: WidgetStateProperty.all(0),
               backgroundColor: WidgetStateProperty.all(Colors.white),
@@ -342,17 +328,17 @@ class _CustomFijkPanelState extends State<CustomFijkPanel>
         children: [
           showConfig.topBar
               ? Positioned(
-            left: 0,
-            top: 0,
-            child: Container(
-              height:
-              showConfig.stateAuto && !widget.player.value.fullScreen
-                  ? barFillingHeight
-                  : barHeight,
-              alignment: Alignment.bottomLeft,
-              child: _buildTopBackBtn(),
-            ),
-          )
+                  left: 0,
+                  top: 0,
+                  child: Container(
+                    height:
+                        showConfig.stateAuto && !widget.player.value.fullScreen
+                        ? barFillingHeight
+                        : barHeight,
+                    alignment: Alignment.bottomLeft,
+                    child: _buildTopBackBtn(),
+                  ),
+                )
               : Container(),
           Positioned(
             left: 0,
@@ -360,7 +346,7 @@ class _CustomFijkPanelState extends State<CustomFijkPanel>
             bottom: 0,
             top: 0,
             child: _buildErrorContext(),
-          )
+          ),
         ],
       ),
     );
@@ -414,7 +400,7 @@ class _CustomFijkPanelState extends State<CustomFijkPanel>
                 .map((e) => Tab(text: e!.name!))
                 .toList(),
             isScrollable: true,
-            tabAlignment:TabAlignment.center,
+            tabAlignment: TabAlignment.center,
             controller: _tabController,
           ),
         ),
@@ -435,83 +421,81 @@ class _CustomFijkPanelState extends State<CustomFijkPanel>
     int widgetIndex = -1;
     debugPrint('tabView size : ${_videoSourceTabs.video!.asMap().length}');
     _videoSourceTabs.video!.asMap().keys.forEach((int tabIdx) {
-      debugPrint('tabView item size : ${_videoSourceTabs.video![tabIdx]!.list!.length}');
+      debugPrint(
+        'tabView item size : ${_videoSourceTabs.video![tabIdx]!.list!.length}',
+      );
       List<Widget> playListBtns = _videoSourceTabs.video![tabIdx]!.list!
           .asMap()
           .keys
           .map((int activeIdx) {
-        return Padding(
-          padding: const EdgeInsets.all(5),
-          child: ElevatedButton(
-            style: ButtonStyle(
-              shape: WidgetStateProperty.all(
-                RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(5),
+            return Padding(
+              padding: const EdgeInsets.all(5),
+              child: ElevatedButton(
+                style: ButtonStyle(
+                  shape: WidgetStateProperty.all(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                  ),
+                  elevation: WidgetStateProperty.all(0),
+                  backgroundColor: WidgetStateProperty.all(
+                    tabIdx == widget.curTabIdx &&
+                            activeIdx == widget.curActiveIdx
+                        ? Colors.red
+                        : Colors.blue,
+                  ),
+                ),
+                onPressed: () {
+                  int newTabIdx = tabIdx;
+                  int newActiveIdx = activeIdx;
+                  // 切换播放源
+                  changeCurPlayVideo(newTabIdx, newActiveIdx);
+                },
+                child: Text(
+                  _videoSourceTabs.video![tabIdx]!.list![activeIdx]!.name!,
+                  style: const TextStyle(color: Colors.white),
                 ),
               ),
-              elevation: WidgetStateProperty.all(0),
-              backgroundColor: WidgetStateProperty.all(
-                  tabIdx == widget.curTabIdx && activeIdx == widget.curActiveIdx
-                      ? Colors.red
-                      : Colors.blue),
-            ),
-            onPressed: () {
-              int newTabIdx = tabIdx;
-              int newActiveIdx = activeIdx;
-              // 切换播放源
-              changeCurPlayVideo(newTabIdx, newActiveIdx);
-            },
-            child: Text(
-              _videoSourceTabs.video![tabIdx]!.list![activeIdx]!.name!,
-              style: const TextStyle(
-                color: Colors.white,
-              ),
-            ),
-          ),
-        );
-      }).toList();
+            );
+          })
+          .toList();
       // 更新widgetIndex
-      widgetIndex ++;
-      list.add((playListBtns.isEmpty) ?
-        Container(
-            padding: const EdgeInsets.only(left: 5, right: 5),
-            child: screenEmptyStateForTabViewDark()
-        ) :
-        LazyTabPage(index: widgetIndex, playListBtns: playListBtns),
+      widgetIndex++;
+      list.add(
+        (playListBtns.isEmpty)
+            ? Container(
+                padding: const EdgeInsets.only(left: 5, right: 5),
+                child: screenEmptyStateForTabViewDark(),
+              )
+            : LazyTabPage(index: widgetIndex, playListBtns: playListBtns),
       );
     });
     return list;
   }
 
   @override
-  // ignore: must_call_super
   Widget build(BuildContext context) {
+    super.build(context); // 需增加super才能达到wantKeepAlive效果
     Rect rect = player.value.fullScreen
-        ? Rect.fromLTWH(0, 0, widget.viewSize.width, widget.viewSize.height,)
+        ? Rect.fromLTWH(0, 0, widget.viewSize.width, widget.viewSize.height)
         : Rect.fromLTRB(
-      max(0.0, widget.texturePos.left),
-      max(0.0, widget.texturePos.top),
-      min(widget.viewSize.width, widget.texturePos.right),
-      min(widget.viewSize.height, widget.texturePos.bottom),
-    );
+            max(0.0, widget.texturePos.left),
+            max(0.0, widget.texturePos.top),
+            min(widget.viewSize.width, widget.texturePos.right),
+            min(widget.viewSize.height, widget.texturePos.bottom),
+          );
 
     List<Widget> ws = [];
 
     if (_playerState == FijkState.error) {
-      ws.add(
-        _buildErrorWidget(),
-      );
+      ws.add(_buildErrorWidget());
     } else {
       if (_lockStuff == true &&
           showConfig.lockBtn &&
           widget.player.value.fullScreen) {
-        ws.add(
-          _buidLockStateDetctor(),
-        );
+        ws.add(_buildLockStateDetector());
       } else if (_drawerState == true && widget.player.value.fullScreen) {
-        ws.add(
-          _buildPlayerListDrawer(),
-        );
+        ws.add(_buildPlayerListDrawer());
       } else {
         ws.add(
           _buildGestureDetector(
@@ -536,9 +520,7 @@ class _CustomFijkPanelState extends State<CustomFijkPanel>
     return WillPopScope(
       child: Positioned.fromRect(
         rect: rect,
-        child: Stack(
-          children: ws,
-        ),
+        child: Stack(children: ws),
       ),
       onWillPop: () async {
         if (!widget.player.value.fullScreen) widget.player.stop();
@@ -648,29 +630,35 @@ class _buildGestureDetectorState extends State<_buildGestureDetector> {
   _buildGestureDetectorState(this._hideStuff);
 
   Future<void> initEventAndPlay() async {
-
     debugPrint("initEvent 2");
     // 设置初始化的值，全屏与半屏切换后，重设
     setState(() {
       _speed = speed;
     });
     // is not null
-    debugPrint("initEvent 2 videoSourceTabs size : ${_videoSourceTabs.video!.length}");
+    debugPrint(
+      "initEvent 2 videoSourceTabs size : ${_videoSourceTabs.video!.length}",
+    );
     if (_videoSourceTabs.video!.length < 1) return null;
     // url
     String url = _videoSourceTabs
-        .video![widget.curTabIdx]!.list![widget.curActiveIdx]!.url!;
+        .video![widget.curTabIdx]!
+        .list![widget.curActiveIdx]!
+        .url!;
     debugPrint("play_url : $url");
 
-    String? playUrl = await MovieRepository().getPlayUrl(url);
-    logD("realPlayUrl : $playUrl");
+    final episodeName =
+        _videoSourceTabs
+            .video![widget.curTabIdx]!
+            .list![widget.curActiveIdx]!
+            .name ??
+        '';
 
     final state = player.state;
     if (state == FijkState.idle ||
         state == FijkState.initialized ||
         state == FijkState.prepared) {
-      logic.currentPlayUrl = playUrl ?? url;
-      player.setDataSource(playUrl ?? url, autoPlay: true);
+      await logic.playEpisode(url, episodeName);
     } else {
       // 先重置到合适的状态
       // player.reset();
@@ -738,7 +726,8 @@ class _buildGestureDetectorState extends State<_buildGestureDetector> {
       });
     }
     print(
-        '+++++++++ $value.state  播放器started状态  ${value.state == FijkState.started} ++++++++++');
+      '+++++++++ $value.state  播放器started状态  ${value.state == FijkState.started} ++++++++++',
+    );
     bool playing = (value.state == FijkState.started);
     bool prepared = value.prepared;
     String? exception = value.exception.message;
@@ -754,12 +743,20 @@ class _buildGestureDetectorState extends State<_buildGestureDetector> {
     }
     // 播放完成
     bool playOver = (value.state == FijkState.completed);
-    debugPrint("_videoSourceTabs_video_length = ${_videoSourceTabs.video!.length}");
+    debugPrint(
+      "_videoSourceTabs_video_length = ${_videoSourceTabs.video!.length}",
+    );
     debugPrint("widget.curActiveIdx = ${widget.curActiveIdx}");
     debugPrint("widget.curTabIdx = ${widget.curTabIdx}");
     debugPrint("widget.curActiveIdx = ${widget.curActiveIdx}");
-    String nextVideoUrl = _videoSourceTabs.video![widget.curTabIdx]!.list!.length > widget.curActiveIdx + 1 ?
-    _videoSourceTabs.video![widget.curTabIdx]!.list![widget.curActiveIdx + 1]!.url! : "";
+    String nextVideoUrl =
+        _videoSourceTabs.video![widget.curTabIdx]!.list!.length >
+            widget.curActiveIdx + 1
+        ? _videoSourceTabs
+              .video![widget.curTabIdx]!
+              .list![widget.curActiveIdx + 1]!
+              .url!
+        : "";
     debugPrint("nextVideoUrl = $nextVideoUrl");
     // 播放完成 && tabLen没有溢出 && curActive没有溢出
     // ignore: unnecessary_null_comparison
@@ -772,7 +769,7 @@ class _buildGestureDetectorState extends State<_buildGestureDetector> {
     }
   }
 
-// +++++++++++++++++++++++++++++++++++++++++++
+  // +++++++++++++++++++++++++++++++++++++++++++
 
   _onHorizontalDragStart(detills) {
     setState(() {
@@ -824,7 +821,7 @@ class _buildGestureDetectorState extends State<_buildGestureDetector> {
     });
   }
 
-// +++++++++++++++++++++++++++++++++++++++++++
+  // +++++++++++++++++++++++++++++++++++++++++++
 
   _onVerticalDragStart(detills) async {
     double clientW = widget.viewSize.width;
@@ -866,8 +863,9 @@ class _buildGestureDetectorState extends State<_buildGestureDetector> {
     // + -, 不满足, 上下滑动合法滑动值，> 3
     if (isBefore && pdy - cdy < 3 || !isBefore && cdy - pdy < 3) return null;
     // 区间
-    double dragRange =
-    isBefore ? updateDargVarVal! + 0.03 : updateDargVarVal! - 0.03;
+    double dragRange = isBefore
+        ? updateDargVarVal! + 0.03
+        : updateDargVarVal! - 0.03;
     // 是否溢出
     if (dragRange > 1) {
       dragRange = 1.0;
@@ -894,7 +892,7 @@ class _buildGestureDetectorState extends State<_buildGestureDetector> {
     });
   }
 
-// +++++++++++++++++++++++++++++++++++++++++++
+  // +++++++++++++++++++++++++++++++++++++++++++
 
   // 切换播放源
   Future<void> changeCurPlayVideo(int tabIdx, int activeIdx) async {
@@ -905,15 +903,11 @@ class _buildGestureDetectorState extends State<_buildGestureDetector> {
     player.reset().then((_) async {
       _speed = speed = 1.0;
       String curTabActiveUrl =
-      _videoSourceTabs.video![tabIdx]!.list![activeIdx]!.url!;
+          _videoSourceTabs.video![tabIdx]!.list![activeIdx]!.url!;
       debugPrint('curTabActiveUrl : $curTabActiveUrl');
-      String? playUrl = await MovieRepository().getPlayUrl(curTabActiveUrl);
-      logD("realPlayUrl : $playUrl");
-      logic.currentPlayUrl = playUrl ?? curTabActiveUrl;
-      player.setDataSource(
-        playUrl ?? curTabActiveUrl,
-        autoPlay: true,
-      );
+      final episodeName =
+          _videoSourceTabs.video![tabIdx]!.list![activeIdx]!.name ?? '';
+      await logic.playEpisode(curTabActiveUrl, episodeName);
       // 回调
       widget.onChangeVideo(tabIdx, activeIdx);
     });
@@ -957,10 +951,7 @@ class _buildGestureDetectorState extends State<_buildGestureDetector> {
     return IconButton(
       icon: Icon(iconData),
       color: Colors.white,
-      padding: const EdgeInsets.only(
-        left: 10.0,
-        right: 10.0,
-      ),
+      padding: const EdgeInsets.only(left: 10.0, right: 10.0),
       splashColor: Colors.transparent,
       highlightColor: Colors.transparent,
       onPressed: _playOrPause,
@@ -974,8 +965,8 @@ class _buildGestureDetectorState extends State<_buildGestureDetector> {
     double currentValue = _seekPos > 0
         ? _seekPos
         : (_isHorizontalMove
-        ? _dargPos.inMilliseconds.toDouble()
-        : _currentPos.inMilliseconds.toDouble());
+              ? _dargPos.inMilliseconds.toDouble()
+              : _currentPos.inMilliseconds.toDouble());
     currentValue = min(currentValue, duration);
     currentValue = max(currentValue, 0);
 
@@ -1014,32 +1005,40 @@ class _buildGestureDetectorState extends State<_buildGestureDetector> {
                     _buildPlayStateBtn(),
                     // 下一集
                     showConfig.nextBtn
-                        ? IconButton (
-                      icon: const Icon(Icons.skip_next),
-                      color: Colors.white,
-                      padding: const EdgeInsets.only(
-                        left: 10.0,
-                        right: 10.0,
-                      ),
-                      splashColor: Colors.transparent,
-                      highlightColor: Colors.transparent,
-                      onPressed: () {
-                        debugPrint("widget.curActiveIdx = ${widget.curActiveIdx}");
-                        debugPrint("widget.curTabIdx = ${widget.curTabIdx}");
-                        bool isOverFlowActiveLen =
-                            widget.curActiveIdx + 1 >=
-                                _videoSourceTabs.video![widget.curTabIdx]!
-                                    .list!.length;
-                        debugPrint("isOverFlowActiveLen = $isOverFlowActiveLen");
-                        // 播放完成
-                        if (!isOverFlowActiveLen) {
-                          int newTabIdx = widget.curTabIdx;
-                          int newActiveIdx = widget.curActiveIdx + 1;
-                          // 切换播放源
-                          changeCurPlayVideo(newTabIdx, newActiveIdx);
-                        }
-                      },
-                    )
+                        ? IconButton(
+                            icon: const Icon(Icons.skip_next),
+                            color: Colors.white,
+                            padding: const EdgeInsets.only(
+                              left: 10.0,
+                              right: 10.0,
+                            ),
+                            splashColor: Colors.transparent,
+                            highlightColor: Colors.transparent,
+                            onPressed: () {
+                              debugPrint(
+                                "widget.curActiveIdx = ${widget.curActiveIdx}",
+                              );
+                              debugPrint(
+                                "widget.curTabIdx = ${widget.curTabIdx}",
+                              );
+                              bool isOverFlowActiveLen =
+                                  widget.curActiveIdx + 1 >=
+                                  _videoSourceTabs
+                                      .video![widget.curTabIdx]!
+                                      .list!
+                                      .length;
+                              debugPrint(
+                                "isOverFlowActiveLen = $isOverFlowActiveLen",
+                              );
+                              // 播放完成
+                              if (!isOverFlowActiveLen) {
+                                int newTabIdx = widget.curTabIdx;
+                                int newActiveIdx = widget.curActiveIdx + 1;
+                                // 切换播放源
+                                changeCurPlayVideo(newTabIdx, newActiveIdx);
+                              }
+                            },
+                          )
                         : Container(),
                     // 已播放时间
                     Padding(
@@ -1055,117 +1054,123 @@ class _buildGestureDetectorState extends State<_buildGestureDetector> {
                     // 播放进度 if 没有开始播放 占满，空ui， else fijkSlider widget
                     _duration.inMilliseconds == 0
                         ? Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.only(right: 5, left: 5),
-                        child: NewFijkSlider(
-                          colors: const NewFijkSliderColors(
-                            cursorColor: Colors.blue,
-                            playedColor: Colors.blue,
-                          ),
-                          onChangeEnd: (double value) {},
-                          value: 0,
-                          onChanged: (double value) {},
-                        ),
-                      ),
-                    )
+                            child: Padding(
+                              padding: const EdgeInsets.only(right: 5, left: 5),
+                              child: NewFijkSlider(
+                                colors: const NewFijkSliderColors(
+                                  cursorColor: Colors.blue,
+                                  playedColor: Colors.blue,
+                                ),
+                                onChangeEnd: (double value) {},
+                                value: 0,
+                                onChanged: (double value) {},
+                              ),
+                            ),
+                          )
                         : Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.only(right: 5, left: 5),
-                        child: NewFijkSlider(
-                          colors: NewFijkSliderColors(
-                            cursorColor: Colors.blue,
-                            playedColor: Colors.blue,
+                            child: Padding(
+                              padding: const EdgeInsets.only(right: 5, left: 5),
+                              child: NewFijkSlider(
+                                colors: NewFijkSliderColors(
+                                  cursorColor: Colors.blue,
+                                  playedColor: Colors.blue,
+                                ),
+                                value: currentValue,
+                                cacheValue: _bufferPos.inMilliseconds
+                                    .toDouble(),
+                                min: 0.0,
+                                max: duration,
+                                onChanged: (v) {
+                                  _startHideTimer();
+                                  setState(() {
+                                    _seekPos = v;
+                                  });
+                                },
+                                onChangeEnd: (v) {
+                                  setState(() {
+                                    player.seekTo(v.toInt());
+                                    print("seek to $v");
+                                    _currentPos = Duration(
+                                      milliseconds: _seekPos.toInt(),
+                                    );
+                                    _seekPos = -1;
+                                  });
+                                },
+                              ),
+                            ),
                           ),
-                          value: currentValue,
-                          cacheValue:
-                          _bufferPos.inMilliseconds.toDouble(),
-                          min: 0.0,
-                          max: duration,
-                          onChanged: (v) {
-                            _startHideTimer();
-                            setState(() {
-                              _seekPos = v;
-                            });
-                          },
-                          onChangeEnd: (v) {
-                            setState(() {
-                              player.seekTo(v.toInt());
-                              print("seek to $v");
-                              _currentPos = Duration(
-                                  milliseconds: _seekPos.toInt());
-                              _seekPos = -1;
-                            });
-                          },
-                        ),
-                      ),
-                    ),
 
                     // 总播放时间
                     _duration.inMilliseconds == 0
                         ? Container(
-                      child: const Text(
-                        "00:00",
-                        style: const TextStyle(color: Colors.white, fontSize: 14.0),
-                      ),
-                    )
+                            child: const Text(
+                              "00:00",
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 14.0,
+                              ),
+                            ),
+                          )
                         : Padding(
-                      padding: EdgeInsets.only(right: 5.0, left: 5),
-                      child: Text(
-                        '${_duration2String(_duration)}',
-                        style: const TextStyle(
-                          fontSize: 14.0,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
+                            padding: EdgeInsets.only(right: 5.0, left: 5),
+                            child: Text(
+                              '${_duration2String(_duration)}',
+                              style: const TextStyle(
+                                fontSize: 14.0,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
                     // 剧集按钮
                     widget.player.value.fullScreen && showConfig.drawerBtn
                         ? Ink(
-                      padding: const EdgeInsets.all(5),
-                      child: InkWell(
-                        onTap: () {
-                          // 调用父组件的回调
-                          widget.changeDrawerState(true);
-                        },
-                        child: Container(
-                          alignment: Alignment.center,
-                          width: 40,
-                          height: 30,
-                          child: const Text(
-                            "剧集",
-                            style: const TextStyle(color: Colors.white),
-                          ),
-                        ),
-                      ),
-                    )
+                            padding: const EdgeInsets.all(5),
+                            child: InkWell(
+                              onTap: () {
+                                // 调用父组件的回调
+                                widget.changeDrawerState(true);
+                              },
+                              child: Container(
+                                alignment: Alignment.center,
+                                width: 40,
+                                height: 30,
+                                child: const Text(
+                                  "剧集",
+                                  style: const TextStyle(color: Colors.white),
+                                ),
+                              ),
+                            ),
+                          )
                         : Container(),
                     // 倍数按钮
                     widget.player.value.fullScreen && showConfig.speedBtn
                         ? Ink(
-                      padding: const EdgeInsets.all(5),
-                      child: InkWell(
-                        onTap: () {
-                          setState(() {
-                            _hideSpeedStu = !_hideSpeedStu;
-                          });
-                        },
-                        child: Container(
-                          alignment: Alignment.center,
-                          width: 40,
-                          height: 30,
-                          child: Text(
-                            _speed.toString() + " X",
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        ),
-                      ),
-                    )
+                            padding: const EdgeInsets.all(5),
+                            child: InkWell(
+                              onTap: () {
+                                setState(() {
+                                  _hideSpeedStu = !_hideSpeedStu;
+                                });
+                              },
+                              child: Container(
+                                alignment: Alignment.center,
+                                width: 40,
+                                height: 30,
+                                child: Text(
+                                  _speed.toString() + " X",
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                              ),
+                            ),
+                          )
                         : Container(),
                     // 按钮 - 全屏/退出全屏
                     IconButton(
-                      icon: Icon(widget.player.value.fullScreen
-                          ? Icons.fullscreen_exit
-                          : Icons.fullscreen),
+                      icon: Icon(
+                        widget.player.value.fullScreen
+                            ? Icons.fullscreen_exit
+                            : Icons.fullscreen,
+                      ),
                       padding: const EdgeInsets.only(left: 10.0, right: 10.0),
                       color: Colors.white,
                       splashColor: Colors.transparent,
@@ -1179,7 +1184,7 @@ class _buildGestureDetectorState extends State<_buildGestureDetector> {
                           widget.changeDrawerState(false);
                         }
                       },
-                    )
+                    ),
                     //
                   ],
                 ),
@@ -1191,21 +1196,22 @@ class _buildGestureDetectorState extends State<_buildGestureDetector> {
             bottom: 0,
             left: 0,
             right: 0,
-            child: showConfig.bottomPro &&
-                _hideStuff &&
-                _duration.inMilliseconds != 0
+            child:
+                showConfig.bottomPro &&
+                    _hideStuff &&
+                    _duration.inMilliseconds != 0
                 ? Container(
-              alignment: Alignment.bottomLeft,
-              height: 4,
-              color: Colors.white70,
-              child: Container(
-                color: Colors.blue,
-                width: curBottomProW,
-                height: 4,
-              ),
-            )
+                    alignment: Alignment.bottomLeft,
+                    height: 4,
+                    color: Colors.white70,
+                    child: Container(
+                      color: Colors.blue,
+                      width: curBottomProW,
+                      height: 4,
+                    ),
+                  )
                 : Container(),
-          )
+          ),
         ],
       ),
     );
@@ -1215,10 +1221,7 @@ class _buildGestureDetectorState extends State<_buildGestureDetector> {
   Widget _buildTopBackBtn() {
     return IconButton(
       icon: const Icon(Icons.arrow_back),
-      padding: const EdgeInsets.only(
-        left: 10.0,
-        right: 10.0,
-      ),
+      padding: const EdgeInsets.only(left: 10.0, right: 10.0),
       splashColor: Colors.transparent,
       highlightColor: Colors.transparent,
       color: Colors.white,
@@ -1231,12 +1234,45 @@ class _buildGestureDetectorState extends State<_buildGestureDetector> {
           await player.stop();
           Navigator.popUntil(
             context,
-                (route) => route.settings.name == RouterConfigs.detail,
+            (route) => route.settings.name == RouterConfigs.detail,
           );
           // Navigator.pop(widget.pageContent!);
         }
       },
     );
+  }
+
+  Widget _buildPlaybackSourceIndicator() {
+    return Obx(() {
+      final sourceId = logic.currentSourceId.value;
+      final sourceName = logic.currentSourceName.value;
+      final isCms = logic.isCmsSource;
+      final label = isCms
+          ? 'CMS：$sourceName'
+          : sourceId == 'legacy'
+          ? 'hsmovie 原 HTML'
+          : sourceName;
+
+      return Tooltip(
+        message: label,
+        child: Semantics(
+          label: label,
+          child: SizedBox(
+            width: 40,
+            height: 40,
+            child: Icon(
+              isCms ? Icons.lightbulb : Icons.lightbulb_outline,
+              color: isCms
+                  ? Colors.amber
+                  : sourceId == 'legacy'
+                  ? Colors.white70
+                  : Colors.white38,
+              size: 24,
+            ),
+          ),
+        ),
+      );
+    });
   }
 
   // 播放器顶部 返回 + 标题
@@ -1271,37 +1307,18 @@ class _buildGestureDetectorState extends State<_buildGestureDetector> {
                     overflow: TextOverflow.ellipsis,
                     maxLines: 1,
                     textAlign: TextAlign.left,
-                    style: const TextStyle(
-                      color: Colors.white,
-                    ),
+                    style: const TextStyle(color: Colors.white),
                   ),
                 ),
               ),
+              _buildPlaybackSourceIndicator(),
               IconButton(
-                padding: const EdgeInsets.only(
-                  left: 10.0,
-                  right: 10.0,
-                ),
+                padding: const EdgeInsets.only(left: 10.0, right: 10.0),
                 splashColor: Colors.transparent,
                 highlightColor: Colors.transparent,
                 onPressed: () {
                   debugPrint('action cast┏ (゜ω゜)=☞');
-                  SmartDialog.show(
-                    debounce: true,
-                    clickMaskDismiss: false,
-                    builder: (BuildContext context) {
-                      return Container(
-                        height: Get.height * 2 / 3,
-                        width: Get.width - 40,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        alignment: Alignment.center,
-                        child: const DlnaDeviceList(),
-                      );
-                    }
-                  );
+                  showDlnaDevicePicker(mediaTitle: widget.playerTitle);
                 },
                 icon: Image.asset(
                   'assets/cast.png',
@@ -1309,8 +1326,8 @@ class _buildGestureDetectorState extends State<_buildGestureDetector> {
                   height: 28,
                   fit: BoxFit.cover,
                   color: Colors.white,
-                )
-              )
+                ),
+              ),
             ],
           ),
         ),
@@ -1327,23 +1344,25 @@ class _buildGestureDetectorState extends State<_buildGestureDetector> {
       child: Center(
         child: (_prepared && !_buffering)
             ? AnimatedOpacity(
-          opacity: _hideStuff ? 0.0 : 0.7,
-          duration: const Duration(milliseconds: 400),
-          child: IconButton(
-            iconSize: barHeight * 1.2,
-            icon: Icon(_playing ? Icons.pause : Icons.play_arrow,
-                color: Colors.white),
-            padding: const EdgeInsets.only(left: 10.0, right: 10.0),
-            onPressed: _playOrPause,
-          ),
-        )
+                opacity: _hideStuff ? 0.0 : 0.7,
+                duration: const Duration(milliseconds: 400),
+                child: IconButton(
+                  iconSize: barHeight * 1.2,
+                  icon: Icon(
+                    _playing ? Icons.pause : Icons.play_arrow,
+                    color: Colors.white,
+                  ),
+                  padding: const EdgeInsets.only(left: 10.0, right: 10.0),
+                  onPressed: _playOrPause,
+                ),
+              )
             : SizedBox(
-          width: barHeight * 0.8,
-          height: barHeight * 0.8,
-          child: const CircularProgressIndicator(
-            valueColor: AlwaysStoppedAnimation(Colors.white),
-          ),
-        ),
+                width: barHeight * 0.8,
+                height: barHeight * 0.8,
+                child: const CircularProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation(Colors.white),
+                ),
+              ),
       ),
     );
   }
@@ -1352,25 +1371,20 @@ class _buildGestureDetectorState extends State<_buildGestureDetector> {
   Widget _buildDargProgressTime() {
     return _isTouch
         ? Container(
-      height: 40,
-      alignment: Alignment.center,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.all(
-          Radius.circular(5),
-        ),
-        color: const Color.fromRGBO(0, 0, 0, 0.8),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.only(left: 10, right: 10),
-        child: Text(
-          '${_duration2String(_dargPos)} / ${_duration2String(_duration)}',
-          style: const TextStyle(
-            color: Colors.white,
-            fontSize: 18,
-          ),
-        ),
-      ),
-    )
+            height: 40,
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(5)),
+              color: const Color.fromRGBO(0, 0, 0, 0.8),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.only(left: 10, right: 10),
+              child: Text(
+                '${_duration2String(_dargPos)} / ${_duration2String(_duration)}',
+                style: const TextStyle(color: Colors.white, fontSize: 18),
+              ),
+            ),
+          )
         : Container();
   }
 
@@ -1396,10 +1410,7 @@ class _buildGestureDetectorState extends State<_buildGestureDetector> {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            Icon(
-              iconData,
-              color: Colors.white,
-            ),
+            Icon(iconData, color: Colors.white),
             Container(
               width: 100,
               height: 3,
@@ -1449,11 +1460,7 @@ class _buildGestureDetectorState extends State<_buildGestureDetector> {
       columnChild.add(
         Padding(
           padding: const EdgeInsets.only(top: 5, bottom: 5),
-          child: Container(
-            width: 50,
-            height: 1,
-            color: Colors.white54,
-          ),
+          child: Container(width: 50, height: 1, color: Colors.white54),
         ),
       );
     });
@@ -1480,11 +1487,11 @@ class _buildGestureDetectorState extends State<_buildGestureDetector> {
             showConfig.topBar
                 ? _buildTopBar()
                 : Container(
-              height:
-              showConfig.stateAuto && !widget.player.value.fullScreen
-                  ? barFillingHeight
-                  : barHeight,
-            ),
+                    height:
+                        showConfig.stateAuto && !widget.player.value.fullScreen
+                        ? barFillingHeight
+                        : barHeight,
+                  ),
             // 中间按钮
             Expanded(
               child: Stack(
@@ -1500,7 +1507,7 @@ class _buildGestureDetectorState extends State<_buildGestureDetector> {
                         // 显示左右滑动快进时间的块
                         _buildDargProgressTime(),
                         // 显示上下滑动音量亮度
-                        _buildDargVolumeAndBrightness()
+                        _buildDargVolumeAndBrightness(),
                       ],
                     ),
                   ),
@@ -1515,40 +1522,38 @@ class _buildGestureDetectorState extends State<_buildGestureDetector> {
                     bottom: 0,
                     child: !_hideSpeedStu
                         ? Container(
-                      child: Padding(
-                        padding: const EdgeInsets.all(10),
-                        child: Column(
-                          children: _buildSpeedListWidget(),
-                        ),
-                      ),
-                      decoration: BoxDecoration(
-                        color: Colors.black45,
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    )
+                            child: Padding(
+                              padding: const EdgeInsets.all(10),
+                              child: Column(children: _buildSpeedListWidget()),
+                            ),
+                            decoration: BoxDecoration(
+                              color: Colors.black45,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          )
                         : Container(),
                   ),
                   // 锁按钮
                   showConfig.lockBtn && widget.player.value.fullScreen
                       ? Align(
-                    alignment: Alignment.centerLeft,
-                    child: AnimatedOpacity(
-                      opacity: _hideStuff ? 0.0 : 0.7,
-                      duration: const Duration(milliseconds: 400),
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 20),
-                        child: IconButton(
-                          iconSize: 30,
-                          onPressed: () {
-                            // 更改 ui显示状态
-                            widget.changeLockState(true);
-                          },
-                          icon: const Icon(Icons.lock_open),
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                  )
+                          alignment: Alignment.centerLeft,
+                          child: AnimatedOpacity(
+                            opacity: _hideStuff ? 0.0 : 0.7,
+                            duration: const Duration(milliseconds: 400),
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 20),
+                              child: IconButton(
+                                iconSize: 30,
+                                onPressed: () {
+                                  // 更改 ui显示状态
+                                  widget.changeLockState(true);
+                                },
+                                icon: const Icon(Icons.lock_open),
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        )
                       : Container(),
                 ],
               ),

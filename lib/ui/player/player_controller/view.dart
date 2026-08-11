@@ -1,8 +1,6 @@
-import 'package:ble_project/base/log/app_log.dart';
 import 'package:ble_project/base/skin/fijkplayer_skin.dart';
 import 'package:ble_project/base/theme/app_theme.dart';
 import 'package:ble_project/configs/global_config.dart';
-import 'package:ble_project/repository/movie_repository.dart';
 import 'package:ble_project/ui/player/components/lazy_tab_page.dart';
 import 'package:ble_project/widget/common_state_screen.dart';
 import 'package:fijkplayer_plus/fijkplayer_plus.dart';
@@ -150,9 +148,12 @@ class PlayerControllerPage extends StatelessWidget {
               await logic.state.player.stop();
               await logic.state.player.reset();
               debugPrint("nextVideoUrl = $nextVideoUrl");
-              String? playUrl = await MovieRepository().getPlayUrl(nextVideoUrl);
-              logD("realPlayUrl : $playUrl");
-              logic.state.player.setDataSource(playUrl ?? nextVideoUrl, autoPlay: true);
+              final episodeName = logic.state.videoSourceFormat!
+                      .video![logic.curTabIdx.value]!
+                      .list![logic.curActiveIdx.value]!
+                      .name ??
+                  '';
+              await logic.playEpisode(nextVideoUrl, episodeName);
             },
             child: Text(
               logic.state.videoSourceFormat!.video![tabIdx]!.list![activeIdx]!.name!,

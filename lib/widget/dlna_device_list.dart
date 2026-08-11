@@ -13,9 +13,32 @@ import 'dlna_dialog.dart';
 
 Map<String, DLNADevice> cacheDeviceList = {};
 
+void showDlnaDevicePicker({String? videoId, String mediaTitle = ''}) {
+  final castController = DlnaCastOverlayController.instance;
+  if (castController.hasActiveSession) {
+    castController.restore();
+    return;
+  }
+  SmartDialog.show(
+    debounce: true,
+    clickMaskDismiss: false,
+    builder: (_) => Container(
+      height: Get.height * 2 / 3,
+      width: Get.width - 40,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(8),
+      ),
+      alignment: Alignment.center,
+      child: DlnaDeviceList(videoId: videoId, mediaTitle: mediaTitle),
+    ),
+  );
+}
+
 class DlnaDeviceList extends StatefulWidget {
   final String? videoId;
-  const DlnaDeviceList({super.key, this.videoId});
+  final String mediaTitle;
+  const DlnaDeviceList({super.key, this.videoId, this.mediaTitle = ''});
 
   @override
   State<StatefulWidget> createState() {
@@ -59,10 +82,7 @@ class _DlnaDeviceListState extends State<DlnaDeviceList> {
 
   @override
   Widget build(BuildContext context) {
-    return RefreshIndicator(
-      onRefresh: _pullToRefresh,
-      child: _bodyContain()
-    );
+    return RefreshIndicator(onRefresh: _pullToRefresh, child: _bodyContain());
   }
 
   Future _pullToRefresh() async {
@@ -82,7 +102,8 @@ class _DlnaDeviceListState extends State<DlnaDeviceList> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('选择设备',
+              Text(
+                '选择设备',
                 style: const TextStyle(
                   fontSize: 17,
                   fontWeight: FontWeight.bold,
@@ -90,17 +111,17 @@ class _DlnaDeviceListState extends State<DlnaDeviceList> {
                 ),
               ),
               IconButton(
-                  icon: const Icon(Icons.close),
-                  onPressed: () {
-                    SmartDialog.dismiss();
-                  }
-              )
-            ]
+                icon: const Icon(Icons.close),
+                onPressed: () {
+                  SmartDialog.dismiss();
+                },
+              ),
+            ],
           ),
           Expanded(child: _body()),
-          SizedBox(height: 15)
+          SizedBox(height: 15),
         ],
-      )
+      ),
     );
   }
 
@@ -113,15 +134,16 @@ class _DlnaDeviceListState extends State<DlnaDeviceList> {
           children: [
             CircularProgressIndicator(),
             SizedBox(height: 10),
-            Text('正在搜索设备...',
+            Text(
+              '正在搜索设备...',
               style: const TextStyle(
                 fontSize: 15,
                 fontWeight: FontWeight.bold,
                 color: Color.fromARGB(255, 100, 100, 135),
               ),
-            )
-          ]
-        )
+            ),
+          ],
+        ),
       );
     }
     final List<Widget> dList = [];
@@ -131,7 +153,7 @@ class _DlnaDeviceListState extends State<DlnaDeviceList> {
 
     return FixScrollShadow(
       color: Colors.black.withAlpha(20),
-      child: ListView(children: dList, padding: EdgeInsets.zero)
+      child: ListView(children: dList, padding: EdgeInsets.zero),
     );
   }
 
@@ -140,8 +162,10 @@ class _DlnaDeviceListState extends State<DlnaDeviceList> {
     final subtitle = '$uri\r\n${device.info.deviceType}';
     final s = subtitle.toLowerCase();
     var icon = Icons.wifi;
-    final support = s.contains("mediarenderer")
-        || s.contains("avtransport") || s.contains('mediaserver');
+    final support =
+        s.contains("mediarenderer") ||
+        s.contains("avtransport") ||
+        s.contains('mediaserver');
     if (!support) {
       icon = Icons.router;
     }
@@ -150,7 +174,11 @@ class _DlnaDeviceListState extends State<DlnaDeviceList> {
       child: Row(
         children: <Widget>[
           Padding(
-            padding: EdgeInsets.only(top: index == 0 ? 0 : 16, left: 16, bottom: 30),
+            padding: EdgeInsets.only(
+              top: index == 0 ? 0 : 16,
+              left: 16,
+              bottom: 30,
+            ),
             child: CircleAvatar(child: Icon(icon)),
           ),
           Expanded(
@@ -169,7 +197,12 @@ class _DlnaDeviceListState extends State<DlnaDeviceList> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(top: 5, left: 16, right: 16, bottom: 10),
+                  padding: const EdgeInsets.only(
+                    top: 5,
+                    left: 16,
+                    right: 16,
+                    bottom: 10,
+                  ),
                   child: Row(
                     children: <Widget>[
                       Expanded(
@@ -208,25 +241,14 @@ class _DlnaDeviceListState extends State<DlnaDeviceList> {
               return;
             }
             await SmartDialog.dismiss();
-            SmartDialog.show(
-                debounce: true,
-                clickMaskDismiss: false,
-                builder: (BuildContext context) {
-                  return Container(
-                    height: Get.height * 2 / 3,
-                    width: Get.width - 40,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                    alignment: Alignment.center,
-                    child: DlnaDialog(device, videoId: widget.videoId),
-                  );
-                }
+            await DlnaCastOverlayController.instance.open(
+              device,
+              videoId: widget.videoId,
+              mediaTitle: widget.mediaTitle,
             );
           },
         ),
-      )
+      ),
     );
   }
 }

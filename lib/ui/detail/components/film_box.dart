@@ -47,7 +47,7 @@ void showFilmInBoxDialog() {
                                         bool isSuccess = await controller.clearFilmsInBox();
                                         if (isSuccess) {
                                           ToastUtil.showToast("清除成功");
-                                          await controller.cartKey.currentState!.runCartAnimation('0');
+                                          await controller.updateFilmBoxBadge(0);
                                           controller.updateFilmBox();
                                         } else {
                                           ToastUtil.showToast("清除失败");
@@ -185,7 +185,8 @@ void showFilmInBoxDialog() {
                         initialPage: controller.boxMovies.length - 1,
                         onSelectedItem: (index) {
                           debugPrint('onSelectedItem : $index');
-                          if(!controller.slideKey.currentState!.isShowSlide.value) {
+                          final slideState = controller.slideKey.currentState;
+                          if(slideState != null && !slideState.isShowSlide.value) {
                             SmartDialog.show(
                                 builder: (BuildContext context) {
                                   return AlertDialog(
@@ -218,13 +219,14 @@ void showFilmInBoxDialog() {
                           if (isSuccess) {
                             ToastUtil.showToast("删除成功");
                             try {
-                              int filmSize = await controller.getFilmsInBoxSize();
-                              await controller.cartKey.currentState!.runCartAnimation(filmSize.toString());
+                              await controller.updateFilmBoxBadge();
                             } catch(e) {
                               debugPrint('获取盒子中的影视数量异常: $e');
                             }
                             controller.updateFilmBox();
-                            controller.slideKey.currentState!.updatePageView();
+                            if (controller.boxMovies.isNotEmpty) {
+                              controller.slideKey.currentState?.updatePageView();
+                            }
                           } else {
                             ToastUtil.showToast("删除失败");
                           }
