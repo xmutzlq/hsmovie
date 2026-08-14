@@ -16,8 +16,10 @@ concurrency:
 jobs:
   build:
     name: macOS release
-    runs-on: macos-14
+    runs-on: macos-15
     timeout-minutes: 45
+    env:
+      DEVELOPER_DIR: /Applications/Xcode_26.3.app/Contents/Developer
 
     steps:
       - name: Check out application source
@@ -55,7 +57,7 @@ jobs:
 
       - name: Upload build log
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: hsmovie-macos-build-log
           path: build-macos.log
@@ -80,7 +82,7 @@ jobs:
           shasum -a 256 "$ARCHIVE" > dist/SHA256SUMS.txt
 
       - name: Upload unsigned macOS package
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: hsmovie-macos-unsigned
           path: |
