@@ -34,7 +34,9 @@ jobs:
       - name: Generate macOS platform project
         run: |
           flutter config --enable-macos-desktop
+          cp pubspec.lock "$RUNNER_TEMP/hsmovie-pubspec.lock"
           flutter create --platforms=macos --org com.mocoav --no-pub .
+          cp "$RUNNER_TEMP/hsmovie-pubspec.lock" pubspec.lock
 
       - name: Resolve dependencies
         run: |
