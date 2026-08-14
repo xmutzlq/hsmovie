@@ -1,0 +1,68 @@
+name: Build macOS
+
+on:
+  push:
+    branches:
+      - app-macos-ci
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: macos-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: macOS release
+    runs-on: macos-14
+    timeout-minutes: 45
+
+    steps:
+      - name: Check out application source
+        uses: actions/checkout@v4
+
+      - name: Install Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Generate macOS platform project
+        run: |
+          flutter config --enable-macos-desktop
+          flutter create --platforms=macos --org com.mocoav .
+
+      - name: Resolve dependencies
+        run: flutter pub get
+
+      - name: Build unsigned release
+        run: flutter build macos --release --no-pub
+
+      - name: Package application
+        run: |
+          set -euo pipefail
+          VERSION="$(awk '/^version:/ { print $2; exit }' pubspec.yaml)"
+          VERSION="${VERSION%%+*}"
+          APP_PATH="$(find build/macos/Build/Products/Release -maxdepth 1 -name '*.app' -print -quit)"
+
+          if [[ -z "$APP_PATH" ]]; then
+            echo 'No macOS .app bundle was generated.' >&2
+            exit 1
+          fi
+
+          mkdir -p dist
+          ARCHIVE="dist/hsmovie-${VERSION}-macos-unsigned.zip"
+          ditto -c -k --sequesterRsrc --keepParent "$APP_PATH" "$ARCHIVE"
+          shasum -a 256 "$ARCHIVE" > dist/SHA256SUMS.txt
+
+      - name: Upload unsigned macOS package
+        uses: actions/upload-artifact@v4
+        with:
+          name: hsmovie-macos-unsigned
+          path: |
+            dist/hsmovie-*-macos-unsigned.zip
+            dist/SHA256SUMS.txt
+          if-no-files-found: error
+          retention-days: 7
