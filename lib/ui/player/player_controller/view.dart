@@ -2,9 +2,9 @@ import 'package:ble_project/base/skin/media_kit_player_skin.dart';
 import 'package:ble_project/base/theme/app_theme.dart';
 import 'package:ble_project/configs/global_config.dart';
 import 'package:ble_project/ui/player/components/lazy_tab_page.dart';
+import 'package:ble_project/util/desktop_platform.dart';
+import 'package:ble_project/util/desktop_real_media_query.dart';
 import 'package:ble_project/widget/common_state_screen.dart';
-import 'package:ble_project/util/windows_real_media_query.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:media_kit_video/media_kit_video.dart';
@@ -19,9 +19,9 @@ class PlayerControllerPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return buildWithWindowsRealMediaQuery(context, (context) {
+    return buildWithDesktopRealMediaQuery(context, (context) {
       final viewportSize = MediaQuery.sizeOf(context);
-      final playerHeight = defaultTargetPlatform == TargetPlatform.windows
+      final playerHeight = isDesktopLayoutPlatform
           ? (viewportSize.width * 9 / 16).clamp(
               260.0,
               viewportSize.height * 0.72,
@@ -48,8 +48,7 @@ class PlayerControllerPage extends StatelessWidget {
                   await defaultExitNativeFullscreen();
                 },
                 controls: (videoState) {
-                  final viewportSize =
-                      defaultTargetPlatform == TargetPlatform.windows
+                  final viewportSize = isDesktopLayoutPlatform
                       ? MediaQueryData.fromView(
                           View.of(videoState.context),
                         ).size

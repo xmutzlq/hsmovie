@@ -8,7 +8,7 @@ import 'package:ble_project/ui/player/player_controller/logic.dart';
 import 'package:ble_project/widget/common_state_screen.dart';
 import 'package:ble_project/widget/dlna_device_list.dart';
 import 'package:ble_project/player/media_kit_player.dart';
-import 'package:flutter/foundation.dart';
+import 'package:ble_project/util/desktop_platform.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -478,7 +478,7 @@ class _CustomMediaKitPanelState extends State<CustomMediaKitPanel>
   @override
   Widget build(BuildContext context) {
     super.build(context); // 需增加super才能达到wantKeepAlive效果
-    final fullScreenSize = defaultTargetPlatform == TargetPlatform.windows
+    final fullScreenSize = isDesktopLayoutPlatform
         ? MediaQueryData.fromView(View.of(context)).size
         : widget.viewSize;
     Rect rect = player.value.fullScreen
@@ -527,14 +527,13 @@ class _CustomMediaKitPanelState extends State<CustomMediaKitPanel>
       child: CallbackShortcuts(
         bindings: <ShortcutActivator, VoidCallback>{
           const SingleActivator(LogicalKeyboardKey.escape): () {
-            if (defaultTargetPlatform == TargetPlatform.windows &&
-                widget.player.value.fullScreen) {
+            if (isDesktopLayoutPlatform && widget.player.value.fullScreen) {
               widget.player.exitFullScreen();
             }
           },
         },
         child: Focus(
-          autofocus: defaultTargetPlatform == TargetPlatform.windows,
+          autofocus: isDesktopLayoutPlatform,
           child: WillPopScope(
             child: Stack(children: ws),
             onWillPop: () async {

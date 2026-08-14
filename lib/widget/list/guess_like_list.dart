@@ -1,7 +1,7 @@
 import 'package:ble_project/base/theme/app_theme.dart';
 import 'package:ble_project/model/vod_info.dart';
+import 'package:ble_project/util/desktop_platform.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class GuessLikeListView extends StatefulWidget {
@@ -39,10 +39,10 @@ class _MovieListViewState extends State<GuessLikeListView> {
     BuildContext context,
   ) {
     var width = MediaQuery.of(context).size.width;
-    final isWindows = defaultTargetPlatform == TargetPlatform.windows;
-    final itemSize = isWindows ? 140.0 : width / 4;
+    final isDesktop = isDesktopLayoutPlatform;
+    final itemSize = isDesktop ? 140.0 : width / 4;
     return Container(
-      height: isWindows ? 190 : width / 2 - 20,
+      height: isDesktop ? 190 : width / 2 - 20,
       margin: EdgeInsets.only(top: 10),
       child: ListView.builder(
         cacheExtent: 500,

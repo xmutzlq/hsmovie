@@ -1,10 +1,10 @@
 import 'package:ble_project/configs/page_config.dart';
 import 'package:ble_project/ui/home/home_page_mixin_controller/logic.dart';
+import 'package:ble_project/util/desktop_platform.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'dart:ui' as ui;
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -20,7 +20,7 @@ class _SlideShowViewState extends State<SlideShowView> {
   Widget build(BuildContext context) {
     final size = MediaQuery.sizeOf(context);
     final width = size.width;
-    final isDesktop = defaultTargetPlatform == TargetPlatform.windows;
+    final isDesktop = isDesktopLayoutPlatform;
     final bannerHeight = isDesktop
         ? (size.height * 0.38).clamp(240.0, 420.0)
         : width / 2;

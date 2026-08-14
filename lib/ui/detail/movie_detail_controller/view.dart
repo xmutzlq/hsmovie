@@ -9,9 +9,10 @@ import 'package:ble_project/ui/detail/components/film_box.dart';
 import 'package:ble_project/ui/home/home_page_mixin_controller/logic.dart';
 import 'package:ble_project/ui/user/personal/logic.dart';
 import 'package:ble_project/util/class_util.dart';
+import 'package:ble_project/util/desktop_platform.dart';
+import 'package:ble_project/util/desktop_real_media_query.dart';
 import 'package:ble_project/util/my_scroll_behavior.dart';
 import 'package:ble_project/util/toast_util.dart';
-import 'package:ble_project/util/windows_real_media_query.dart';
 import 'package:ble_project/widget/common_state_screen.dart';
 import 'package:ble_project/widget/list/guess_like_list.dart';
 import 'package:ble_project/widget/list/recommend_list.dart';
@@ -37,7 +38,7 @@ class MovieDetailControllerPage extends GetView<MovieDetailControllerLogic> {
 
   @override
   Widget build(BuildContext context) {
-    return buildWithWindowsRealMediaQuery(
+    return buildWithDesktopRealMediaQuery(
       context,
       (context) => controller.obx(
         (movieDetailResult) => _buildDetailContent(movieDetailResult!),
@@ -662,7 +663,7 @@ class _HeaderBackgroundState extends State<_HeaderBackground> {
                   child: SizedBox(
                     width: width,
                     height: height,
-                    child: defaultTargetPlatform == TargetPlatform.windows
+                    child: isDesktopLayoutPlatform
                         ? _buildDesktopArtwork(width)
                         : CachedNetworkImage(
                             imageUrl: widget.imgUrl,
@@ -721,7 +722,7 @@ class _HeaderBackgroundState extends State<_HeaderBackground> {
 }
 
 double _detailHeaderHeight(double width) {
-  if (defaultTargetPlatform == TargetPlatform.windows) {
+  if (isDesktopLayoutPlatform) {
     return (width * 9 / 16).clamp(320.0, 620.0);
   }
   return width;

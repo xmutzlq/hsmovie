@@ -2,16 +2,16 @@ import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 
-class WindowsStableAutosize extends StatefulWidget {
-  const WindowsStableAutosize({super.key, required this.child});
+class DesktopStableAutosize extends StatefulWidget {
+  const DesktopStableAutosize({super.key, required this.child});
 
   final Widget child;
 
   @override
-  State<WindowsStableAutosize> createState() => _WindowsStableAutosizeState();
+  State<DesktopStableAutosize> createState() => _DesktopStableAutosizeState();
 }
 
-class _WindowsStableAutosizeState extends State<WindowsStableAutosize>
+class _DesktopStableAutosizeState extends State<DesktopStableAutosize>
     with WidgetsBindingObserver {
   static const double _standardExtent = 360;
 

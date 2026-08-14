@@ -1,11 +1,11 @@
-import 'package:flutter/foundation.dart';
+import 'package:ble_project/util/desktop_platform.dart';
 import 'package:flutter/material.dart';
 
-Widget buildWithWindowsRealMediaQuery(
+Widget buildWithDesktopRealMediaQuery(
   BuildContext context,
   WidgetBuilder builder,
 ) {
-  if (defaultTargetPlatform != TargetPlatform.windows) {
+  if (!isDesktopLayoutPlatform) {
     return builder(context);
   }
   return MediaQuery.fromView(

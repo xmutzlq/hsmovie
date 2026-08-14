@@ -8,9 +8,10 @@ import 'package:ble_project/ui/navigation/navigation/binding.dart';
 import 'package:ble_project/ui/navigation/navigation/view.dart';
 import 'package:ble_project/ui/user/personal/model/movie_info.dart';
 import 'package:ble_project/ui/user/personal/model/person_info.dart';
+import 'package:ble_project/util/desktop_platform.dart';
+import 'package:ble_project/util/desktop_stable_autosize.dart';
 import 'package:ble_project/util/sp.dart';
 import 'package:ble_project/util/my_scroll_behavior.dart';
-import 'package:ble_project/util/windows_stable_autosize.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
@@ -107,8 +108,8 @@ class MyApp extends StatelessWidget {
       builder: FlutterSmartDialog.init(
         builder: (context, child) {
           Widget result = child!;
-          if (defaultTargetPlatform == TargetPlatform.windows) {
-            result = WindowsStableAutosize(child: result);
+          if (isDesktopLayoutPlatform) {
+            result = DesktopStableAutosize(child: result);
           } else {
             result = FlutterAutosizeScreenPro.appBuilder(context, result);
           }
