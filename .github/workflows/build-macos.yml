@@ -21,7 +21,7 @@ jobs:
 
     steps:
       - name: Check out application source
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Install Flutter
         uses: subosito/flutter-action@v2
@@ -38,7 +38,29 @@ jobs:
         run: flutter pub get
 
       - name: Build unsigned release
-        run: flutter build macos --release --no-pub
+        run: |
+          set +e
+          flutter build macos --release --no-pub 2>&1 | tee build-macos.log
+          BUILD_EXIT=${PIPESTATUS[0]}
+
+          if [[ $BUILD_EXIT -ne 0 ]]; then
+            SUMMARY="$(tail -n 120 build-macos.log)"
+            SUMMARY="${SUMMARY//'%'/'%25'}"
+            SUMMARY="${SUMMARY//$'\r'/'%0D'}"
+            SUMMARY="${SUMMARY//$'\n'/'%0A'}"
+            echo "::error title=macOS build failed::$SUMMARY"
+          fi
+
+          exit "$BUILD_EXIT"
+
+      - name: Upload build log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: hsmovie-macos-build-log
+          path: build-macos.log
+          if-no-files-found: error
+          retention-days: 7
 
       - name: Package application
         run: |
