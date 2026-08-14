@@ -39,6 +39,19 @@ jobs:
           flutter create --platforms=macos --org com.mocoav --no-pub .
           cp "$RUNNER_TEMP/hsmovie-pubspec.lock" pubspec.lock
 
+      - name: Allow outbound network access
+        run: |
+          set -euo pipefail
+
+          for ENTITLEMENTS in \
+            macos/Runner/DebugProfile.entitlements \
+            macos/Runner/Release.entitlements; do
+            /usr/libexec/PlistBuddy \
+              -c "Add :com.apple.security.network.client bool true" \
+              "$ENTITLEMENTS"
+            plutil -lint "$ENTITLEMENTS"
+          done
+
       - name: Resolve dependencies
         run: |
           set +e
@@ -101,6 +114,11 @@ jobs:
             echo 'No macOS .app bundle was generated.' >&2
             exit 1
           fi
+
+          codesign -d --entitlements :- "$APP_PATH" > app-entitlements.plist
+          /usr/libexec/PlistBuddy \
+            -c "Print :com.apple.security.network.client" \
+            app-entitlements.plist | grep -qx true
 
           mkdir -p dist
           ARCHIVE="dist/hsmovie-${VERSION}-macos-unsigned.zip"
