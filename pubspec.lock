@@ -369,14 +369,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.5"
-  fijkplayer_plus:
-    dependency: "direct main"
-    description:
-      name: fijkplayer_plus
-      sha256: dab2422138cdb8533fe505e1e6401339fb1021c9d12c958ad39eb938f73c0924
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.0.1"
   file:
     dependency: transitive
     description:

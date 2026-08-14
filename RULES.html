@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>body{font:16px/1.65 system-ui,sans-serif;max-width:980px;margin:32px auto;padding:0 20px;color:#202124}h1,h2,h3{line-height:1.25}code,pre{font-family:ui-monospace,monospace;background:#f4f5f6}code{padding:2px 4px}pre{padding:14px;overflow:auto;border-radius:4px}li{margin:4px 0}blockquote{border-left:3px solid #aaa;padding-left:12px;color:#555}</style></head><body>
+<h1>hsmovie 2.0 Project Rules</h1>
+<h2>Project Ownership</h2>
+<ul>
+<li><code>D:\workspace\zlq\hsmovie</code> is the implementation project. The TV Agent project is read-only reference material.</li>
+<li>Work for version 2.0 stays on the <code>version2.0</code> branch unless the user explicitly requests another branch.</li>
+<li>Playback source resolution remains Flutter-owned: CMS candidates keep their existing priority and the hsmovie HTML source remains the fallback.</li>
+</ul>
+<h2>Playback</h2>
+<ul>
+<li>Local video playback MUST use <code>media_kit</code>, <code>media_kit_video</code>, and <code>media_kit_libs_video</code>.</li>
+<li>FijkPlayer and IJK dependencies, imports, native binaries, and new compatibility code are prohibited after migration.</li>
+<li>The existing player page layout and interactions MUST remain compatible, including source tabs, episodes, seek, speed, fullscreen, lock, auto-next, CMS indicator, DLNA, resume, lifecycle handling, and stall recovery.</li>
+<li>HLS manifests MUST use the ad-filter behavior ported from TV Agent. A filtering or proxy failure MUST fail open to the original remote URL.</li>
+<li>HLS filtering applies only to local playback. DLNA MUST receive the original remote URL, never a loopback URL.</li>
+</ul>
+<h2>Specification And Documentation</h2>
+<ul>
+<li>Non-trivial work follows Spec Kit: constitution, specification, clarification, plan, tasks, implementation, and validation.</li>
+<li>Formal Markdown artifacts (<code>RULES.md</code>, the constitution, and files under <code>specs&#47;</code>) MUST have a same-name <code>.html</code> counterpart. README and <code>.specify&#47;templates&#47;</code> are excluded.</li>
+<li>Markdown is canonical. HTML mirrors MUST contain the same substantive content and MUST NOT introduce independent requirements.</li>
+<li>API or design changes MUST be documented before implementation tasks are marked complete.</li>
+</ul>
+<h2>Quality Gates</h2>
+<ul>
+<li>Playback parsing&#47;filtering changes require unit tests. Player migration requires controller tests and Android integration validation.</li>
+<li>HLS manifest buffering is capped at 1 MiB. A filter that would remove every media segment MUST return the original manifest.</li>
+<li>Logs MUST identify source, filter outcome, segment counts, and fallback reason without exposing access tokens or complete sensitive URLs.</li>
+<li>Before completion, <code>flutter analyze</code>, <code>flutter test</code>, and an Android debug build MUST pass, or the exact external blocker MUST be recorded.</li>
+</ul>
+<h2>Build Storage</h2>
+<ul>
+<li>Flutter commands MUST use <code>PUB_CACHE=D:\Flutter\flutter_cache</code>.</li>
+<li>Gradle commands MUST use <code>GRADLE_USER_HOME=D:\Users\liqin.zeng\.gradle</code>.</li>
+<li>uv commands MUST use a D-drive <code>UV_CACHE_DIR</code>.</li>
+<li>Build-scoped <code>TEMP</code> and <code>TMP</code> MUST point to a D-drive temporary directory. Do not intentionally create Flutter, Gradle, uv, or build caches on C:.</li>
+<li>Windows builds on machines without administrator rights MUST use the checked-in user-mode build script and D-drive portable toolchain. They MUST NOT require Developer Mode, Visual Studio Installer changes, registry edits, UAC elevation, or system-wide package installation.</li>
+</ul>
+<h2>Image Presentation</h2>
+<ul>
+<li>Real-ESRGAN and other local image-enhancement executables MUST NOT be packaged or launched. Apex One classifies their generated temporary images as unauthorized file encryption.</li>
+<li>Image widgets MUST preserve the source aspect ratio when stretching or cropping would materially distort the subject.</li>
+<li>On Windows only, when the home API provides a portrait <code>VodPic</code> for a wide banner, use a blurred cover background with a contained foreground image. Non-Windows platforms MUST retain their existing banner path and <code>BoxFit.cover</code> behavior.</li>
+<li>Apply the same proportion-safe composition to Windows detail headers that receive only portrait artwork. Mobile detail headers may retain their existing cover treatment.</li>
+<li>Prefer a dedicated high-resolution landscape image from the API when one becomes available. Client-side scaling cannot recreate missing source detail.</li>
+</ul>
+</body></html>
