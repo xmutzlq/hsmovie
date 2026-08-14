@@ -34,10 +34,10 @@ jobs:
       - name: Generate macOS platform project
         run: |
           flutter config --enable-macos-desktop
-          flutter create --platforms=macos --org com.mocoav .
+          flutter create --platforms=macos --org com.mocoav --no-pub .
 
       - name: Resolve dependencies
-        run: flutter pub get
+        run: flutter pub get --enforce-lockfile
 
       - name: Build unsigned release
         run: |
