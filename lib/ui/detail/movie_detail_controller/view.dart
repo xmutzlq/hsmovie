@@ -1,4 +1,6 @@
 import 'package:add_to_cart_animation/add_to_cart_animation.dart';
+import 'dart:ui' as ui;
+
 import 'package:ble_project/base/theme/app_theme.dart';
 import 'package:ble_project/configs/page_config.dart';
 import 'package:ble_project/model/detail/movie_detail_entity.dart';
@@ -9,6 +11,7 @@ import 'package:ble_project/ui/user/personal/logic.dart';
 import 'package:ble_project/util/class_util.dart';
 import 'package:ble_project/util/my_scroll_behavior.dart';
 import 'package:ble_project/util/toast_util.dart';
+import 'package:ble_project/util/windows_real_media_query.dart';
 import 'package:ble_project/widget/common_state_screen.dart';
 import 'package:ble_project/widget/list/guess_like_list.dart';
 import 'package:ble_project/widget/list/recommend_list.dart';
@@ -16,16 +19,16 @@ import 'package:ble_project/widget/scrollview_background.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:floating_draggable_widget/floating_draggable_widget.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_autosize_screen_pro/flutter_autosize_screen_pro.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:get/get.dart' show Obx, Get, GetView, Inst, StateExt, GetNavigation;
+import 'package:get/get.dart'
+    show Obx, Get, GetView, Inst, StateExt, GetNavigation;
 
 import 'logic.dart';
 
 class MovieDetailControllerPage extends GetView<MovieDetailControllerLogic> {
-
   final logic = Get.find<MovieDetailControllerLogic>();
   final homeLogic = Get.find<HomePageMixinControllerLogic>();
   final GlobalKey widgetKey = GlobalKey();
@@ -34,20 +37,22 @@ class MovieDetailControllerPage extends GetView<MovieDetailControllerLogic> {
 
   @override
   Widget build(BuildContext context) {
-    return controller.obx(
-            (movieDetailResult) => _buildDetailContent(movieDetailResult!),
+    return buildWithWindowsRealMediaQuery(
+      context,
+      (context) => controller.obx(
+        (movieDetailResult) => _buildDetailContent(movieDetailResult!),
         onLoading: screenLoadingState(),
         onError: (error) => screenErrorState(error),
-        onEmpty: screenEmptyStateFull()
+        onEmpty: screenEmptyStateFull(),
+      ),
     );
   }
 
   Widget _buildDetailContent(MovieDetailEntity entity) {
-
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       try {
         await logic.updateFilmBoxBadge();
-      } catch(e) {
+      } catch (e) {
         debugPrint('获取盒子中的影视数量异常: $e');
       }
     });
@@ -56,11 +61,12 @@ class MovieDetailControllerPage extends GetView<MovieDetailControllerLogic> {
       cartKey: logic.cartKey,
       dragAnimation: const DragToCartAnimationOptions(
         rotation: true,
-        duration: const Duration(milliseconds: 500)
+        duration: const Duration(milliseconds: 500),
       ),
       jumpAnimation: const JumpAnimationOptions(
-          active: false,
-          duration: const Duration(milliseconds: 300)),
+        active: false,
+        duration: const Duration(milliseconds: 300),
+      ),
       createAddToCartAnimation: (runAddToCartAnimation) {
         logic.runAddToCartAnimation = runAddToCartAnimation;
       },
@@ -69,7 +75,8 @@ class MovieDetailControllerPage extends GetView<MovieDetailControllerLogic> {
           body: Stack(
             children: <Widget>[
               _buildContent(entity),
-              Positioned( //Place it at the top, and not use the entire screen
+              Positioned(
+                //Place it at the top, and not use the entire screen
                 top: 0.0,
                 left: 0.0,
                 right: 0.0,
@@ -92,37 +99,42 @@ class MovieDetailControllerPage extends GetView<MovieDetailControllerLogic> {
                         ToastUtil.showToast("即将开放");
                       },
                     ),
-                  ], systemOverlayStyle: SystemUiOverlayStyle.dark,
-                ),),
+                  ],
+                  systemOverlayStyle: SystemUiOverlayStyle.dark,
+                ),
+              ),
             ],
           ),
         ),
-        floatingWidget: Obx(() => logic.detailState.isFilm.value ?
-        FloatingActionButton(
-          onPressed: () async {
-            await logic.getFilmsInBox();
-            debugPrint('box_length : ${logic.boxMovies.length}');
-            showFilmInBoxDialog();
-          },
-          tooltip: '影视盒子',
-          child: AddToCartIcon(
-            key: logic.cartKey,
-            icon: Image.asset(
-              width: 28,
-              height: 28,
-              'assets/film_list.png',
-              fit: BoxFit.cover,
-            ),
-            badgeOptions: const BadgeOptions(
-              active: true,
-              backgroundColor: Colors.red,
-            ),
-          ),
-        ): SizedBox()),
+        floatingWidget: Obx(
+          () => logic.detailState.isFilm.value
+              ? FloatingActionButton(
+                  onPressed: () async {
+                    await logic.getFilmsInBox();
+                    debugPrint('box_length : ${logic.boxMovies.length}');
+                    showFilmInBoxDialog();
+                  },
+                  tooltip: '影视盒子',
+                  child: AddToCartIcon(
+                    key: logic.cartKey,
+                    icon: Image.asset(
+                      width: 28,
+                      height: 28,
+                      'assets/film_list.png',
+                      fit: BoxFit.cover,
+                    ),
+                    badgeOptions: const BadgeOptions(
+                      active: true,
+                      backgroundColor: Colors.red,
+                    ),
+                  ),
+                )
+              : SizedBox(),
+        ),
         floatingWidgetHeight: 50,
         floatingWidgetWidth: 50,
-        autoAlign: true
-      )
+        autoAlign: true,
+      ),
     );
   }
 
@@ -136,148 +148,202 @@ class MovieDetailControllerPage extends GetView<MovieDetailControllerLogic> {
           child: Column(
             children: <Widget>[
               _buildBackdrop(entity.vod.vodPic),
-              const Padding(padding: const EdgeInsets.only(top: 10),),
+              const Padding(padding: const EdgeInsets.only(top: 10)),
               Container(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
                     _buildMovieName(entity.vod.vodName),
-                    const Padding(padding: EdgeInsets.only(top: 10),),
+                    const Padding(padding: EdgeInsets.only(top: 10)),
                     _buildGenres([entity.vod.vodRemarks]),
-                    const Padding(padding: EdgeInsets.only(top: 10),),
+                    const Padding(padding: EdgeInsets.only(top: 10)),
                     _buildRating(entity.vod.vodScore!.toDouble(), 5),
-                    const Padding(padding: EdgeInsets.only(top: 10),),
-                    _buildMovieInfo(entity.vod.vodYear, entity.vod.vodArea, entity.vod.vodClass.typeName,),
-                    const Padding(padding: EdgeInsets.only(top: 10),),
+                    const Padding(padding: EdgeInsets.only(top: 10)),
+                    _buildMovieInfo(
+                      entity.vod.vodYear,
+                      entity.vod.vodArea,
+                      entity.vod.vodClass.typeName,
+                    ),
+                    const Padding(padding: EdgeInsets.only(top: 10)),
                     _buildMovieDescription(entity.vod.vodContent),
-                    const Padding(padding: EdgeInsets.only(top: 10),),
+                    const Padding(padding: EdgeInsets.only(top: 10)),
                     _buildYouLike(entity.rand),
-                    const Padding(padding: EdgeInsets.only(top: 10),),
-                    _buildRecommend(entity.relate)
+                    const Padding(padding: EdgeInsets.only(top: 10)),
+                    _buildRecommend(entity.relate),
                   ],
                 ),
               ),
             ],
           ),
         ),
-      )
+      ),
     );
   }
 
   _buildBackdrop(String backdrop) {
     return Container(
       child: LayoutBuilder(
-          builder: (BuildContext context, BoxConstraints constraints) {
-            var width = constraints.biggest.width;
-            return Stack(
-              children: <Widget>[
-                Container(
-                  margin: const EdgeInsets.only(bottom: 5),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      AnimatedSwitcher(
-                        duration: const Duration(milliseconds: 600),
-                        child: _HeaderBackground(imgUrl: backdrop, scrollController: logic.detailState.scrollController),
+        builder: (BuildContext context, BoxConstraints constraints) {
+          var width = constraints.biggest.width;
+          final headerHeight = _detailHeaderHeight(width);
+          return Stack(
+            children: <Widget>[
+              Container(
+                margin: const EdgeInsets.only(bottom: 5),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    AnimatedSwitcher(
+                      duration: const Duration(milliseconds: 600),
+                      child: _HeaderBackground(
+                        imgUrl: backdrop,
+                        scrollController: logic.detailState.scrollController,
                       ),
-                      Container(
-                        padding: const EdgeInsets.only(left: 10, right: 10),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: <Widget>[
-                            Obx(() => logic.detailState.isFilm.value ?
-                              Container(
-                                key: widgetKey,
-                                child: IconButton(
-                                  icon: Image.asset(
-                                    width: 26,
-                                    height: 26,
-                                    'assets/add_play.png',
-                                    fit: BoxFit.cover,
-                                  ),
-                                  onPressed: () async {
-                                    try {
-                                      bool isSuccess = await logic.saveFilm2Box(
-                                          (logic.detailState.entity?.vod.vodID ?? 0).toString());
-                                      if(isSuccess) {
-                                        int filmSize = await logic.getFilmsInBoxSize();
-                                        String addValue = filmSize.toString();
-                                        debugPrint('addValue : $addValue');
+                    ),
+                    Container(
+                      padding: const EdgeInsets.only(left: 10, right: 10),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: <Widget>[
+                          Obx(
+                            () => logic.detailState.isFilm.value
+                                ? Container(
+                                    key: widgetKey,
+                                    child: IconButton(
+                                      icon: Image.asset(
+                                        width: 26,
+                                        height: 26,
+                                        'assets/add_play.png',
+                                        fit: BoxFit.cover,
+                                      ),
+                                      onPressed: () async {
                                         try {
-                                          await logic.runAddToCart(widgetKey);
-                                        } catch(e) {
-                                          debugPrint('runAddToCart加载失败: $e');
+                                          bool isSuccess = await logic
+                                              .saveFilm2Box(
+                                                (logic
+                                                            .detailState
+                                                            .entity
+                                                            ?.vod
+                                                            .vodID ??
+                                                        0)
+                                                    .toString(),
+                                              );
+                                          if (isSuccess) {
+                                            int filmSize = await logic
+                                                .getFilmsInBoxSize();
+                                            String addValue = filmSize
+                                                .toString();
+                                            debugPrint('addValue : $addValue');
+                                            try {
+                                              await logic.runAddToCart(
+                                                widgetKey,
+                                              );
+                                            } catch (e) {
+                                              debugPrint(
+                                                'runAddToCart加载失败: $e',
+                                              );
+                                            }
+                                            await logic.updateFilmBoxBadge(
+                                              filmSize,
+                                            );
+                                          }
+                                        } catch (e) {
+                                          debugPrint('添加到盒子异常 : $e');
                                         }
-                                        await logic.updateFilmBoxBadge(filmSize);
-                                      }
-                                    } catch(e) {
-                                      debugPrint('添加到盒子异常 : $e');
-                                    }
-                                  }
-                                ),
-                              ): SizedBox()
-                            ),
-                            Expanded(
-                              child: Container(),
-                            ),
-                            IconButton(icon: const Icon(Icons.favorite_border, size: 26,), onPressed: () async {
+                                      },
+                                    ),
+                                  )
+                                : SizedBox(),
+                          ),
+                          Expanded(child: Container()),
+                          IconButton(
+                            icon: const Icon(Icons.favorite_border, size: 26),
+                            onPressed: () async {
                               try {
                                 await logic.saveFavourite();
                                 ToastUtil.showToast("收藏成功");
-                              } catch(e) {
+                              } catch (e) {
                                 ToastUtil.showToast("收藏失败");
                               }
-                            },),
-                          ],
-                        ),
-                      )
-                    ],
-                  ),
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
-                Positioned(
-                  right: width / 2 - 27.5, ///
-                  top: width,
-                  child: FractionalTranslation(
-                    translation: const Offset(0.0, -0.5),
-                    child: FloatingActionButton(
-                      onPressed: () {
-                        ///播放
-                        if(logic.detailState.entity == null
-                            || logic.detailState.entity!.vod.vodPlayServer == null
-                            || logic.detailState.entity!.vod.vodPlayServer!.isEmpty) {
-                          ToastUtil.showToast("暂无无播放资源");
-                        } else {
-                          // 加入观看记录
-                          debugPrint('加入观看记录');
-                          final PersonalLogic personalController = Get.put(PersonalLogic());
-                          personalController.saveViewingRecord(
-                              (logic.detailState.entity?.vod.vodID ?? 999).toString(),
-                              logic.detailState.entity?.vod.vodPic ?? "",
-                              logic.detailState.entity?.vod.vodName ?? "",
-                              (logic.detailState.entity?.vod.typeID ?? -1).toString());
+              ),
+              Positioned(
+                right: width / 2 - 27.5,
 
-                          Navigator.of(context).pushNamed(RouterConfigs.player, arguments: {
-                            'playServers' : logic.detailState.entity?.vod.vodPlayServer, // 播放源
-                            'playUrlInfo' : logic.detailState.entity?.vod.vodPlayUrls, // 播放地址
-                            'videoTitle' : logic.detailState.entity?.vod.vodName,
-                            'videoYear' : logic.detailState.entity?.vod.vodYear,
-                            'videoId' : logic.detailState.entity?.vod.vodID,
-                          });
-                          // Get.toNamed(RouterConfigs.player, arguments: {
-                          //       'playServers' : logic.detailState.entity?.vod.vodPlayServer,
-                          //       'playUrlInfo' : logic.detailState.entity?.vod.vodPlayUrls,
-                          //       'videoTitle' : logic.detailState.entity?.vod.vodName})
-                        }
-                      },
-                      heroTag: null,
-                      backgroundColor: Colors.white,
-                      child: const Icon(Icons.play_arrow, color: Colors.red, size: 40,),
+                ///
+                top: headerHeight,
+                child: FractionalTranslation(
+                  translation: const Offset(0.0, -0.5),
+                  child: FloatingActionButton(
+                    onPressed: () {
+                      ///播放
+                      if (logic.detailState.entity == null ||
+                          logic.detailState.entity!.vod.vodPlayServer == null ||
+                          logic
+                              .detailState
+                              .entity!
+                              .vod
+                              .vodPlayServer!
+                              .isEmpty) {
+                        ToastUtil.showToast("暂无无播放资源");
+                      } else {
+                        // 加入观看记录
+                        debugPrint('加入观看记录');
+                        final PersonalLogic personalController = Get.put(
+                          PersonalLogic(),
+                        );
+                        personalController.saveViewingRecord(
+                          (logic.detailState.entity?.vod.vodID ?? 999)
+                              .toString(),
+                          logic.detailState.entity?.vod.vodPic ?? "",
+                          logic.detailState.entity?.vod.vodName ?? "",
+                          (logic.detailState.entity?.vod.typeID ?? -1)
+                              .toString(),
+                        );
+
+                        Navigator.of(context).pushNamed(
+                          RouterConfigs.player,
+                          arguments: {
+                            'playServers': logic
+                                .detailState
+                                .entity
+                                ?.vod
+                                .vodPlayServer, // 播放源
+                            'playUrlInfo': logic
+                                .detailState
+                                .entity
+                                ?.vod
+                                .vodPlayUrls, // 播放地址
+                            'videoTitle': logic.detailState.entity?.vod.vodName,
+                            'videoYear': logic.detailState.entity?.vod.vodYear,
+                            'videoId': logic.detailState.entity?.vod.vodID,
+                          },
+                        );
+                        // Get.toNamed(RouterConfigs.player, arguments: {
+                        //       'playServers' : logic.detailState.entity?.vod.vodPlayServer,
+                        //       'playUrlInfo' : logic.detailState.entity?.vod.vodPlayUrls,
+                        //       'videoTitle' : logic.detailState.entity?.vod.vodName})
+                      }
+                    },
+                    heroTag: null,
+                    backgroundColor: Colors.white,
+                    child: const Icon(
+                      Icons.play_arrow,
+                      color: Colors.red,
+                      size: 40,
                     ),
                   ),
-                )
-              ],
-            );
-          }
+                ),
+              ),
+            ],
+          );
+        },
       ),
     );
   }
@@ -286,13 +352,15 @@ class MovieDetailControllerPage extends GetView<MovieDetailControllerLogic> {
     return Container(
       padding: const EdgeInsets.only(left: 15, right: 15),
       alignment: Alignment.center,
-      child: Text(name,
+      child: Text(
+        name,
         textAlign: TextAlign.center,
         style: const TextStyle(
-            color: Colors.black87,
-            fontSize: 20.0,
-            fontWeight: FontWeight.bold,
-            fontFamily: "Muli"),
+          color: Colors.black87,
+          fontSize: 20.0,
+          fontWeight: FontWeight.bold,
+          fontFamily: "Muli",
+        ),
       ),
     );
   }
@@ -309,14 +377,17 @@ class MovieDetailControllerPage extends GetView<MovieDetailControllerLogic> {
     }
 
     return Container(
-        padding: const EdgeInsets.only(left: 15, right: 15),
-        alignment: Alignment.center,
-        child: Text(genresValue.toString(),
-          style: const TextStyle(
-              color: Colors.black45,
-              fontSize: 12.0,
-              fontWeight: FontWeight.bold,
-              fontFamily: "Muli"),)
+      padding: const EdgeInsets.only(left: 15, right: 15),
+      alignment: Alignment.center,
+      child: Text(
+        genresValue.toString(),
+        style: const TextStyle(
+          color: Colors.black45,
+          fontSize: 12.0,
+          fontWeight: FontWeight.bold,
+          fontFamily: "Muli",
+        ),
+      ),
     );
   }
 
@@ -332,10 +403,7 @@ class MovieDetailControllerPage extends GetView<MovieDetailControllerLogic> {
         itemSize: 20,
         itemCount: voteCount,
         itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
-        itemBuilder: (context, _) => const Icon(
-          Icons.star,
-          color: Colors.red,
-        ),
+        itemBuilder: (context, _) => const Icon(Icons.star, color: Colors.red),
         onRatingUpdate: (rating) {
           debugPrint("rating = $rating");
         },
@@ -350,15 +418,14 @@ class MovieDetailControllerPage extends GetView<MovieDetailControllerLogic> {
       alignment: Alignment.center,
       child: Row(
         children: <Widget>[
-          Expanded(
-            child: Container(),
-          ),
+          Expanded(child: Container()),
           _buildMovieMoreInfoItem('detail.detail_year'.tr(), year ?? "--"),
-          _buildMovieMoreInfoItem('detail.detail_area'.tr(), productionCountry ?? "--"),
-          _buildMovieMoreInfoItem('detail.detail_type'.tr(), type ?? "--"),
-          Expanded(
-            child: Container(),
+          _buildMovieMoreInfoItem(
+            'detail.detail_area'.tr(),
+            productionCountry ?? "--",
           ),
+          _buildMovieMoreInfoItem('detail.detail_type'.tr(), type ?? "--"),
+          Expanded(child: Container()),
         ],
       ),
     );
@@ -366,10 +433,13 @@ class MovieDetailControllerPage extends GetView<MovieDetailControllerLogic> {
 
   _buildMovieDescription(String? description) {
     debugPrint("${ClazzUtil.getClassName(this)} -> description : $description");
-    final desc = description?.replaceAll(RegExp(r'<[^>]*>'), '')
-        .replaceAll('&#39;', "'")
-        .replaceAll('&quot;', '"')
-        .trim() ?? "";
+    final desc =
+        description
+            ?.replaceAll(RegExp(r'<[^>]*>'), '')
+            .replaceAll('&#39;', "'")
+            .replaceAll('&quot;', '"')
+            .trim() ??
+        "";
     return GestureDetector(
       onTap: () => logic.changeExpanded(!logic.detailState.isExpanded),
       child: Container(
@@ -381,16 +451,19 @@ class MovieDetailControllerPage extends GetView<MovieDetailControllerLogic> {
             maxLines: 4,
             overflow: TextOverflow.ellipsis,
             style: const TextStyle(
-                color: Colors.black87,
-                fontSize: 12.0,
-                fontFamily: "Muli"),
+              color: Colors.black87,
+              fontSize: 12.0,
+              fontFamily: "Muli",
+            ),
           ),
           secondChild: Text(
             desc,
             style: const TextStyle(
-                color: Colors.black87,
-                fontSize: 12.0,
-                fontFamily: "Muli"),),
+              color: Colors.black87,
+              fontSize: 12.0,
+              fontFamily: "Muli",
+            ),
+          ),
           crossFadeState: logic.detailState.isExpanded
               ? CrossFadeState.showSecond
               : CrossFadeState.showFirst,
@@ -410,11 +483,14 @@ class MovieDetailControllerPage extends GetView<MovieDetailControllerLogic> {
             child: Row(
               children: <Widget>[
                 Expanded(
-                  child: Text('detail.detail_you_might_like'.tr(), style: const TextStyle(
-                    color: Colors.black,
-                    fontSize: 16.0,
-                    fontWeight: FontWeight.bold,
-                    fontFamily: "Muli"),
+                  child: Text(
+                    'detail.detail_you_might_like'.tr(),
+                    style: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 16.0,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: "Muli",
+                    ),
                   ),
                 ),
                 // InkWell(
@@ -426,10 +502,16 @@ class MovieDetailControllerPage extends GetView<MovieDetailControllerLogic> {
               ],
             ),
           ),
-          GuessLikeListView(items: items, onItemInteraction: (movieId) {
-            debugPrint("handle_GuessLike_ite：$movieId");
-            Navigator.of(Get.context!).pushReplacementNamed(RouterConfigs.detail, arguments: {'movieId' : movieId});
-           },)
+          GuessLikeListView(
+            items: items,
+            onItemInteraction: (movieId) {
+              debugPrint("handle_GuessLike_ite：$movieId");
+              Navigator.of(Get.context!).pushReplacementNamed(
+                RouterConfigs.detail,
+                arguments: {'movieId': movieId},
+              );
+            },
+          ),
         ],
       ),
     );
@@ -445,12 +527,13 @@ class MovieDetailControllerPage extends GetView<MovieDetailControllerLogic> {
             child: Row(
               children: <Widget>[
                 Expanded(
-                  child: Text('detail.detail_recommended_for_you'.tr(),
+                  child: Text(
+                    'detail.detail_recommended_for_you'.tr(),
                     style: const TextStyle(
                       color: Colors.black,
                       fontSize: 16.0,
                       fontWeight: FontWeight.bold,
-                      fontFamily: "Muli"
+                      fontFamily: "Muli",
                     ),
                   ),
                 ),
@@ -463,10 +546,16 @@ class MovieDetailControllerPage extends GetView<MovieDetailControllerLogic> {
               ],
             ),
           ),
-          RecommendListView(items: items, onItemInteraction: (movieId) {
-            debugPrint("handle_Recommend_item：$movieId");
-            Navigator.of(Get.context!).pushReplacementNamed(RouterConfigs.detail, arguments: {'movieId' : movieId});
-          },)
+          RecommendListView(
+            items: items,
+            onItemInteraction: (movieId) {
+              debugPrint("handle_Recommend_item：$movieId");
+              Navigator.of(Get.context!).pushReplacementNamed(
+                RouterConfigs.detail,
+                arguments: {'movieId': movieId},
+              );
+            },
+          ),
         ],
       ),
     );
@@ -474,54 +563,61 @@ class MovieDetailControllerPage extends GetView<MovieDetailControllerLogic> {
 
   _buildMovieMoreInfoItem(String title, String value) {
     return LayoutBuilder(
-        builder: (BuildContext context, BoxConstraints constraints) {
-          return Container(
-            width: constraints.biggest.width > 100 ? 100 : double.infinity,
-            padding: const EdgeInsets.only(left: 10.0, right: 10.0),
-            child: Column(
-              children: <Widget>[
-                Text(title, style: const TextStyle(
-                    color: Colors.black45,
-                    fontSize: 12.0,
-                    fontWeight: FontWeight.bold,
-                    fontFamily: "Muli"),
+      builder: (BuildContext context, BoxConstraints constraints) {
+        return Container(
+          width: constraints.biggest.width > 100 ? 100 : double.infinity,
+          padding: const EdgeInsets.only(left: 10.0, right: 10.0),
+          child: Column(
+            children: <Widget>[
+              Text(
+                title,
+                style: const TextStyle(
+                  color: Colors.black45,
+                  fontSize: 12.0,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: "Muli",
                 ),
-                const Padding(padding: const EdgeInsets.only(top: 5),),
-                Wrap(
-                  children: <Widget>[
-                    Text(value,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                          color: Colors.black,
-                          fontSize: 16.0,
-                          fontWeight: FontWeight.bold,
-                          fontFamily: "Muli"),
+              ),
+              const Padding(padding: const EdgeInsets.only(top: 5)),
+              Wrap(
+                children: <Widget>[
+                  Text(
+                    value,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 16.0,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: "Muli",
                     ),
-                  ],
-                ),
-              ],
-            ),
-          );
-        });
+                  ),
+                ],
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
 }
 
 class _HeaderBackground extends StatefulWidget {
   final String imgUrl;
   final ScrollController scrollController;
-  const _HeaderBackground({required this.imgUrl, required this.scrollController});
+  const _HeaderBackground({
+    required this.imgUrl,
+    required this.scrollController,
+  });
   @override
   _HeaderBackgroundState createState() => _HeaderBackgroundState();
 }
 
 class _HeaderBackgroundState extends State<_HeaderBackground> {
-  static Size size = FlutterAutosizeScreenPro.getScreenSize();
-
   double _position = 0;
-  double _height = 1150;
   void _imageScroll() {
-    if (widget.scrollController.position.pixels <= _height) {
+    if (widget.scrollController.position.pixels <=
+        widget.scrollController.position.maxScrollExtent) {
       _position = widget.scrollController.position.pixels;
     }
     setState(() {});
@@ -543,45 +639,96 @@ class _HeaderBackgroundState extends State<_HeaderBackground> {
 
   @override
   Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final width = constraints.maxWidth;
+        final height = _detailHeaderHeight(width);
+        return Stack(
+          children: [
+            SizedBox(
+              width: width,
+              height: height,
+              child: CustomPaint(
+                painter: MyShadowPainter(
+                  shadow: const Shadow(
+                    color: const Color(0xFF8E8E8E),
+                    offset: const Offset(0, -0.5),
+                    blurRadius: 10,
+                  ),
+                  clipper: MClipper(),
+                ),
+                child: ClipPath(
+                  clipper: MClipper(),
+                  child: SizedBox(
+                    width: width,
+                    height: height,
+                    child: defaultTargetPlatform == TargetPlatform.windows
+                        ? _buildDesktopArtwork(width)
+                        : CachedNetworkImage(
+                            imageUrl: widget.imgUrl,
+                            fit: BoxFit.cover,
+                            filterQuality: FilterQuality.high,
+                          ),
+                  ),
+                ),
+              ),
+            ),
+            Positioned.fill(
+              child: ScrollViewBackGround(
+                scrollController: widget.scrollController,
+                height: height,
+                maxOpacity: 0.8,
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Widget _buildDesktopArtwork(double width) {
     return Stack(
+      fit: StackFit.expand,
       children: [
-        SizedBox(
-          height: size.width,
-          child: CustomPaint(
-            painter: MyShadowPainter(
-              shadow: const Shadow(
-                color: const Color(0xFF8E8E8E),
-                offset: const Offset(0, -0.5),
-                blurRadius: 10,
-              ),
-              clipper: MClipper()),
-            child: ClipPath(
-              clipper: MClipper(),
-              child: Container(
-                width: size.width,
-                height: _height,
-                child: CachedNetworkImage(
-                  imageUrl: widget.imgUrl,
-                  placeholder: (context, url) => new CircularProgressIndicator(),
-                  errorWidget: (context, url, error) => new Icon(Icons.error),
-                  fit: BoxFit.cover,)
-              ),
-            )
+        ImageFiltered(
+          imageFilter: ui.ImageFilter.blur(sigmaX: 18, sigmaY: 18),
+          child: Transform.scale(
+            scale: 1.08,
+            child: CachedNetworkImage(
+              imageUrl: widget.imgUrl,
+              fit: BoxFit.cover,
+              filterQuality: FilterQuality.medium,
+            ),
           ),
         ),
-        ScrollViewBackGround(
-          scrollController: widget.scrollController,
-          height: 750,
-          maxOpacity: 0.8,
-        )
+        const ColoredBox(color: Color(0x66000000)),
+        Padding(
+          padding: EdgeInsets.fromLTRB(width * 0.08, 22, width * 0.08, 46),
+          child: CachedNetworkImage(
+            imageUrl: widget.imgUrl,
+            fit: BoxFit.contain,
+            alignment: Alignment.center,
+            filterQuality: FilterQuality.high,
+            fadeInDuration: const Duration(milliseconds: 180),
+            errorWidget: (context, url, error) => const Center(
+              child: Icon(Icons.broken_image_outlined, color: Colors.white70),
+            ),
+          ),
+        ),
       ],
     );
   }
 }
 
+double _detailHeaderHeight(double width) {
+  if (defaultTargetPlatform == TargetPlatform.windows) {
+    return (width * 9 / 16).clamp(320.0, 620.0);
+  }
+  return width;
+}
+
 ///裁剪
 class MClipper extends CustomClipper<Path> {
-
   double deltaY;
 
   MClipper({this.deltaY = 0});
@@ -595,13 +742,21 @@ class MClipper extends CustomClipper<Path> {
     var endpoint = Offset(size.width / 2, size.height - deltaY);
 
     path.quadraticBezierTo(
-        controlPoint.dx, controlPoint.dy, endpoint.dx, endpoint.dy);
+      controlPoint.dx,
+      controlPoint.dy,
+      endpoint.dx,
+      endpoint.dy,
+    );
 
     var controlPoint2 = Offset(size.width * 3 / 4, size.height);
     var endpoint2 = Offset(size.width, size.height - 40.0);
 
     path.quadraticBezierTo(
-        controlPoint2.dx, controlPoint2.dy, endpoint2.dx, endpoint2.dy);
+      controlPoint2.dx,
+      controlPoint2.dy,
+      endpoint2.dx,
+      endpoint2.dy,
+    );
 
     path.lineTo(size.width, 0.0);
 

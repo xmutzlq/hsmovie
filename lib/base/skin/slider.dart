@@ -2,11 +2,10 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
-/// FijkSlider is like Slider in Flutter SDK.
-/// FijkSlider support [cacheValue] which can be used
+/// Slider with a secondary buffered-position track.
 /// to show the player's cached buffer.
 /// The [colors] is used to make colorful painter to draw the line and circle.
-class NewFijkSlider extends StatefulWidget {
+class BufferedSlider extends StatefulWidget {
   final double value;
   final double cacheValue;
 
@@ -17,9 +16,9 @@ class NewFijkSlider extends StatefulWidget {
   final double min;
   final double max;
 
-  final NewFijkSliderColors colors;
+  final BufferedSliderColors colors;
 
-  const NewFijkSlider({
+  const BufferedSlider({
     Key? key,
     required this.value,
     required this.onChanged,
@@ -28,16 +27,16 @@ class NewFijkSlider extends StatefulWidget {
     required this.onChangeEnd,
     this.min = 0.0,
     this.max = 1.0,
-    this.colors = const NewFijkSliderColors(),
+    this.colors = const BufferedSliderColors(),
   });
 
   @override
   State<StatefulWidget> createState() {
-    return _NewFijkSliderState();
+    return _BufferedSliderState();
   }
 }
 
-class _NewFijkSliderState extends State<NewFijkSlider> {
+class _BufferedSliderState extends State<BufferedSlider> {
   bool dragging = false;
 
   late double dragValue;
@@ -92,9 +91,9 @@ class _NewFijkSliderState extends State<NewFijkSlider> {
   }
 }
 
-/// Colors for the FijkSlider
-class NewFijkSliderColors {
-  const NewFijkSliderColors({
+/// Colors for the buffered slider.
+class BufferedSliderColors {
+  const BufferedSliderColors({
     this.playedColor = const Color.fromRGBO(255, 0, 0, 0.6),
     this.bufferedColor = const Color.fromRGBO(50, 50, 100, 0.4),
     this.cursorColor = const Color.fromRGBO(255, 0, 0, 0.8),
@@ -109,9 +108,9 @@ class NewFijkSliderColors {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-          other is NewFijkSliderColors &&
-              runtimeType == other.runtimeType &&
-              hashCode == other.hashCode;
+      other is BufferedSliderColors &&
+          runtimeType == other.runtimeType &&
+          hashCode == other.hashCode;
 
   @override
   int get hashCode =>
@@ -125,10 +124,14 @@ class _SliderPainter extends CustomPainter {
   final bool dragging;
   final Paint pt = Paint();
 
-  final NewFijkSliderColors colors;
+  final BufferedSliderColors colors;
 
-  _SliderPainter(this.v, this.cv, this.dragging,
-      {this.colors = const NewFijkSliderColors()});
+  _SliderPainter(
+    this.v,
+    this.cv,
+    this.dragging, {
+    this.colors = const BufferedSliderColors(),
+  });
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -192,7 +195,7 @@ class _SliderPainter extends CustomPainter {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-          other is _SliderPainter && hashCode == other.hashCode;
+      other is _SliderPainter && hashCode == other.hashCode;
 
   @override
   int get hashCode => Object.hash(v, cv, dragging, colors);

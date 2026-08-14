@@ -1,20 +1,22 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:ble_project/base/skin/fijkplayer_skin.dart';
+import 'package:ble_project/base/skin/media_kit_player_skin.dart';
 import 'package:ble_project/base/skin/schema.dart';
 import 'package:ble_project/model/detail/play_server_info.dart';
 import 'package:ble_project/model/detail/play_url_info.dart';
 import 'package:ble_project/model/player/playback_models.dart';
 import 'package:ble_project/repository/playback_resolver.dart';
-import 'package:fijkplayer_plus/fijkplayer_plus.dart';
+import 'package:ble_project/player/media_kit_player.dart';
+import 'package:ble_project/service/hls/hls_playback_preparer.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'state.dart';
 
-class PlayerControllerLogic extends GetxController with SingleGetTickerProviderMixin {
+class PlayerControllerLogic extends GetxController
+    with SingleGetTickerProviderMixin {
   final PlayerControllerState state = PlayerControllerState();
   RxString title = "未知".obs;
   RxInt curTabIdx = 0.obs;
@@ -31,6 +33,7 @@ class PlayerControllerLogic extends GetxController with SingleGetTickerProviderM
       currentSourceId.value.isNotEmpty && currentSourceId.value != 'legacy';
 
   final PlaybackResolver _playbackResolver = PlaybackResolver();
+  final HlsPlaybackPreparer _playbackPreparer = HlsPlaybackPreparer();
   final List<PlaybackCandidate> _playbackCandidates = [];
   final Set<String> _failedCandidateUrls = {};
   StreamSubscription<Duration>? _positionSubscription;
@@ -74,11 +77,14 @@ class PlayerControllerLogic extends GetxController with SingleGetTickerProviderM
     legacyMovieId = map['videoId']?.toString() ?? '';
     List<PlayServerInfo> playServers = map['playServers'];
     PlayUrlInfo playUrlInfo = map['playUrlInfo'];
-    List<VideoSourceFormatVideo> videoList = _buildVideoList(playServers, playUrlInfo);
+    List<VideoSourceFormatVideo> videoList = _buildVideoList(
+      playServers,
+      playUrlInfo,
+    );
     VideoSourceFormat videoEntity = VideoSourceFormat(video: videoList);
     onChangeTitle(title);
     state.videoSourceFormat = VideoSourceFormat.fromJson(videoEntity.toJson());
-    state.tabController = TabController (
+    state.tabController = TabController(
       length: videoEntity.video!.length,
       vsync: this,
     );
@@ -103,8 +109,8 @@ class PlayerControllerLogic extends GetxController with SingleGetTickerProviderM
     if (!force &&
         episodeKey == currentKey &&
         currentPlayUrl.isNotEmpty &&
-        state.player.state != FijkState.error &&
-        state.player.state != FijkState.idle) {
+        state.player.state != MediaPlaybackState.error &&
+        state.player.state != MediaPlaybackState.idle) {
       return;
     }
 
@@ -137,11 +143,19 @@ class PlayerControllerLogic extends GetxController with SingleGetTickerProviderM
       Get.rawSnackbar(message: '未找到可播放的视频地址');
       return;
     }
-    final opened = await _openCandidate(_candidateIndex, Duration.zero);
-    if (!opened) await _recoverPlayback();
+    final opened = await _openCandidate(
+      _candidateIndex,
+      Duration.zero,
+      generation: generation,
+    );
+    if (!opened && generation == _playGeneration) await _recoverPlayback();
   }
 
-  Future<bool> _openCandidate(int index, Duration resumeAt) async {
+  Future<bool> _openCandidate(
+    int index,
+    Duration resumeAt, {
+    required int generation,
+  }) async {
     if (index < 0 || index >= _playbackCandidates.length) return false;
     final candidate = _playbackCandidates[index];
     _candidateIndex = index;
@@ -151,28 +165,27 @@ class PlayerControllerLogic extends GetxController with SingleGetTickerProviderM
     _setCurrentSource(null);
 
     try {
-      if (state.player.state != FijkState.idle &&
-          state.player.state != FijkState.initialized &&
-          state.player.state != FijkState.end) {
+      if (state.player.state != MediaPlaybackState.idle &&
+          state.player.state != MediaPlaybackState.initialized &&
+          state.player.state != MediaPlaybackState.end) {
         try {
           await state.player.stop();
         } catch (_) {}
         await state.player.reset();
-      } else if (state.player.state == FijkState.initialized) {
+      } else if (state.player.state == MediaPlaybackState.initialized) {
         await state.player.reset();
       }
-
-      final headers = candidate.headers.entries
-          .map((entry) => '${entry.key}:${entry.value}')
-          .join('\r\n');
-      await state.player.setOption(FijkOption.formatCategory, 'headers', headers);
-      await state.player.setOption(
-        FijkOption.playerCategory,
-        'pos-update-interval',
-        500,
+      final prepared = await _playbackPreparer.prepare(
+        candidate.url,
+        candidate.headers,
       );
+      if (generation != _playGeneration) return false;
       currentPlayUrl = candidate.url;
-      await state.player.setDataSource(candidate.url, autoPlay: true);
+      await state.player.setDataSource(
+        prepared.playbackUri,
+        autoPlay: true,
+        headers: prepared.headers,
+      );
       _setCurrentSource(candidate);
       return true;
     } catch (_) {
@@ -209,7 +222,7 @@ class PlayerControllerLogic extends GetxController with SingleGetTickerProviderM
     state.player.addListener(_handlePlayerState);
     _stallTimer = Timer.periodic(const Duration(seconds: 3), (_) {
       if (_recovering || currentPlayUrl.isEmpty) return;
-      if (state.player.state != FijkState.started) return;
+      if (state.player.state != MediaPlaybackState.started) return;
       final stalledFor = DateTime.now().difference(_lastProgressAt);
       if (stalledFor >= const Duration(seconds: 12)) {
         _recoverPlayback();
@@ -223,7 +236,7 @@ class PlayerControllerLogic extends GetxController with SingleGetTickerProviderM
       _pendingResumePosition = null;
       state.player.seekTo(pending.inMilliseconds);
     }
-    if (state.player.state == FijkState.error && !_recovering) {
+    if (state.player.state == MediaPlaybackState.error && !_recovering) {
       _recoverPlayback();
     }
   }
@@ -259,7 +272,12 @@ class PlayerControllerLogic extends GetxController with SingleGetTickerProviderM
           nextIndex = _nextHealthyCandidateIndex() ?? -1;
         }
         if (nextIndex < 0) break;
-        if (await _openCandidate(nextIndex, resumeAt)) return;
+        if (await _openCandidate(
+          nextIndex,
+          resumeAt,
+          generation: _playGeneration,
+        ))
+          return;
       }
       Get.rawSnackbar(message: '没有可用的备用播放线路');
     } finally {
@@ -283,219 +301,320 @@ class PlayerControllerLogic extends GetxController with SingleGetTickerProviderM
   }
 
   ///组装资源列表
-  List<VideoSourceFormatVideo> _buildVideoList(List<PlayServerInfo> playServers, PlayUrlInfo playUrlInfo) {
-    Map<String, List<VideoSourceFormatVideoList>> totalVideoUrlInfoMap = _buildVideoUrlInfoList(playUrlInfo);
+  List<VideoSourceFormatVideo> _buildVideoList(
+    List<PlayServerInfo> playServers,
+    PlayUrlInfo playUrlInfo,
+  ) {
+    Map<String, List<VideoSourceFormatVideoList>> totalVideoUrlInfoMap =
+        _buildVideoUrlInfoList(playUrlInfo);
     List<VideoSourceFormatVideo> videoUrls = [];
-    for(PlayServerInfo playServerInfo in playServers) {
-      videoUrls.add(VideoSourceFormatVideo(name: playServerInfo.show, list: totalVideoUrlInfoMap.putIfAbsent(playServerInfo.from, () => [])));
+    for (PlayServerInfo playServerInfo in playServers) {
+      videoUrls.add(
+        VideoSourceFormatVideo(
+          name: playServerInfo.show,
+          list: totalVideoUrlInfoMap.putIfAbsent(playServerInfo.from, () => []),
+        ),
+      );
     }
     return videoUrls;
   }
 
   String _parseUrl(String? url) {
     // debugPrint("parseUrl = $url");
-    if(url != null) {
+    if (url != null) {
       // final decoded = Uri.decodeFull(url);
       final uri = Uri.parse(url);
       url = uri.queryParameters['v'] ?? url;
     }
-    return url??"";
+    return url ?? "";
   }
 
   ///遍历所有视频来源(14个源)
-  Map<String, List<VideoSourceFormatVideoList>> _buildVideoUrlInfoList(PlayUrlInfo playUrlInfo) {
+  Map<String, List<VideoSourceFormatVideoList>> _buildVideoUrlInfoList(
+    PlayUrlInfo playUrlInfo,
+  ) {
     var videoUrlInfoMap = Map<String, List<VideoSourceFormatVideoList>>();
+
     ///优酷视频
-    if(playUrlInfo.youku != null && playUrlInfo.youku!.length > 0) {
+    if (playUrlInfo.youku != null && playUrlInfo.youku!.length > 0) {
       List<VideoSourceFormatVideoList> youkuVideoUrlInfoList = [];
       playUrlInfo.youku!.forEach((element) {
-        if(element.length > 1) {
-          youkuVideoUrlInfoList.add(VideoSourceFormatVideoList(url: _parseUrl(element[1]), name: element[0]));
+        if (element.length > 1) {
+          youkuVideoUrlInfoList.add(
+            VideoSourceFormatVideoList(
+              url: _parseUrl(element[1]),
+              name: element[0],
+            ),
+          );
         }
       });
-      if(youkuVideoUrlInfoList.length > 0) {
+      if (youkuVideoUrlInfoList.length > 0) {
         videoUrlInfoMap['youku'] = youkuVideoUrlInfoList;
       }
     }
+
     ///芒果tv
-    if(playUrlInfo.mgtv != null && playUrlInfo.mgtv!.length > 0) {
+    if (playUrlInfo.mgtv != null && playUrlInfo.mgtv!.length > 0) {
       List<VideoSourceFormatVideoList> mgtvVideoUrlInfoList = [];
       playUrlInfo.mgtv!.forEach((element) {
-        if(element.length > 1) {
+        if (element.length > 1) {
           _parseUrl(element[1]);
-          mgtvVideoUrlInfoList.add(VideoSourceFormatVideoList(url: _parseUrl(element[1]), name: element[0]));
+          mgtvVideoUrlInfoList.add(
+            VideoSourceFormatVideoList(
+              url: _parseUrl(element[1]),
+              name: element[0],
+            ),
+          );
         }
       });
-      if(mgtvVideoUrlInfoList.length > 0) {
+      if (mgtvVideoUrlInfoList.length > 0) {
         videoUrlInfoMap['mgtv'] = mgtvVideoUrlInfoList;
       }
     }
+
     ///TT云
-    if(playUrlInfo.tt != null && playUrlInfo.tt!.length > 0) {
+    if (playUrlInfo.tt != null && playUrlInfo.tt!.length > 0) {
       List<VideoSourceFormatVideoList> ttVideoUrlInfoList = [];
       playUrlInfo.tt!.forEach((element) {
-        if(element.length > 1) {
+        if (element.length > 1) {
           _parseUrl(element[1]);
-          ttVideoUrlInfoList.add(VideoSourceFormatVideoList(url: _parseUrl(element[1]), name: element[0]));
+          ttVideoUrlInfoList.add(
+            VideoSourceFormatVideoList(
+              url: _parseUrl(element[1]),
+              name: element[0],
+            ),
+          );
         }
       });
-      if(ttVideoUrlInfoList.length > 0) {
+      if (ttVideoUrlInfoList.length > 0) {
         videoUrlInfoMap['tt'] = ttVideoUrlInfoList;
       }
     }
+
     ///腾讯资源
-    if(playUrlInfo.qq != null && playUrlInfo.qq!.length > 0) {
+    if (playUrlInfo.qq != null && playUrlInfo.qq!.length > 0) {
       List<VideoSourceFormatVideoList> qqVideoUrlInfoList = [];
       playUrlInfo.qq!.forEach((element) {
-        if(element.length > 1) {
+        if (element.length > 1) {
           _parseUrl(element[1]);
-          qqVideoUrlInfoList.add(VideoSourceFormatVideoList(url: _parseUrl(element[1]), name: element[0]));
+          qqVideoUrlInfoList.add(
+            VideoSourceFormatVideoList(
+              url: _parseUrl(element[1]),
+              name: element[0],
+            ),
+          );
         }
       });
-      if(qqVideoUrlInfoList.length > 0) {
+      if (qqVideoUrlInfoList.length > 0) {
         videoUrlInfoMap['qq'] = qqVideoUrlInfoList;
       }
     }
+
     ///快播资源
-    if(playUrlInfo.kbm3u8 != null && playUrlInfo.kbm3u8!.length > 0) {
+    if (playUrlInfo.kbm3u8 != null && playUrlInfo.kbm3u8!.length > 0) {
       List<VideoSourceFormatVideoList> kbm3u8VideoUrlInfoList = [];
       playUrlInfo.kbm3u8!.forEach((element) {
-        if(element.length > 1) {
+        if (element.length > 1) {
           _parseUrl(element[1]);
-          kbm3u8VideoUrlInfoList.add(VideoSourceFormatVideoList(url: _parseUrl(element[1]), name: element[0]));
+          kbm3u8VideoUrlInfoList.add(
+            VideoSourceFormatVideoList(
+              url: _parseUrl(element[1]),
+              name: element[0],
+            ),
+          );
         }
       });
-      if(kbm3u8VideoUrlInfoList.length > 0) {
+      if (kbm3u8VideoUrlInfoList.length > 0) {
         videoUrlInfoMap['kbm3u8'] = kbm3u8VideoUrlInfoList;
       }
     }
+
     ///CK资源
-    if(playUrlInfo.ckm3u8 != null && playUrlInfo.ckm3u8!.length > 0) {
+    if (playUrlInfo.ckm3u8 != null && playUrlInfo.ckm3u8!.length > 0) {
       List<VideoSourceFormatVideoList> ckm3u8VideoUrlInfoList = [];
       playUrlInfo.ckm3u8!.forEach((element) {
-        if(element.length > 1) {
+        if (element.length > 1) {
           _parseUrl(element[1]);
-          ckm3u8VideoUrlInfoList.add(VideoSourceFormatVideoList(url: _parseUrl(element[1]), name: element[0]));
+          ckm3u8VideoUrlInfoList.add(
+            VideoSourceFormatVideoList(
+              url: _parseUrl(element[1]),
+              name: element[0],
+            ),
+          );
         }
       });
-      if(ckm3u8VideoUrlInfoList.length > 0) {
+      if (ckm3u8VideoUrlInfoList.length > 0) {
         videoUrlInfoMap['ckm3u8'] = ckm3u8VideoUrlInfoList;
       }
     }
+
     ///遍历奇艺资源
-    if(playUrlInfo.qiyi != null && playUrlInfo.qiyi!.length > 0) {
+    if (playUrlInfo.qiyi != null && playUrlInfo.qiyi!.length > 0) {
       List<VideoSourceFormatVideoList> qiyiVideoUrlInfoList = [];
       playUrlInfo.qiyi!.forEach((element) {
-        if(element.length > 1) {
+        if (element.length > 1) {
           _parseUrl(element[1]);
-          qiyiVideoUrlInfoList.add(VideoSourceFormatVideoList(url: _parseUrl(element[1]), name: element[0]));
+          qiyiVideoUrlInfoList.add(
+            VideoSourceFormatVideoList(
+              url: _parseUrl(element[1]),
+              name: element[0],
+            ),
+          );
         }
       });
-      if(qiyiVideoUrlInfoList.length > 0) {
+      if (qiyiVideoUrlInfoList.length > 0) {
         videoUrlInfoMap['qiyi'] = qiyiVideoUrlInfoList;
       }
     }
+
     ///遍历八戒资源
-    if(playUrlInfo.bjm3u8 != null && playUrlInfo.bjm3u8!.length > 0) {
+    if (playUrlInfo.bjm3u8 != null && playUrlInfo.bjm3u8!.length > 0) {
       List<VideoSourceFormatVideoList> bjm3u8VideoUrlInfoList = [];
       playUrlInfo.bjm3u8!.forEach((element) {
-        if(element.length > 1) {
+        if (element.length > 1) {
           _parseUrl(element[1]);
-          bjm3u8VideoUrlInfoList.add(VideoSourceFormatVideoList(url: _parseUrl(element[1]), name: element[0]));
+          bjm3u8VideoUrlInfoList.add(
+            VideoSourceFormatVideoList(
+              url: _parseUrl(element[1]),
+              name: element[0],
+            ),
+          );
         }
       });
-      if(bjm3u8VideoUrlInfoList.length > 0) {
+      if (bjm3u8VideoUrlInfoList.length > 0) {
         videoUrlInfoMap['bjm3u8'] = bjm3u8VideoUrlInfoList;
       }
     }
+
     ///遍历天空资源
-    if(playUrlInfo.tkm3u8 != null && playUrlInfo.tkm3u8!.length > 0) {
+    if (playUrlInfo.tkm3u8 != null && playUrlInfo.tkm3u8!.length > 0) {
       List<VideoSourceFormatVideoList> tkm3u8VideoUrlInfoList = [];
       playUrlInfo.tkm3u8!.forEach((element) {
-        if(element.length > 1) {
+        if (element.length > 1) {
           _parseUrl(element[1]);
-          tkm3u8VideoUrlInfoList.add(VideoSourceFormatVideoList(url: _parseUrl(element[1]), name: element[0]));
+          tkm3u8VideoUrlInfoList.add(
+            VideoSourceFormatVideoList(
+              url: _parseUrl(element[1]),
+              name: element[0],
+            ),
+          );
         }
       });
-      if(tkm3u8VideoUrlInfoList.length > 0) {
+      if (tkm3u8VideoUrlInfoList.length > 0) {
         videoUrlInfoMap['tkm3u8'] = tkm3u8VideoUrlInfoList;
       }
     }
+
     ///遍历百度资源
-    if(playUrlInfo.dbm3u8 != null && playUrlInfo.dbm3u8!.length > 0) {
+    if (playUrlInfo.dbm3u8 != null && playUrlInfo.dbm3u8!.length > 0) {
       List<VideoSourceFormatVideoList> dbm3u8VideoUrlInfoList = [];
       playUrlInfo.dbm3u8!.forEach((element) {
-        if(element.length > 1) {
+        if (element.length > 1) {
           _parseUrl(element[1]);
-          dbm3u8VideoUrlInfoList.add(VideoSourceFormatVideoList(url: _parseUrl(element[1]), name: element[0]));
+          dbm3u8VideoUrlInfoList.add(
+            VideoSourceFormatVideoList(
+              url: _parseUrl(element[1]),
+              name: element[0],
+            ),
+          );
         }
       });
-      if(dbm3u8VideoUrlInfoList.length > 0) {
+      if (dbm3u8VideoUrlInfoList.length > 0) {
         videoUrlInfoMap['dbm3u8'] = dbm3u8VideoUrlInfoList;
       }
     }
+
     ///遍历红牛资源
-    if(playUrlInfo.hnm3u8 != null && playUrlInfo.hnm3u8!.length > 0) {
+    if (playUrlInfo.hnm3u8 != null && playUrlInfo.hnm3u8!.length > 0) {
       List<VideoSourceFormatVideoList> hnm3u8VideoUrlInfoList = [];
       playUrlInfo.hnm3u8!.forEach((element) {
-        if(element.length > 1) {
+        if (element.length > 1) {
           _parseUrl(element[1]);
-          hnm3u8VideoUrlInfoList.add(VideoSourceFormatVideoList(url: _parseUrl(element[1]), name: element[0]));
+          hnm3u8VideoUrlInfoList.add(
+            VideoSourceFormatVideoList(
+              url: _parseUrl(element[1]),
+              name: element[0],
+            ),
+          );
         }
       });
-      if(hnm3u8VideoUrlInfoList.length > 0) {
+      if (hnm3u8VideoUrlInfoList.length > 0) {
         videoUrlInfoMap['hnm3u8'] = hnm3u8VideoUrlInfoList;
       }
     }
+
     ///遍历北斗资源
-    if(playUrlInfo.bdxm3u8 != null && playUrlInfo.bdxm3u8!.length > 0) {
+    if (playUrlInfo.bdxm3u8 != null && playUrlInfo.bdxm3u8!.length > 0) {
       List<VideoSourceFormatVideoList> bdxm3u8VideoUrlInfoList = [];
       playUrlInfo.bdxm3u8!.forEach((element) {
-        if(element.length > 1) {
+        if (element.length > 1) {
           _parseUrl(element[1]);
-          bdxm3u8VideoUrlInfoList.add(VideoSourceFormatVideoList(url: _parseUrl(element[1]), name: element[0]));
+          bdxm3u8VideoUrlInfoList.add(
+            VideoSourceFormatVideoList(
+              url: _parseUrl(element[1]),
+              name: element[0],
+            ),
+          );
         }
       });
-      if(bdxm3u8VideoUrlInfoList.length > 0) {
+      if (bdxm3u8VideoUrlInfoList.length > 0) {
         videoUrlInfoMap['bdxm3u8'] = bdxm3u8VideoUrlInfoList;
       }
     }
+
     ///遍历无尽资源
-    if(playUrlInfo.wjm3u8 != null && playUrlInfo.wjm3u8!.length > 0) {
+    if (playUrlInfo.wjm3u8 != null && playUrlInfo.wjm3u8!.length > 0) {
       List<VideoSourceFormatVideoList> wjm3u8VideoUrlInfoList = [];
       playUrlInfo.wjm3u8!.forEach((element) {
-        if(element.length > 1) {
+        if (element.length > 1) {
           _parseUrl(element[1]);
-          wjm3u8VideoUrlInfoList.add(VideoSourceFormatVideoList(url: _parseUrl(element[1]), name: element[0]));
+          wjm3u8VideoUrlInfoList.add(
+            VideoSourceFormatVideoList(
+              url: _parseUrl(element[1]),
+              name: element[0],
+            ),
+          );
         }
       });
-      if(wjm3u8VideoUrlInfoList.length > 0) {
+      if (wjm3u8VideoUrlInfoList.length > 0) {
         videoUrlInfoMap['wjm3u8'] = wjm3u8VideoUrlInfoList;
       }
     }
+
     ///最快资源
-    if(playUrlInfo.zkm3u8 != null && playUrlInfo.zkm3u8!.length > 0) {
+    if (playUrlInfo.zkm3u8 != null && playUrlInfo.zkm3u8!.length > 0) {
       List<VideoSourceFormatVideoList> zkm3u8VideoUrlInfoList = [];
       playUrlInfo.zkm3u8!.forEach((element) {
-        if(element.length > 1) {
+        if (element.length > 1) {
           _parseUrl(element[1]);
-          zkm3u8VideoUrlInfoList.add(VideoSourceFormatVideoList(url: _parseUrl(element[1]), name: element[0]));
+          zkm3u8VideoUrlInfoList.add(
+            VideoSourceFormatVideoList(
+              url: _parseUrl(element[1]),
+              name: element[0],
+            ),
+          );
         }
       });
-      if(zkm3u8VideoUrlInfoList.length > 0) {
+      if (zkm3u8VideoUrlInfoList.length > 0) {
         videoUrlInfoMap['zkm3u8'] = zkm3u8VideoUrlInfoList;
       }
     }
+
     ///遍历自建云资源
-    if(playUrlInfo.zjm3u8 != null && playUrlInfo.zjm3u8!.length > 0) {
+    if (playUrlInfo.zjm3u8 != null && playUrlInfo.zjm3u8!.length > 0) {
       List<VideoSourceFormatVideoList> zjm3u8VideoUrlInfoList = [];
       playUrlInfo.zjm3u8!.forEach((element) {
-        if(element.length > 1) {
+        if (element.length > 1) {
           _parseUrl(element[1]);
-          zjm3u8VideoUrlInfoList.add(VideoSourceFormatVideoList(url: _parseUrl(element[1]), name: element[0]));
+          zjm3u8VideoUrlInfoList.add(
+            VideoSourceFormatVideoList(
+              url: _parseUrl(element[1]),
+              name: element[0],
+            ),
+          );
         }
       });
-      if(zjm3u8VideoUrlInfoList.length > 0) {
+      if (zjm3u8VideoUrlInfoList.length > 0) {
         videoUrlInfoMap['zjm3u8'] = zjm3u8VideoUrlInfoList;
       }
     }
@@ -507,6 +626,7 @@ class PlayerControllerLogic extends GetxController with SingleGetTickerProviderM
     _stallTimer?.cancel();
     _positionSubscription?.cancel();
     state.player.removeListener(_handlePlayerState);
+    unawaited(_playbackPreparer.close());
     super.onClose();
   }
 

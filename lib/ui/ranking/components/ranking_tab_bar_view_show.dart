@@ -12,38 +12,48 @@ import 'package:get/get.dart' show GetBuilder, Get, GetNavigation;
 import 'package:shimmer/shimmer.dart';
 
 Widget rankingShowView() {
-  return keepAliveWrapper(AnimatedSwitcher(
-    duration: const Duration(milliseconds: 600),
-    child: GetBuilder<RankingLogic>(
-      id: "rankingShow",
-      init: RankingLogic(),
-      builder: (logic) {
-        int _count = logic.state.showVodList.length;
-        return _count > 0 ?
-          ListView.builder(
-            physics: const NeverScrollableScrollPhysics(),
-            cacheExtent: 500,
-            scrollDirection: Axis.vertical,
-            itemCount: logic.state.showVodList.length,
-            itemBuilder: (BuildContext context, int index) => _ItemCell(index: index, data: logic.state.showVodList[index], onTap: () => {
-              Get.toNamed(RouterConfigs.detail, arguments: {'movieId' : logic.state.showVodList[index].vodID})
-            }))
-          :
-          ListView.separated(
-            physics: const NeverScrollableScrollPhysics(),
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            cacheExtent: 500,
-            separatorBuilder: (_, __) => _SeparatorItem(),
-            itemCount: _count + 1,
-            itemBuilder: (_, index) {
-              return const Offstage(
-              offstage: false,
-              child: const _ShimmerList(),
-              );
-            },
-         );
-      })
-  ));
+  return keepAliveWrapper(
+    AnimatedSwitcher(
+      duration: const Duration(milliseconds: 600),
+      child: GetBuilder<RankingLogic>(
+        id: "rankingShow",
+        init: RankingLogic(),
+        builder: (logic) {
+          int _count = logic.state.showVodList.length;
+          return _count > 0
+              ? ListView.builder(
+                  cacheExtent: 500,
+                  scrollDirection: Axis.vertical,
+                  itemCount: logic.state.showVodList.length,
+                  itemBuilder: (BuildContext context, int index) => _ItemCell(
+                    index: index,
+                    data: logic.state.showVodList[index],
+                    onTap: () => {
+                      Get.toNamed(
+                        RouterConfigs.detail,
+                        arguments: {
+                          'movieId': logic.state.showVodList[index].vodID,
+                        },
+                      ),
+                    },
+                  ),
+                )
+              : ListView.separated(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  cacheExtent: 500,
+                  separatorBuilder: (_, __) => _SeparatorItem(),
+                  itemCount: _count + 1,
+                  itemBuilder: (_, index) {
+                    return const Offstage(
+                      offstage: false,
+                      child: const _ShimmerList(),
+                    );
+                  },
+                );
+        },
+      ),
+    ),
+  );
 }
 
 class _SeparatorItem extends StatelessWidget {
@@ -51,7 +61,9 @@ class _SeparatorItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Padding(
-        padding: const EdgeInsets.only(left: 130), child: const Divider());
+      padding: const EdgeInsets.only(left: 130),
+      child: const Divider(),
+    );
   }
 }
 
@@ -71,8 +83,9 @@ class _ShimmerCell extends StatelessWidget {
             height: 200,
             width: 130,
             decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: _color),
+              borderRadius: BorderRadius.circular(10),
+              color: _color,
+            ),
           ),
           const SizedBox(width: 20),
           SizedBox(
@@ -81,11 +94,23 @@ class _ShimmerCell extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const SizedBox(height: 20),
-                Container(height: 30, width: _rightPanelWidth - 50, color: _color),
+                Container(
+                  height: 30,
+                  width: _rightPanelWidth - 50,
+                  color: _color,
+                ),
                 const SizedBox(height: 5),
-                Container(height: 15, width: _rightPanelWidth - 50, color: _color),
+                Container(
+                  height: 15,
+                  width: _rightPanelWidth - 50,
+                  color: _color,
+                ),
                 const SizedBox(height: 5),
-                Container(height: 15, width: _rightPanelWidth - 50, color: _color),
+                Container(
+                  height: 15,
+                  width: _rightPanelWidth - 50,
+                  color: _color,
+                ),
                 const SizedBox(height: 15),
                 Container(height: 18, color: _color),
                 const SizedBox(height: 5),
@@ -111,9 +136,12 @@ class _ShimmerList extends StatelessWidget {
         children: [
           const SizedBox(height: 20),
           Column(
-            children: List.filled(4, 0).map((e) => const _ShimmerCell()).toList(),
-          )
-        ]
+            children: List.filled(
+              4,
+              0,
+            ).map((e) => const _ShimmerCell()).toList(),
+          ),
+        ],
       ),
     );
   }
@@ -123,7 +151,11 @@ class _ItemCell extends StatelessWidget {
   final int index;
   final VodInfo data;
   final Function() onTap;
-  const _ItemCell({required this.index, required this.data, required this.onTap});
+  const _ItemCell({
+    required this.index,
+    required this.data,
+    required this.onTap,
+  });
   @override
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
@@ -143,23 +175,24 @@ class _ItemCell extends StatelessWidget {
                   decoration: BoxDecoration(
                     color: shimmerColorLight,
                     borderRadius: const BorderRadius.only(
-                        topLeft: const Radius.circular(10.0),
-                        topRight: Radius.zero,
-                        bottomLeft: const Radius.circular(10.0),
-                        bottomRight: const Radius.circular(35.0)
+                      topLeft: const Radius.circular(10.0),
+                      topRight: Radius.zero,
+                      bottomLeft: const Radius.circular(10.0),
+                      bottomRight: const Radius.circular(35.0),
                     ),
                     boxShadow: [
                       BoxShadow(
-                          color: appThemeData.brightness == Brightness.light
-                              ? const Color(0xFF8E8E8E)
-                              : const Color(0x00000000),
-                          offset: const Offset(0, 15),
-                          blurRadius: 10,
-                          spreadRadius: -10)
+                        color: appThemeData.brightness == Brightness.light
+                            ? const Color(0xFF8E8E8E)
+                            : const Color(0x00000000),
+                        offset: const Offset(0, 15),
+                        blurRadius: 10,
+                        spreadRadius: -10,
+                      ),
                     ],
                     image: DecorationImage(
                       fit: BoxFit.cover,
-                      image: CachedNetworkImageProvider(data.vodPic,),
+                      image: CachedNetworkImageProvider(data.vodPic),
                     ),
                   ),
                 ),
@@ -174,58 +207,84 @@ class _ItemCell extends StatelessWidget {
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                         style: const TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 16),
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                        ),
                       ),
                       const SizedBox(height: 5),
                       RichText(
-                        text: TextSpan (
-                            style: TextStyle(
-                                color: secondaryColor,
-                                fontWeight: FontWeight.normal, fontSize: 14),
-                            children: <InlineSpan>[
-                              TextSpan(text: 'detail.detail_overall_rating'.tr()),
-                              TextSpan(text: "${data.vodHits}", style: TextStyle(
-                                  color: const Color(0xFF109E9E),
-                                  fontWeight: FontWeight.w500, fontSize: 14)),
-                            ]
+                        text: TextSpan(
+                          style: TextStyle(
+                            color: secondaryColor,
+                            fontWeight: FontWeight.normal,
+                            fontSize: 14,
+                          ),
+                          children: <InlineSpan>[
+                            TextSpan(text: 'detail.detail_overall_rating'.tr()),
+                            TextSpan(
+                              text: "${data.vodHits}",
+                              style: TextStyle(
+                                color: const Color(0xFF109E9E),
+                                fontWeight: FontWeight.w500,
+                                fontSize: 14,
+                              ),
+                            ),
+                          ],
                         ),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
                       const SizedBox(height: 5),
                       RichText(
-                        text: TextSpan (
-                            style: TextStyle(
-                                color: secondaryColor,
-                                fontWeight: FontWeight.normal, fontSize: 14),
-                            children: <InlineSpan>[
-                              TextSpan(text: 'detail.detail_year_area'.tr()),
-                              TextSpan(text: data.vodYear, style: const TextStyle(
-                                  color: const Color(0xFF109E9E),
-                                  fontWeight: FontWeight.w500, fontSize: 14)),
-                              TextSpan(text: " ${data.vodArea}"),
-                            ]
+                        text: TextSpan(
+                          style: TextStyle(
+                            color: secondaryColor,
+                            fontWeight: FontWeight.normal,
+                            fontSize: 14,
+                          ),
+                          children: <InlineSpan>[
+                            TextSpan(text: 'detail.detail_year_area'.tr()),
+                            TextSpan(
+                              text: data.vodYear,
+                              style: const TextStyle(
+                                color: const Color(0xFF109E9E),
+                                fontWeight: FontWeight.w500,
+                                fontSize: 14,
+                              ),
+                            ),
+                            TextSpan(text: " ${data.vodArea}"),
+                          ],
                         ),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
                       Text(
-                        'detail.detail_actor'.tr(namedArgs: {'vodActor': '${data.vodActor}'}),
+                        'detail.detail_actor'.tr(
+                          namedArgs: {'vodActor': '${data.vodActor}'},
+                        ),
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
-                            color: secondaryColor,
-                            fontWeight: FontWeight.normal, fontSize: 14),
+                          color: secondaryColor,
+                          fontWeight: FontWeight.normal,
+                          fontSize: 14,
+                        ),
                       ),
                       const SizedBox(height: 3),
                       Text(
                         'detail.detail_publish_time'.tr(
-                            namedArgs: {'vodTime': '${TimeUtil.timeStampToTimeStr(data.vodTime)}'}),
+                          namedArgs: {
+                            'vodTime':
+                                '${TimeUtil.timeStampToTimeStr(data.vodTime)}',
+                          },
+                        ),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
-                            color: secondaryColor,
-                            fontWeight: FontWeight.normal, fontSize: 13),
+                          color: secondaryColor,
+                          fontWeight: FontWeight.normal,
+                          fontSize: 13,
+                        ),
                       ),
                     ],
                   ),
@@ -235,33 +294,41 @@ class _ItemCell extends StatelessWidget {
             Align(
               alignment: Alignment.topRight,
               child: Visibility(
-                  // visible: index == 0 || index == 1 || index == 2,
-                  child: Container(
-                    alignment: Alignment.center,
-                    width: 30,
-                    height: 30,
-                    decoration: BoxDecoration(
-                      color: index == 0 ? Colors.red : index == 1 ? Colors.orange : index == 2 ? Colors.amber : Colors.grey[300],
-                      borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                      boxShadow: [
-                        BoxShadow(
-                            color: appThemeData.brightness == Brightness.light
-                                ? const Color(0xFF8E8E8E)
-                                : const Color(0x00000000),
-                            offset: const Offset(0, 10),
-                            blurRadius: 10,
-                            spreadRadius: -10)
-                      ],
-                    ),
-                    child: Text("${index + 1}",
-                      style: TextStyle(
-                          color: appThemeData.primaryColorLight,
-                          fontSize: 15.0,
-                          fontWeight: FontWeight.bold,
-                          fontFamily: "Muli"
+                // visible: index == 0 || index == 1 || index == 2,
+                child: Container(
+                  alignment: Alignment.center,
+                  width: 30,
+                  height: 30,
+                  decoration: BoxDecoration(
+                    color: index == 0
+                        ? Colors.red
+                        : index == 1
+                        ? Colors.orange
+                        : index == 2
+                        ? Colors.amber
+                        : Colors.grey[300],
+                    borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                    boxShadow: [
+                      BoxShadow(
+                        color: appThemeData.brightness == Brightness.light
+                            ? const Color(0xFF8E8E8E)
+                            : const Color(0x00000000),
+                        offset: const Offset(0, 10),
+                        blurRadius: 10,
+                        spreadRadius: -10,
                       ),
+                    ],
+                  ),
+                  child: Text(
+                    "${index + 1}",
+                    style: TextStyle(
+                      color: appThemeData.primaryColorLight,
+                      fontSize: 15.0,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: "Muli",
                     ),
-                  )
+                  ),
+                ),
               ),
             ),
           ],

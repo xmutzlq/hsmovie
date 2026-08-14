@@ -53,7 +53,11 @@ class SizeBasedLoggerConfig {
           maxBackups: 5,
         ),
         compressionHandler: GzipCompressionHandler(
-          onProgress: (message) => print('Compression progress: $message'),
+          onProgress: (message) {
+            if (!Platform.isWindows) {
+              print('Compression progress: $message');
+            }
+          },
         ),
         archiveDir: path.join(logDirectory, 'log_archives'), // 归档目录
         enableStorageMonitoring: true,
@@ -73,13 +77,17 @@ class SizeBasedLoggerConfig {
       performanceMonitor: PerformanceMonitor(),
       errorReporter: ErrorReporter(
         onError: (error, stackTrace) {
-          print('Error reported: $error');
+          if (!Platform.isWindows) {
+            print('Error reported: $error');
+          }
         },
       ),
     );
 
     // 添加中间件
-    _logger.use(consoleMiddleware);
+    if (!Platform.isWindows) {
+      _logger.use(consoleMiddleware);
+    }
     _logger.use(fileMiddleware);
 
     _isInitialized = true;

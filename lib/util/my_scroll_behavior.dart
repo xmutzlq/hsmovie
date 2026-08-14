@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 
 ///
@@ -5,5 +7,14 @@ import 'package:flutter/material.dart';
 /// Remove overflow color when scroll list view
 ///
 class MyScrollBehavior extends ScrollBehavior {
+  const MyScrollBehavior();
 
+  @override
+  Set<PointerDeviceKind> get dragDevices => const {
+    PointerDeviceKind.touch,
+    PointerDeviceKind.mouse,
+    PointerDeviceKind.trackpad,
+    PointerDeviceKind.stylus,
+    PointerDeviceKind.invertedStylus,
+  };
 }
