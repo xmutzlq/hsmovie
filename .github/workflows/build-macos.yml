@@ -39,6 +39,28 @@ jobs:
           flutter create --platforms=macos --org com.mocoav --no-pub .
           cp "$RUNNER_TEMP/hsmovie-pubspec.lock" pubspec.lock
 
+      - name: Apply macOS branding
+        run: |
+          set -euo pipefail
+
+          sed -i '' 's/^PRODUCT_NAME = .*/PRODUCT_NAME = 浮光掠影/' \
+            macos/Runner/Configs/AppInfo.xcconfig
+
+          /usr/libexec/PlistBuddy \
+            -c "Add :CFBundleDisplayName string 浮光掠影" \
+            macos/Runner/Info.plist
+
+          LC_ALL=en_US.UTF-8 sed -i '' 's/ble_project/浮光掠影/g' \
+            macos/Runner/Base.lproj/MainMenu.xib
+
+          for SIZE in 16 32 64 128 256 512 1024; do
+            sips -z "$SIZE" "$SIZE" \
+              .github/assets/macos_app_icon.png \
+              --out "macos/Runner/Assets.xcassets/AppIcon.appiconset/app_icon_${SIZE}.png"
+          done
+
+          plutil -lint macos/Runner/Info.plist
+
       - name: Allow outbound network access
         run: |
           set -euo pipefail
@@ -114,6 +136,16 @@ jobs:
             echo 'No macOS .app bundle was generated.' >&2
             exit 1
           fi
+
+          if [[ "$(basename "$APP_PATH")" != '浮光掠影.app' ]]; then
+            echo "Unexpected application name: $(basename "$APP_PATH")" >&2
+            exit 1
+          fi
+
+          INFO_PLIST="$APP_PATH/Contents/Info.plist"
+          [[ "$(/usr/libexec/PlistBuddy -c 'Print :CFBundleName' "$INFO_PLIST")" == '浮光掠影' ]]
+          [[ "$(/usr/libexec/PlistBuddy -c 'Print :CFBundleDisplayName' "$INFO_PLIST")" == '浮光掠影' ]]
+          [[ -s "$APP_PATH/Contents/Resources/AppIcon.icns" ]]
 
           codesign -d --entitlements :- "$APP_PATH" > app-entitlements.plist
           /usr/libexec/PlistBuddy \
