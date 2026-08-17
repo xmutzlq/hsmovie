@@ -41,7 +41,10 @@
     "title": "排行",
     "ranking_weekly": "周榜",
     "ranking_monthly": "周榜",
-    "ranking_overall": "周榜"
+    "ranking_overall": "周榜",
+    "ranking_weekly_desktop": "周榜",
+    "ranking_monthly_desktop": "月榜",
+    "ranking_overall_desktop": "总榜"
   },
   "mine": {
     "title": "我的",

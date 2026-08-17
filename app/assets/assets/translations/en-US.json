@@ -41,7 +41,10 @@
     "title": "Ranking",
     "ranking_weekly": "Weekly",
     "ranking_monthly": "Monthly",
-    "ranking_overall": "Overall"
+    "ranking_overall": "Overall",
+    "ranking_weekly_desktop": "Weekly",
+    "ranking_monthly_desktop": "Monthly",
+    "ranking_overall_desktop": "Overall"
   },
   "mine": {
     "title": "Mine",
