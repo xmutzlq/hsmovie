@@ -50,43 +50,68 @@ class _MovieListViewState extends State<MovieListView> {
     final layoutWidth = kIsWeb && width > 480 ? 480.0 : width;
     final itemCount = snapshot.data!.length > 10 ? 10 : snapshot.data!.length;
     final itemHeight = layoutWidth / 4;
-    final contentWidth =
-        itemCount * (itemHeight * 4 / 3 + 20) + 10 + leftPaddingControl;
-    final horizontalPadding = kIsWeb && contentWidth < width
-        ? (width - contentWidth) / 2
-        : 0.0;
+    final contentWidth = itemCount * (itemHeight * 4 / 3 + 20);
+    final distributeAcrossRow = kIsWeb && contentWidth <= width;
     return Container(
       height: layoutWidth / 1.75,
       margin: const EdgeInsets.only(bottom: 10, top: 20),
       child: SizeCacheWidget(
         // estimateCount: snapshot.data!.length,
-        child: ListView.builder(
-          shrinkWrap: true,
-          cacheExtent: 500,
-          padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
-          scrollDirection: Axis.horizontal,
-          itemCount: itemCount,
-          itemBuilder: (BuildContext context, int index) => FrameSeparateWidget(
-            index: index,
-            placeHolder: Container(height: layoutWidth / 4 / 2),
-            child: InkWell(
-              onTap: () => {
-                if (widget.onItemInteraction != null)
-                  {widget.onItemInteraction!(snapshot.data![index].vodID)}
-                else
-                  {debugPrint("No handle")},
-              },
-              child: _buildItem(
-                snapshot.data![index].vodName,
-                snapshot.data![index].vodPic,
-                snapshot.data![index].vodPic,
-                itemHeight,
-                index == 0,
-                leftPaddingControl,
+        child: distributeAcrossRow
+            ? Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: List.generate(
+                  itemCount,
+                  (index) => _buildInteractiveItem(
+                    snapshot.data![index],
+                    itemHeight,
+                    isFirst: false,
+                    leftPaddingControl: 0,
+                  ),
+                ),
+              )
+            : ListView.builder(
+                shrinkWrap: true,
+                cacheExtent: 500,
+                scrollDirection: Axis.horizontal,
+                itemCount: itemCount,
+                itemBuilder: (BuildContext context, int index) =>
+                    FrameSeparateWidget(
+                      index: index,
+                      placeHolder: Container(height: itemHeight / 2),
+                      child: _buildInteractiveItem(
+                        snapshot.data![index],
+                        itemHeight,
+                        isFirst: index == 0,
+                        leftPaddingControl: leftPaddingControl,
+                      ),
+                    ),
               ),
-            ),
-          ),
-        ),
+      ),
+    );
+  }
+
+  Widget _buildInteractiveItem(
+    VodInfo item,
+    double itemHeight, {
+    required bool isFirst,
+    required double leftPaddingControl,
+  }) {
+    return InkWell(
+      onTap: () {
+        if (widget.onItemInteraction != null) {
+          widget.onItemInteraction!(item.vodID);
+        } else {
+          debugPrint('No handle');
+        }
+      },
+      child: _buildItem(
+        item.vodName,
+        item.vodPic,
+        item.vodPic,
+        itemHeight,
+        isFirst,
+        leftPaddingControl,
       ),
     );
   }
