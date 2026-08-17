@@ -6,6 +6,8 @@ class MoreState {
   RxString title = "更多".obs;
   late int typeId;
   late List<VodInfo> moreList;
+  bool isLoading = true;
+  String? loadError;
 
   MoreState() {
     moreList = [];

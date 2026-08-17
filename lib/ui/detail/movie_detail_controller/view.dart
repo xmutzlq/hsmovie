@@ -42,7 +42,10 @@ class MovieDetailControllerPage extends GetView<MovieDetailControllerLogic> {
       (context) => controller.obx(
         (movieDetailResult) => _buildDetailContent(movieDetailResult!),
         onLoading: screenLoadingState(),
-        onError: (error) => screenErrorState(error),
+        onError: (error) => screenErrorState(
+          kIsWeb ? '影片信息加载失败，请稍后重试' : error,
+          onRetry: kIsWeb ? logic.retryMovieDetail : null,
+        ),
         onEmpty: screenEmptyStateFull(),
       ),
     );

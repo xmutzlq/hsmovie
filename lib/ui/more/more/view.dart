@@ -6,6 +6,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:easy_refresh/easy_refresh.dart';
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -26,7 +27,11 @@ class MorePage extends StatelessWidget {
           child: Obx(
             () => Text(
               logic.state.title.value,
-              style: TextStyle(color: appThemeData.primaryColor, fontSize: 17.0, fontWeight: FontWeight.w500),
+              style: TextStyle(
+                color: appThemeData.primaryColor,
+                fontSize: 17.0,
+                fontWeight: FontWeight.w500,
+              ),
             ),
           ),
         ),
@@ -40,6 +45,15 @@ class MorePage extends StatelessWidget {
       ),
       body: GetBuilder<MoreLogic>(
         builder: (logic) {
+          if (kIsWeb && logic.state.isLoading) {
+            return _buildLoadingList();
+          }
+          if (kIsWeb && logic.state.moreList.isEmpty) {
+            return _WebLoadResult(
+              failed: logic.state.loadError != null,
+              onRetry: logic.loadMoreData,
+            );
+          }
           return logic.state.moreList.length > 0
               ? EasyRefresh(
                   scrollController: logic.controller,
@@ -73,20 +87,50 @@ class MorePage extends StatelessWidget {
                     ],
                   ),
                 )
-              : ListView.separated(
-                  physics: const BouncingScrollPhysics(),
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  cacheExtent: 500,
-                  separatorBuilder: (_, __) => _SeparatorItem(),
-                  itemCount: 1,
-                  itemBuilder: (_, index) {
-                    return const Offstage(
-                      offstage: false,
-                      child: const _ShimmerList(),
-                    );
-                  },
-                );
+              : _buildLoadingList();
         },
+      ),
+    );
+  }
+}
+
+Widget _buildLoadingList() => ListView.separated(
+  physics: const BouncingScrollPhysics(),
+  padding: const EdgeInsets.symmetric(horizontal: 20),
+  cacheExtent: 500,
+  separatorBuilder: (_, __) => const _SeparatorItem(),
+  itemCount: 1,
+  itemBuilder: (_, __) => const _ShimmerList(),
+);
+
+class _WebLoadResult extends StatelessWidget {
+  final bool failed;
+  final Future<void> Function() onRetry;
+
+  const _WebLoadResult({required this.failed, required this.onRetry});
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            failed ? Icons.cloud_off_outlined : Icons.inbox_outlined,
+            size: 48,
+            color: secondaryColor,
+          ),
+          const SizedBox(height: 12),
+          Text(failed ? '内容加载失败' : '暂无数据'),
+          if (failed) ...[
+            const SizedBox(height: 12),
+            FilledButton.icon(
+              onPressed: onRetry,
+              icon: const Icon(Icons.refresh_rounded),
+              label: const Text('重试'),
+            ),
+          ],
+        ],
       ),
     );
   }

@@ -2,6 +2,7 @@ import 'package:ble_project/base/dio_new.dart';
 import 'package:ble_project/model/search/search_entity.dart';
 import 'package:ble_project/repository/movie_repository.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 
 import 'state.dart';
@@ -11,7 +12,11 @@ class MoreLogic extends GetxController {
   ScrollController controller = ScrollController();
 
   void listScrollTop() {
-    controller.animateTo(0, duration: Duration(milliseconds: 500), curve: Curves.ease);
+    controller.animateTo(
+      0,
+      duration: Duration(milliseconds: 500),
+      curve: Curves.ease,
+    );
   }
 
   @override
@@ -35,38 +40,60 @@ class MoreLogic extends GetxController {
   }
 
   ///首次进入页面加载数据
-  void loadMoreData() async {
-    var moreData = await refreshMoreData(true);
-    if(moreData.ok) {
-      SearchEntity movieData = SearchEntity.fromJson(moreData.data);
-      state.moreList = movieData.data;
+  Future<void> loadMoreData() async {
+    if (!kIsWeb) {
+      var moreData = await refreshMoreData(true);
+      if (moreData.ok) {
+        SearchEntity movieData = SearchEntity.fromJson(moreData.data);
+        state.moreList = movieData.data;
+        update();
+      }
+      return;
+    }
+
+    state.isLoading = true;
+    state.loadError = null;
+    update();
+    try {
+      var moreData = await refreshMoreData(true);
+      if (moreData.ok) {
+        SearchEntity movieData = SearchEntity.fromJson(moreData.data);
+        state.moreList = movieData.data;
+      } else {
+        state.loadError = moreData.error?.message ?? '内容加载失败';
+      }
+    } catch (error) {
+      state.loadError = error.toString();
+    } finally {
+      state.isLoading = false;
       update();
     }
   }
 
   ///刷新加载数据
   Future<HttpResponse> refreshMoreData(bool isRefresh) {
-    if(isRefresh) {
+    if (isRefresh) {
       state.page = 1;
     } else {
-      state.page ++;
+      state.page++;
     }
+
     ///typeId区分不同视频
     return MovieRepository().fetchMoreData(state.typeId, state.page);
   }
 
   void updateResultForRefresh(HttpResponse moreData, bool isRefresh) {
-    if(moreData.ok) {
+    if (moreData.ok) {
       SearchEntity movieData = SearchEntity.fromJson(moreData.data);
-      if(isRefresh) {
+      if (isRefresh) {
         state.moreList = movieData.data;
       } else {
         state.moreList.addAll(movieData.data);
       }
       update();
     } else {
-      if(state.page > 1) {
-        state.page --;
+      if (state.page > 1) {
+        state.page--;
       }
     }
   }

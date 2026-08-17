@@ -16,13 +16,13 @@ Widget screenLoadingStateForTabView() {
       children: [
         Expanded(child: SizedBox()),
         Expanded(child: const CircularProgressIndicator()),
-        Expanded(child: SizedBox())
+        Expanded(child: SizedBox()),
       ],
     ),
   );
 }
 
-Widget screenErrorState(String? error) {
+Widget screenErrorState(String? error, {VoidCallback? onRetry}) {
   debugPrint("buildResults -> screenErrorState error : $screenErrorState");
   return Container(
     color: Colors.white,
@@ -40,6 +40,14 @@ Widget screenErrorState(String? error) {
         ),
         SizedBox(height: 15),
         Text(error ?? "error msg null"),
+        if (onRetry != null) ...[
+          const SizedBox(height: 16),
+          FilledButton.icon(
+            onPressed: onRetry,
+            icon: const Icon(Icons.refresh_rounded),
+            label: const Text('重试'),
+          ),
+        ],
         SizedBox(height: 140),
       ],
     ),

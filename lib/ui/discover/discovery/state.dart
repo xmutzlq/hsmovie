@@ -4,12 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 class DiscoveryState {
-
   ///movie
   List<DiscoveryGroupInfo>? discoveryGroups;
   late int page;
   late int totalPages;
   late bool isMovieOnLoading;
+  String? movieLoadError;
 
   ///tv
   DiscoveryEntity? discoveryTvEntity;
@@ -18,6 +18,7 @@ class DiscoveryState {
   late int tvPage;
   late int tvTotalPages;
   late bool isTvOnLoading;
+  String? tvLoadError;
 
   ///vs
   DiscoveryEntity? discoveryVSEntity;
@@ -26,6 +27,7 @@ class DiscoveryState {
   late int vsPage;
   late int vsTotalPages;
   late bool isVSOnLoading;
+  String? vsLoadError;
 
   DiscoveryState() {
     this.discoveryGroups = [];
@@ -53,7 +55,9 @@ class DiscoveryState {
   }
 
   void vsDataUpdate(DiscoveryEntity entity) {
-    List<DiscoveryGroupInfo> tmpList = DiscoveryResult.makeDiscoveryGroups(entity);
+    List<DiscoveryGroupInfo> tmpList = DiscoveryResult.makeDiscoveryGroups(
+      entity,
+    );
     // tmpList.sort((left,right)=>right.id.compareTo(left.id));
     discoveryVSGroups = tmpList;
   }

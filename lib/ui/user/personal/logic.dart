@@ -9,6 +9,7 @@ import 'package:ble_project/ui/user/personal/state.dart';
 import 'package:ble_project/util/keyboard_util.dart';
 import 'package:ble_project/util/toast_util.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:hive_ce/hive.dart';
 import 'package:random_avatar/random_avatar.dart';
@@ -123,10 +124,9 @@ class PersonalLogic extends GetxController with StateMixin<List<String>> {
     currentSelectedAvatarIndex = -1;
     // await Future.delayed(Duration(seconds: 5)); // 模拟网络请求
     try {
-      final fakeData = generateUniqueAvatarSvgs(
-        20,
-        excluded: _generatedAvatars,
-      );
+      final fakeData = kIsWeb
+          ? generateWebAvatarSvgs(20, excluded: _generatedAvatars)
+          : generateUniqueAvatarSvgs(20, excluded: _generatedAvatars);
       personState.avatarItemStatus.assignAll({
         for (int i = 0; i < fakeData.length; i++)
           i: AvatarItemState(isSelected: false, avatar: fakeData[i]),
@@ -519,6 +519,28 @@ class PersonalLogic extends GetxController with StateMixin<List<String>> {
         break;
     }
   }
+}
+
+List<String> generateWebAvatarSvgs(
+  int count, {
+  Set<String> excluded = const <String>{},
+}) {
+  final avatars = <String>{};
+  var attempt = 0;
+  while (avatars.length < count) {
+    final hue = (attempt * 47) % 360;
+    final accentHue = (hue + 135) % 360;
+    final avatar =
+        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" data-seed="$attempt">'
+        '<circle cx="32" cy="32" r="32" fill="hsl($hue 58% 48%)"/>'
+        '<circle cx="32" cy="23" r="12" fill="white"/>'
+        '<path d="M12 58c2-15 10-23 20-23s18 8 20 23" fill="white"/>'
+        '<circle cx="51" cy="50" r="7" fill="hsl($accentHue 72% 66%)"/>'
+        '</svg>';
+    if (!excluded.contains(avatar)) avatars.add(avatar);
+    attempt++;
+  }
+  return avatars.toList(growable: false);
 }
 
 List<String> generateUniqueAvatarSvgs(
