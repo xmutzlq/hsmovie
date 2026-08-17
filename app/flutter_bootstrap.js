@@ -34,10 +34,24 @@ addEventListener("message", eventListener);
 if (!window._flutter) {
   window._flutter = {};
 }
-_flutter.buildConfig = {"engineRevision":"035316565ad77281a75305515e4682e6c4c6f7ca","builds":[{"compileTarget":"dart2js","renderer":"canvaskit","mainJsPath":"main.dart.js"},{}]};
+_flutter.buildConfig = {"engineRevision":"035316565ad77281a75305515e4682e6c4c6f7ca","builds":[{"compileTarget":"dart2js","renderer":"canvaskit","mainJsPath":"main.dart.js"}],"useLocalCanvasKit":true};
+
+
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.getRegistrations().then((registrations) => {
+    for (const registration of registrations) {
+      if (registration.scope.includes('/app/')) registration.unregister();
+    }
+  });
+}
 
 _flutter.loader.load({
-  serviceWorkerSettings: {
-    serviceWorkerVersion: "4203656686"
-  }
+  config: {
+    canvasKitBaseUrl: 'canvaskit/',
+  },
+  onEntrypointLoaded: async (engineInitializer) => {
+    const appRunner = await engineInitializer.initializeEngine();
+    await appRunner.runApp();
+    document.getElementById('app-loading')?.remove();
+  },
 });
