@@ -56,12 +56,8 @@
     #app-loading-mark {
       width: 52px;
       height: 52px;
-      display: grid;
-      place-items: center;
       border-radius: 8px;
-      background: #0b6f69;
-      color: #fff;
-      font-size: 26px;
+      object-fit: contain;
     }
     #app-loading-progress {
       width: 160px;
@@ -86,7 +82,7 @@
 <body>
   <div id="app-loading" role="status" aria-live="polite">
     <div id="app-loading-content">
-      <div id="app-loading-mark">浮</div>
+      <img id="app-loading-mark" src="icons/Icon-192.png" alt="">
       <div>浮光掠影</div>
       <div id="app-loading-progress"></div>
     </div>
