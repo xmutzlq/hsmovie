@@ -1,12 +1,13 @@
 import 'package:ble_project/base/theme/app_theme.dart';
+import 'package:ble_project/ui/user/components/platform_avatar.dart';
 import 'package:ble_project/ui/user/personal/logic.dart';
 import 'package:ble_project/util/my_scroll_behavior.dart';
 import 'package:ble_project/util/toast_util.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart' show GetView, Get, GetBuilder, GetNavigation, Obx;
 import 'package:zo_animated_border/widget/zo_dual_border.dart';
 import 'package:zo_animated_border/widget/zo_snake_border.dart';
@@ -104,9 +105,15 @@ class PersonalInfoEditPage extends GetView<PersonalLogic> {
   }
 
   Widget _buildAvatarChoiceForm() {
+    if (kIsWeb) controller.ensureRandomAvatars();
     return Obx(
       () => controller.personState.avatarItemStatus.isEmpty
-          ? const SizedBox(height: 230)
+          ? SizedBox(
+              height: 230,
+              child: kIsWeb
+                  ? const Center(child: CircularProgressIndicator())
+                  : null,
+            )
           : _buildAvatarGrid(controller.personState.avatarItemStatus.length),
     );
   }
@@ -158,7 +165,9 @@ class PersonalInfoEditPage extends GetView<PersonalLogic> {
   }
 
   Widget _buildAvatar(String avatarSvgStr) {
-    return SvgPicture.string(avatarSvgStr, width: 35, height: 35);
+    return Center(
+      child: PlatformAvatar(svgData: avatarSvgStr, size: kIsWeb ? 52 : 35),
+    );
   }
 
   Widget _buildExchangeAvatarButton() {

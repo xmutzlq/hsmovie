@@ -1,6 +1,7 @@
 import 'package:ble_project/model/player/playback_models.dart';
 import 'package:ble_project/repository/cms_video_api.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 
 class PlaybackResolver {
   final CmsVideoApi cmsApi;
@@ -16,7 +17,7 @@ class PlaybackResolver {
               receiveTimeout: const Duration(seconds: 8),
               sendTimeout: const Duration(seconds: 5),
               responseType: ResponseType.plain,
-              headers: const {'User-Agent': 'hsmovie/1.0'},
+              headers: kIsWeb ? const {} : const {'User-Agent': 'hsmovie/1.0'},
             ),
           );
 
@@ -192,6 +193,7 @@ class PlaybackResolver {
     if (lowerPath.endsWith('.m3u8') || lowerPath.endsWith('.mp4')) {
       return PlaybackCandidate(sourceId: 'legacy', sourceName: '原线路', url: url);
     }
+    if (kIsWeb) return null;
     try {
       final response = await _legacyDio
           .get<String>(url)

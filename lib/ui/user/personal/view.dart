@@ -1,21 +1,21 @@
-import 'dart:io';
-
 import 'package:animated_flip_widget/animated_flip_widget.dart';
 import 'package:ble_project/base/theme/app_theme.dart';
 import 'package:ble_project/configs/page_config.dart';
 import 'package:ble_project/model/movie_enum.dart';
 import 'package:ble_project/model/vod_class.dart';
 import 'package:ble_project/model/vod_info.dart';
+import 'package:ble_project/ui/user/components/platform_avatar.dart';
 import 'package:ble_project/ui/user/components/movie_chart.dart';
 import 'package:ble_project/util/my_scroll_behavior.dart';
 import 'package:ble_project/util/toast_util.dart';
 import 'package:ble_project/widget/list/movie_list.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_live2d_ffi/live2d_view.dart';
+import 'live2d_view_web.dart'
+    if (dart.library.io) 'package:flutter_live2d_ffi/live2d_view.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart' show Obx, Get, Inst, GetNavigation;
 import 'package:zo_animated_border/zo_animated_border.dart';
 
@@ -128,7 +128,8 @@ class PersonalPage extends StatelessWidget {
       () => personalController.personState.avatarSVGStr.value.isNotEmpty
           ? InkWell(
               onTap: () {
-                if (!Platform.isAndroid && !Platform.isIOS) {
+                if (defaultTargetPlatform != TargetPlatform.android &&
+                    defaultTargetPlatform != TargetPlatform.iOS) {
                   ToastUtil.showToast('当前平台暂不支持 Live2D');
                   return;
                 }
@@ -137,10 +138,9 @@ class PersonalPage extends StatelessWidget {
                       Live2DView('assets/live2d/haru_01.model.json'),
                 );
               },
-              child: SvgPicture.string(
-                '${personalController.personState.avatarSVGStr}',
-                width: 60,
-                height: 60,
+              child: PlatformAvatar(
+                svgData: personalController.personState.avatarSVGStr.value,
+                size: 60,
               ),
             )
           : _buildUnknownAvatar(),

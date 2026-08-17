@@ -22,8 +22,9 @@ class SettingLogic extends GetxController {
     super.onReady();
   }
 
-  void refreshCurrentLang() {
-    currentLang = Get.context!.locale.toString();
+  void refreshCurrentLang([Locale? locale]) {
+    currentLang = (locale ?? Get.context?.locale ?? const Locale('zh', 'CN'))
+        .toString();
     debugPrint('currentLang : $currentLang');
   }
 
@@ -32,7 +33,5 @@ class SettingLogic extends GetxController {
   }
 
   @override
-  void onClose() {
-  }
-
+  void onClose() {}
 }

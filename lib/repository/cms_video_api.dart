@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:ble_project/model/player/playback_models.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 
 class CmsVideoApi {
   static const List<CmsSourceConfig> defaultSources = [
@@ -25,18 +26,28 @@ class CmsVideoApi {
     ),
   ];
 
+  static const List<CmsSourceConfig> webSources = [
+    CmsSourceConfig(
+      id: 'lzi',
+      name: '量子资源',
+      api: 'https://cj.lziapi.com/api.php/provide/vod/',
+      priority: 10,
+    ),
+  ];
+
   final Dio _dio;
   final List<CmsSourceConfig> sources;
 
-  CmsVideoApi({Dio? dio, this.sources = defaultSources})
-    : _dio =
+  CmsVideoApi({Dio? dio, List<CmsSourceConfig>? sources})
+    : sources = sources ?? (kIsWeb ? webSources : defaultSources),
+      _dio =
           dio ??
           Dio(
             BaseOptions(
               connectTimeout: const Duration(seconds: 5),
               receiveTimeout: const Duration(seconds: 8),
               sendTimeout: const Duration(seconds: 5),
-              headers: const {'User-Agent': 'hsmovie/1.0'},
+              headers: kIsWeb ? const {} : const {'User-Agent': 'hsmovie/1.0'},
             ),
           );
 

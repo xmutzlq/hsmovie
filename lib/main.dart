@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 import 'package:ble_project/base/theme/app_theme.dart';
 import 'package:ble_project/configs/global_config.dart';
 import 'package:ble_project/configs/page_config.dart';
@@ -53,7 +52,7 @@ void main() async {
       // await TimeBasedLoggerConfig.instance.initialize();
       // 配置Flutter错误处理
       FlutterError.onError = (details) {
-        if (!Platform.isWindows || kDebugMode) {
+        if (defaultTargetPlatform != TargetPlatform.windows || kDebugMode) {
           FlutterError.presentError(details);
         }
         Log.error(
@@ -75,7 +74,7 @@ void main() async {
             path: 'assets/translations', // 语言文件路径
             // 可选：设置默认语言、回退语言等
             fallbackLocale: const Locale('zh', 'CN'),
-            startLocale: const Locale('zh', 'CN'),
+            startLocale: kIsWeb ? null : const Locale('zh', 'CN'),
             child: const MyApp(),
           ),
         ),

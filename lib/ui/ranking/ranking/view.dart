@@ -9,6 +9,7 @@ import 'package:ble_project/util/my_scroll_behavior.dart';
 import 'package:ble_project/util/toast_util.dart';
 import 'package:ble_project/widget/sliverappbar_delegate.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart' show Obx, Get, Inst;
@@ -24,7 +25,6 @@ class RankingPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return ScrollConfiguration(
       behavior: MyScrollBehavior(),
       child: Scaffold(
@@ -45,8 +45,8 @@ class RankingPage extends StatelessWidget {
                       minHeight: 60,
                       maxHeight: 60,
                       child: _FilterBar(
-                        onFilterPress: () => {ToastUtil.showToast("即将开放")}
-                      )
+                        onFilterPress: () => {ToastUtil.showToast("即将开放")},
+                      ),
                     ),
                   ),
                   SliverPersistentHeader(
@@ -56,7 +56,7 @@ class RankingPage extends StatelessWidget {
                       maxHeight: 50,
                       child: rankingTabBarView(),
                     ),
-                  )
+                  ),
                 ];
               },
               body: TabBarView(
@@ -65,8 +65,8 @@ class RankingPage extends StatelessWidget {
                   rankingMovieView(),
                   rankingTvView(),
                   rankingShowView(),
-                  rankingCartoonView()
-                ]
+                  rankingCartoonView(),
+                ],
               ),
             ),
           ),
@@ -87,72 +87,70 @@ class _ShimmerCell extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
-    final _rightPanelWidth = width - _imageWidth - _horizontalPadding * 2 - _rightPanelPadding * 2;
+    final _rightPanelWidth =
+        width - _imageWidth - _horizontalPadding * 2 - _rightPanelPadding * 2;
     return Container(
       height: _cardHeight,
-      child: Row(children: [
-        ClipRRect(
-          borderRadius: BorderRadius.only(
+      child: Row(
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadius.only(
               topLeft: Radius.circular(_borderRadius),
               bottomLeft: Radius.circular(_borderRadius),
-              bottomRight: Radius.circular(_imageWidth / 2)),
-          child: Container (
-            width: _imageWidth,
-            height: _cardHeight,
-            color: const Color(0xFFFFFFFF),
-          ),
-        ),
-        Padding(
-          padding: EdgeInsets.all(_rightPanelPadding),
-          child: SizedBox(
-            width: _rightPanelWidth,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  width: 150,
-                  height: 13,
-                  color: const Color(0xFFFFFFFF),
-                ),
-                const SizedBox(height: 7.5),
-                Container(
-                  width: 40,
-                  height: 7.5,
-                  color: const Color(0xFFFFFFFF),
-                ),
-                const SizedBox(height: 2.5),
-                Container(
-                  width: 60,
-                  height: 7.5,
-                  color: const Color(0xFFFFFFFF),
-                ),
-                const SizedBox(height: 5),
-                Container(
-                  width: 100,
-                  height: 7.5,
-                  color: const Color(0xFFFFFFFF),
-                ),
-                const SizedBox(height: 10),
-                Container(
-                  height: 10,
-                  color: const Color(0xFFFFFFFF),
-                ),
-                const SizedBox(height: 5),
-                Container(
-                  height: 10,
-                  color: const Color(0xFFFFFFFF),
-                ),
-                const SizedBox(height: 5),
-                Container(
-                  width: 125,
-                  height: 10,
-                  color: const Color(0xFFFFFFFF),
-                ),
-              ],
+              bottomRight: Radius.circular(_imageWidth / 2),
+            ),
+            child: Container(
+              width: _imageWidth,
+              height: _cardHeight,
+              color: const Color(0xFFFFFFFF),
             ),
           ),
-        )
-      ]),
+          Padding(
+            padding: EdgeInsets.all(_rightPanelPadding),
+            child: SizedBox(
+              width: _rightPanelWidth,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    width: 150,
+                    height: 13,
+                    color: const Color(0xFFFFFFFF),
+                  ),
+                  const SizedBox(height: 7.5),
+                  Container(
+                    width: 40,
+                    height: 7.5,
+                    color: const Color(0xFFFFFFFF),
+                  ),
+                  const SizedBox(height: 2.5),
+                  Container(
+                    width: 60,
+                    height: 7.5,
+                    color: const Color(0xFFFFFFFF),
+                  ),
+                  const SizedBox(height: 5),
+                  Container(
+                    width: 100,
+                    height: 7.5,
+                    color: const Color(0xFFFFFFFF),
+                  ),
+                  const SizedBox(height: 10),
+                  Container(height: 10, color: const Color(0xFFFFFFFF)),
+                  const SizedBox(height: 5),
+                  Container(height: 10, color: const Color(0xFFFFFFFF)),
+                  const SizedBox(height: 5),
+                  Container(
+                    width: 125,
+                    height: 10,
+                    color: const Color(0xFFFFFFFF),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -163,22 +161,28 @@ class _ShimmerList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SliverToBoxAdapter(
-      child:  isBusy? Shimmer.fromColors(
-        baseColor: appThemeData.primaryColorDark,
-        highlightColor: appThemeData.primaryColorLight,
-        child: Container(
-          margin: const EdgeInsets.only(top: 5, bottom: 15, left: 15, right: 15),
-          child: Column(
-            children: <Widget>[
-              const _ShimmerCell(),
-              const SizedBox(height: 15),
-              const _ShimmerCell(),
-              const SizedBox(height: 15),
-              const _ShimmerCell(),
-            ],
-          ),
-        ),
-      )
+      child: isBusy
+          ? Shimmer.fromColors(
+              baseColor: appThemeData.primaryColorDark,
+              highlightColor: appThemeData.primaryColorLight,
+              child: Container(
+                margin: const EdgeInsets.only(
+                  top: 5,
+                  bottom: 15,
+                  left: 15,
+                  right: 15,
+                ),
+                child: Column(
+                  children: <Widget>[
+                    const _ShimmerCell(),
+                    const SizedBox(height: 15),
+                    const _ShimmerCell(),
+                    const SizedBox(height: 15),
+                    const _ShimmerCell(),
+                  ],
+                ),
+              ),
+            )
           : const SizedBox(),
     );
   }
@@ -194,92 +198,137 @@ class _FilterBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       color: commBgColor,
-      child: Stack(children: [
-        Container(
-          margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-          padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-          height: 60,
-          decoration: BoxDecoration(
-            border: Border.all(
+      child: Stack(
+        children: [
+          Container(
+            margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+            padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+            height: 60,
+            decoration: BoxDecoration(
+              border: Border.all(
                 color: appThemeData.brightness == Brightness.light
                     ? const Color(0xFFEFEFEF)
-                    : const Color(0xFF505050)),
-            borderRadius: BorderRadius.circular(10),
-            color: Colors.black12
-          ),
-          child: Row(
-            children: [
-              _TapPanel(),
-              Expanded(child: const SizedBox()),
-              GestureDetector(
-                onTap: onFilterPress,
-                child: Container(
-                  padding: const EdgeInsets.all(5),
-                  decoration: BoxDecoration(
-                    color: appThemeData.primaryColor,
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                  child: Icon(
-                    Icons.filter_list,
-                    size: 15,
-                    color: const Color(0xFFFFFFFF),
+                    : const Color(0xFF505050),
+              ),
+              borderRadius: BorderRadius.circular(10),
+              color: Colors.black12,
+            ),
+            child: Row(
+              children: [
+                _TapPanel(),
+                Expanded(child: const SizedBox()),
+                GestureDetector(
+                  onTap: onFilterPress,
+                  child: Container(
+                    padding: const EdgeInsets.all(5),
+                    decoration: BoxDecoration(
+                      color: appThemeData.primaryColor,
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    child: Icon(
+                      Icons.filter_list,
+                      size: 15,
+                      color: const Color(0xFFFFFFFF),
+                    ),
                   ),
                 ),
-              )
-            ],
+              ],
+            ),
           ),
-        ),
-        _Loading(),
-      ]),
+          _Loading(),
+        ],
+      ),
     );
   }
 }
 
 class _TapPanel extends StatelessWidget {
   final logic = Get.find<RankingLogic>();
-  final TextStyle _selectedStyle = TextStyle(fontWeight: FontWeight.w500, fontSize: 17);
-  final TextStyle _unSelectedStyle = TextStyle(color: const Color(0xFF9E9E9E), fontSize: 15);
+  final TextStyle _selectedStyle = TextStyle(
+    fontWeight: FontWeight.w500,
+    fontSize: 17,
+  );
+  final TextStyle _unSelectedStyle = TextStyle(
+    color: const Color(0xFF9E9E9E),
+    fontSize: 15,
+  );
 
   _TapPanel();
 
   @override
   Widget build(BuildContext context) {
-    return Stack(children: [
-        Obx(() => Row(children: [
-          _TapCell(
-            onTap: () => logic.updateRanking(RankingState.RANKING_TYPE_WEEK),
-            title: 'ranking.ranking_weekly'.tr(),
-            textStyle: RankingState.RANKING_TYPE_WEEK == logic.state.currentRankingIndex.value ? _selectedStyle : _unSelectedStyle,
-          ),
-          _TapCell(
-            onTap: () => logic.updateRanking(RankingState.RANKING_TYPE_MONTH),
-            title: 'ranking.ranking_monthly'.tr(),
-            textStyle: RankingState.RANKING_TYPE_MONTH == logic.state.currentRankingIndex.value ? _selectedStyle : _unSelectedStyle,
-          ),
-          _TapCell(
-            onTap: () => logic.updateRanking(RankingState.RANKING_TYPE_ALL),
-            title: 'ranking.ranking_overall'.tr(),
-            textStyle: RankingState.RANKING_TYPE_ALL == logic.state.currentRankingIndex.value ? _selectedStyle : _unSelectedStyle,
-          )
-        ])),
-    SlideTransition(
-      position: logic.positionAnimation,
-      child: Container(
-        padding: const EdgeInsets.only(top: 32),
-        width: context.locale.toString().startsWith('en') ? 70 : 50,
-        child: Container(
-          width: 5,
-          height: 5,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: appThemeData.brightness == Brightness.light
-                ? const Color(0xFF334455)
-                : const Color(0xFFFFFFFF),
+    final usesDesktopOrder =
+        kIsWeb || defaultTargetPlatform == TargetPlatform.windows;
+    return Stack(
+      children: [
+        Obx(
+          () => Row(
+            children: usesDesktopOrder
+                ? [
+                    _buildCell(
+                      RankingState.RANKING_TYPE_ALL,
+                      0,
+                      'ranking.ranking_overall_desktop',
+                    ),
+                    _buildCell(
+                      RankingState.RANKING_TYPE_MONTH,
+                      1,
+                      'ranking.ranking_monthly_desktop',
+                    ),
+                    _buildCell(
+                      RankingState.RANKING_TYPE_WEEK,
+                      2,
+                      'ranking.ranking_weekly_desktop',
+                    ),
+                  ]
+                : [
+                    _buildCell(
+                      RankingState.RANKING_TYPE_WEEK,
+                      0,
+                      'ranking.ranking_weekly',
+                    ),
+                    _buildCell(
+                      RankingState.RANKING_TYPE_MONTH,
+                      1,
+                      'ranking.ranking_monthly',
+                    ),
+                    _buildCell(
+                      RankingState.RANKING_TYPE_ALL,
+                      2,
+                      'ranking.ranking_overall',
+                    ),
+                  ],
           ),
         ),
-      ),
-    ),
-    ]);
+        SlideTransition(
+          position: logic.positionAnimation,
+          child: Container(
+            padding: const EdgeInsets.only(top: 32),
+            width: context.locale.toString().startsWith('en') ? 70 : 50,
+            child: Container(
+              width: 5,
+              height: 5,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: appThemeData.brightness == Brightness.light
+                    ? const Color(0xFF334455)
+                    : const Color(0xFFFFFFFF),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildCell(double type, double visualIndex, String translationKey) {
+    return _TapCell(
+      onTap: () => logic.updateRanking(type, visualIndex: visualIndex),
+      title: translationKey.tr(),
+      textStyle: type == logic.state.currentRankingIndex.value
+          ? _selectedStyle
+          : _unSelectedStyle,
+    );
   }
 }
 
@@ -287,7 +336,11 @@ class _TapCell extends StatelessWidget {
   final String title;
   final TextStyle textStyle;
   final Function() onTap;
-  const _TapCell({required this.title, required this.onTap, required this.textStyle});
+  const _TapCell({
+    required this.title,
+    required this.onTap,
+    required this.textStyle,
+  });
   @override
   Widget build(BuildContext context) {
     debugPrint('context.locale.toString() : ${context.locale.toString()}');
@@ -295,12 +348,7 @@ class _TapCell extends StatelessWidget {
       onTap: onTap,
       child: SizedBox(
         width: context.locale.toString().startsWith('en') ? 70 : 50,
-        child: Center(
-          child: Text(
-            title,
-            style: textStyle,
-          ),
-        ),
+        child: Center(child: Text(title, style: textStyle)),
       ),
     );
   }
@@ -313,26 +361,32 @@ class _Loading extends StatelessWidget {
     final _brightness = appThemeData.brightness == Brightness.light;
     return AnimatedSwitcher(
       duration: const Duration(milliseconds: 300),
-      child: Obx(() => logic.state.loadingBusy.value ? Container(
-        alignment: Alignment.bottomCenter,
-        margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-        padding: const EdgeInsets.symmetric(vertical: 0.5, horizontal: 10),
-        height: 60,
-        child: SizedBox(
-          height: 1,
-          child: LinearProgressIndicator(
-            backgroundColor: _brightness
-                ? const Color(0xFFEFEFEF)
-                : const Color(0xFF505050),
-            valueColor: AlwaysStoppedAnimation(
-              _brightness
-                  ? const Color(0xFF334455)
-                  : const Color(0xFFFFFFFF),
-            ),
-          ),
-        ),
-      )
-          : const SizedBox()),
+      child: Obx(
+        () => logic.state.loadingBusy.value
+            ? Container(
+                alignment: Alignment.bottomCenter,
+                margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+                padding: const EdgeInsets.symmetric(
+                  vertical: 0.5,
+                  horizontal: 10,
+                ),
+                height: 60,
+                child: SizedBox(
+                  height: 1,
+                  child: LinearProgressIndicator(
+                    backgroundColor: _brightness
+                        ? const Color(0xFFEFEFEF)
+                        : const Color(0xFF505050),
+                    valueColor: AlwaysStoppedAnimation(
+                      _brightness
+                          ? const Color(0xFF334455)
+                          : const Color(0xFFFFFFFF),
+                    ),
+                  ),
+                ),
+              )
+            : const SizedBox(),
+      ),
     );
   }
 }

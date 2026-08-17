@@ -1,6 +1,6 @@
 import 'dart:async';
-import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:media_kit/media_kit.dart';
@@ -148,7 +148,7 @@ class MediaKitPlayer extends ChangeNotifier {
       player.setVolume(value.clamp(0, 1) * 100);
 
   Future<double> getBrightness() async {
-    if (!Platform.isAndroid) return 0.5;
+    if (defaultTargetPlatform != TargetPlatform.android) return 0.5;
     try {
       return ((await _platformControls.invokeMethod<num>('getBrightness')) ??
               0.5)
@@ -160,7 +160,7 @@ class MediaKitPlayer extends ChangeNotifier {
   }
 
   Future<void> setBrightness(double value) async {
-    if (!Platform.isAndroid) return;
+    if (defaultTargetPlatform != TargetPlatform.android) return;
     try {
       await _platformControls.invokeMethod<void>(
         'setBrightness',

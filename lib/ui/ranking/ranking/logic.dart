@@ -2,6 +2,7 @@ import 'package:ble_project/model/ranking/ranking_entity.dart';
 import 'package:ble_project/model/vod_info.dart';
 import 'package:ble_project/repository/movie_repository.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart' show SingleGetTickerProviderMixin, GetxController;
 
@@ -16,24 +17,32 @@ class RankingLogic extends GetxController with SingleGetTickerProviderMixin {
   late Tween<Offset> positionTween;
   late Animation<Offset> positionAnimation;
 
-  void updateRanking(double to) {
-    if(positionAnimation.value == Offset(to, 0)) return;
+  bool get _usesDesktopRankingOrder =>
+      kIsWeb || defaultTargetPlatform == TargetPlatform.windows;
+
+  void updateRanking(double to, {double? visualIndex}) {
+    final targetOffset = Offset(visualIndex ?? to, 0);
+    if (positionAnimation.value == targetOffset &&
+        state.currentRankingIndex.value == to) {
+      return;
+    }
     positionTween.begin = positionAnimation.value;
-    positionTween.end = Offset(to, 0);
+    positionTween.end = targetOffset;
 
     controller.reset();
     controller.forward();
     state.currentRankingIndex.value = to;
 
     debugPrint("ranking_tab_to = $to");
+
     ///排行版数据
-    if(RankingState.RANKING_TYPE_WEEK == to) {
+    if (RankingState.RANKING_TYPE_WEEK == to) {
       state.loadingBusy.value = true;
       getWeekRanking();
-    } else if(RankingState.RANKING_TYPE_MONTH == to) {
+    } else if (RankingState.RANKING_TYPE_MONTH == to) {
       state.loadingBusy.value = true;
       getMonthRanking();
-    } else if(RankingState.RANKING_TYPE_ALL == to) {
+    } else if (RankingState.RANKING_TYPE_ALL == to) {
       state.loadingBusy.value = true;
       getAllRanking();
     }
@@ -41,7 +50,7 @@ class RankingLogic extends GetxController with SingleGetTickerProviderMixin {
 
   ///电影排行
   void updateRankingMovie(List<VodInfo> movies, bool isNeedRefresh) {
-    if(!state.isMovieBusy) {
+    if (!state.isMovieBusy) {
       state.isMovieBusy = true;
     }
     state.movieVodList = movies;
@@ -51,7 +60,7 @@ class RankingLogic extends GetxController with SingleGetTickerProviderMixin {
 
   ///电视剧排行
   void updateRankingTv(List<VodInfo> movies, bool isNeedRefresh) {
-    if(!state.isTvBusy) {
+    if (!state.isTvBusy) {
       state.isTvBusy = true;
     }
     state.tvVodList = movies;
@@ -61,7 +70,7 @@ class RankingLogic extends GetxController with SingleGetTickerProviderMixin {
 
   ///综艺排行
   void updateRankingShow(List<VodInfo> movies, bool isNeedRefresh) {
-    if(!state.isShowBusy) {
+    if (!state.isShowBusy) {
       state.isShowBusy = true;
     }
     state.showVodList = movies;
@@ -71,7 +80,7 @@ class RankingLogic extends GetxController with SingleGetTickerProviderMixin {
 
   ///动漫排行
   void updateRankingCartoon(List<VodInfo> movies, bool isNeedRefresh) {
-    if(!state.isCartoonBusy) {
+    if (!state.isCartoonBusy) {
       state.isCartoonBusy = true;
     }
     state.cartoonVodList = movies;
@@ -82,69 +91,98 @@ class RankingLogic extends GetxController with SingleGetTickerProviderMixin {
   @override
   void onInit() {
     resetTabs();
+    if (_usesDesktopRankingOrder) {
+      state.currentRankingIndex.value = RankingState.RANKING_TYPE_ALL;
+    }
 
     scrollController = ScrollController();
 
-    tabController = TabController(vsync: this, length: rankingTabs.length)..addListener(() {
-      ///点击tab回调一次，滑动切换tab不会回调
-      if(tabController.indexIsChanging){
-        //选择下面的方式：
-      }
-
-      ///点击tab时或滑动tab回调一次
-      if(tabController.index.toDouble() == tabController.animation!.value){
-        if (tabController.index == 0) { ///tab_movie
-          updateRankingMovie(state.rankingEntity!.movie, true);
-        } else if(tabController.index == 1) { ///tab_tv
-          updateRankingTv(state.rankingEntity!.teleplay, true);
-        } else if(tabController.index == 2) { ///tab_variety_show
-          updateRankingShow(state.rankingEntity!.show, true);
-        } else if(tabController.index == 3) { ///tab_variety_show
-          updateRankingCartoon(state.rankingEntity!.cartoon, true);
+    tabController = TabController(vsync: this, length: rankingTabs.length)
+      ..addListener(() {
+        ///点击tab回调一次，滑动切换tab不会回调
+        if (tabController.indexIsChanging) {
+          //选择下面的方式：
         }
-      }
-    });
-    controller = AnimationController(vsync: this, duration: Duration(milliseconds: 200));
+
+        ///点击tab时或滑动tab回调一次
+        if (tabController.index.toDouble() == tabController.animation!.value) {
+          if (tabController.index == 0) {
+            ///tab_movie
+            updateRankingMovie(state.rankingEntity!.movie, true);
+          } else if (tabController.index == 1) {
+            ///tab_tv
+            updateRankingTv(state.rankingEntity!.teleplay, true);
+          } else if (tabController.index == 2) {
+            ///tab_variety_show
+            updateRankingShow(state.rankingEntity!.show, true);
+          } else if (tabController.index == 3) {
+            ///tab_variety_show
+            updateRankingCartoon(state.rankingEntity!.cartoon, true);
+          }
+        }
+      });
+    controller = AnimationController(
+      vsync: this,
+      duration: Duration(milliseconds: 200),
+    );
     positionTween = Tween<Offset>(begin: Offset.zero, end: Offset.zero);
-    positionAnimation = positionTween.animate(CurvedAnimation(parent: controller, curve: Curves.easeOut));
+    positionAnimation = positionTween.animate(
+      CurvedAnimation(parent: controller, curve: Curves.easeOut),
+    );
     super.onInit();
   }
 
   void resetTabs() {
     rankingTabs = []
-      ..add(Tab(
+      ..add(
+        Tab(
           child: GestureDetector(
             onDoubleTap: () => listScrollTop(),
             child: Text('common.movie'.tr()),
-          )
-      ))
-      ..add(Tab(
+          ),
+        ),
+      )
+      ..add(
+        Tab(
           child: GestureDetector(
-            onDoubleTap: ()  => listScrollTop(),
+            onDoubleTap: () => listScrollTop(),
             child: Text('common.tv_series'.tr()),
-          )
-      ))
-      ..add(Tab(
+          ),
+        ),
+      )
+      ..add(
+        Tab(
           child: GestureDetector(
-            onDoubleTap: ()  => listScrollTop(),
+            onDoubleTap: () => listScrollTop(),
             child: Text('common.variety_show'.tr()),
-          )
-      ))
-      ..add(Tab(
+          ),
+        ),
+      )
+      ..add(
+        Tab(
           child: GestureDetector(
-            onDoubleTap: ()  => listScrollTop(),
+            onDoubleTap: () => listScrollTop(),
             child: Text('common.tv_anime'.tr()),
-          )
-      ));
+          ),
+        ),
+      );
   }
 
   void listScrollTop() {
-    scrollController.animateTo(0, duration: Duration(milliseconds: 500), curve: Curves.ease);
+    scrollController.animateTo(
+      0,
+      duration: Duration(milliseconds: 500),
+      curve: Curves.ease,
+    );
   }
 
   @override
   void onReady() {
-    getWeekRanking();
+    if (_usesDesktopRankingOrder) {
+      getAllRanking();
+    } else {
+      getWeekRanking();
+    }
     super.onReady();
   }
 
@@ -170,19 +208,18 @@ class RankingLogic extends GetxController with SingleGetTickerProviderMixin {
   void _getRanking(String type) async {
     var rankingData = await MovieRepository().fetchRanking(type);
     state.loadingBusy.value = false;
-    if(rankingData.ok) {
+    if (rankingData.ok) {
       RankingEntity entity = RankingEntity.fromJson(rankingData.data);
       state.rankingEntity = entity;
-      if(tabController.index == 0) {
+      if (tabController.index == 0) {
         updateRankingMovie(entity.movie, true);
-      } else if(tabController.index == 1) {
+      } else if (tabController.index == 1) {
         updateRankingTv(entity.teleplay, true);
-      } else if(tabController.index == 2) {
+      } else if (tabController.index == 2) {
         updateRankingShow(entity.show, true);
-      } else if(tabController.index == 3) {
+      } else if (tabController.index == 3) {
         updateRankingCartoon(entity.cartoon, true);
       }
-    } else {
-    }
+    } else {}
   }
 }

@@ -1,11 +1,10 @@
-import 'dart:io';
-
+import 'package:flutter/foundation.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class ToastUtil {
   static void showToast(String msg) {
-    if (Platform.isWindows) {
+    if (defaultTargetPlatform == TargetPlatform.windows) {
       SmartDialog.showToast(msg);
       return;
     }
@@ -17,7 +16,7 @@ class ToastUtil {
   }
 
   static void cancelAllToast() {
-    if (Platform.isWindows) {
+    if (defaultTargetPlatform == TargetPlatform.windows) {
       SmartDialog.dismiss(status: SmartStatus.toast);
       return;
     }

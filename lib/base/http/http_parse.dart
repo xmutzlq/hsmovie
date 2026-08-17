@@ -1,12 +1,13 @@
 // 成功回调
-import 'dart:io';
-
 import 'package:ble_project/base/http/default_http_transformer.dart';
 
 import '../dio_new.dart';
+import 'socket_exception.dart';
 
-HttpResponse handleResponse(Response? response,
-    {HttpTransformer? httpTransformer}) {
+HttpResponse handleResponse(
+  Response? response, {
+  HttpTransformer? httpTransformer,
+}) {
   httpTransformer ??= DefaultHttpTransformer.getInstance();
 
   // 返回值异常
@@ -17,7 +18,8 @@ HttpResponse handleResponse(Response? response,
   // token失效
   if (_isTokenTimeout(response.statusCode)) {
     return HttpResponse.failureFromError(
-        UnauthorisedException(message: "没有权限", code: response.statusCode));
+      UnauthorisedException(message: "没有权限", code: response.statusCode),
+    );
   }
   // 接口调用成功
   if (_isRequestSuccess(response.statusCode)) {
@@ -25,7 +27,9 @@ HttpResponse handleResponse(Response? response,
   } else {
     // 接口调用失败
     return HttpResponse.failure(
-        errorMsg: response.statusMessage, errorCode: response.statusCode);
+      errorMsg: response.statusMessage,
+      errorCode: response.statusCode,
+    );
   }
 }
 
@@ -75,7 +79,9 @@ HttpException _parseException(Exception error) {
               return BadServiceException(message: "服务器挂了", code: errCode);
             case 505:
               return UnauthorisedException(
-                  message: "不支持HTTP协议请求", code: errCode);
+                message: "不支持HTTP协议请求",
+                code: errCode,
+              );
             default:
               return UnknownException(error.message);
           }
@@ -84,7 +90,7 @@ HttpException _parseException(Exception error) {
         }
 
       case DioExceptionType.unknown:
-        if (error.error is SocketException) {
+        if (isSocketException(error.error)) {
           return NetworkException(message: error.message);
         } else {
           return UnknownException(error.message);
