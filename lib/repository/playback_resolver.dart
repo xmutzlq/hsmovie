@@ -22,27 +22,52 @@ class PlaybackResolver {
           );
 
   Future<ResolvedPlayback> resolve(PlaybackRequest request) async {
-    final results = await Future.wait([
-      _resolveCms(request),
-      _resolveLegacy(request.legacyUrl),
-    ]);
+    final cmsFuture = _resolveCms(request);
+    final legacyFuture = _resolveLegacy(request.legacyUrl);
+    final cms = await cmsFuture;
+    final legacy = await legacyFuture;
     final candidates = <PlaybackCandidate>[
-      ...(results[0] as List<PlaybackCandidate>),
-      if (results[1] case final PlaybackCandidate legacy) legacy,
+      ...cms.candidates,
+      if (legacy != null) legacy,
     ];
     final seen = <String>{};
     final unique = candidates
         .where((candidate) => seen.add(candidate.url))
         .toList();
-    return ResolvedPlayback(request: request, candidates: unique);
+    return ResolvedPlayback(
+      request: request,
+      candidates: unique,
+      issue: unique.isEmpty ? cms.issue : PlaybackResolutionIssue.none,
+    );
   }
 
-  Future<List<PlaybackCandidate>> _resolveCms(PlaybackRequest request) async {
+  Future<_CmsResolution> _resolveCms(PlaybackRequest request) async {
     final searchResults = await cmsApi.searchAll(request.title);
-    final matches = selectMatches(searchResults, request.title, request.year);
-    if (matches.isEmpty) return const [];
+    if (searchResults.isEmpty) {
+      final allSourcesFailed =
+          cmsApi.sources.isNotEmpty &&
+          cmsApi.lastSearchErrors.length == cmsApi.sources.length;
+      return _CmsResolution(
+        const [],
+        allSourcesFailed
+            ? PlaybackResolutionIssue.cmsRequestFailed
+            : PlaybackResolutionIssue.cmsTitleNotFound,
+      );
+    }
+    final matches = selectMatches(
+      searchResults,
+      request.title,
+      request.year,
+      allowAliases: kIsWeb,
+    );
+    if (matches.isEmpty) {
+      return const _CmsResolution([], PlaybackResolutionIssue.cmsTitleNotFound);
+    }
 
     final details = await Future.wait(matches.map(cmsApi.detail));
+    if (details.every((detail) => detail == null)) {
+      return const _CmsResolution([], PlaybackResolutionIssue.cmsRequestFailed);
+    }
     final candidates = <PlaybackCandidate>[];
     for (var index = 0; index < matches.length; index++) {
       final detail = details[index];
@@ -83,17 +108,30 @@ class PlaybackResolver {
           0;
       return bPriority.compareTo(aPriority);
     });
-    return candidates;
+    return _CmsResolution(
+      candidates,
+      candidates.isEmpty
+          ? PlaybackResolutionIssue.cmsEpisodeNotFound
+          : PlaybackResolutionIssue.none,
+    );
   }
 
   static List<CmsSearchResult> selectMatches(
     List<CmsSearchResult> results,
     String title,
-    String year,
-  ) {
+    String year, {
+    bool allowAliases = kIsWeb,
+  }) {
     final normalizedTitle = normalizeTitle(title);
     final exact = results
-        .where((result) => normalizeTitle(result.title) == normalizedTitle)
+        .where(
+          (result) =>
+              normalizeTitle(result.title) == normalizedTitle ||
+              (allowAliases &&
+                  result.aliases.any(
+                    (alias) => normalizeTitle(alias) == normalizedTitle,
+                  )),
+        )
         .toList();
     final normalizedYear = year.trim();
     if (normalizedYear.isNotEmpty) {
@@ -141,8 +179,9 @@ class PlaybackResolver {
     String playFrom,
     String playUrl,
     String episodeLabel,
-    int? episodeNumber,
-  ) {
+    int? episodeNumber, {
+    bool allowPositionFallback = kIsWeb,
+  }) {
     final fromGroups = playFrom.split(r'$$$');
     final urlGroups = playUrl.split(r'$$$');
     final candidates = <PlaybackCandidate>[];
@@ -178,6 +217,14 @@ class PlaybackResolver {
         }
       }
       if (selected.isEmpty && parsed.length == 1) selected = parsed;
+      if (allowPositionFallback &&
+          selected.isEmpty &&
+          episodeNumber != null &&
+          episodeNumber > 0 &&
+          episodeNumber <= parsed.length &&
+          parsed.every((entry) => entry.number == null)) {
+        selected = [parsed[episodeNumber - 1]];
+      }
 
       final groupName = groupIndex < fromGroups.length
           ? fromGroups[groupIndex]
@@ -272,4 +319,11 @@ class PlaybackResolver {
         (uri.scheme == 'http' || uri.scheme == 'https') &&
         uri.host.isNotEmpty;
   }
+}
+
+class _CmsResolution {
+  final List<PlaybackCandidate> candidates;
+  final PlaybackResolutionIssue issue;
+
+  const _CmsResolution(this.candidates, this.issue);
 }

@@ -140,7 +140,7 @@ class PlayerControllerLogic extends GetxController
     if (_playbackCandidates.isEmpty) {
       currentPlayUrl = '';
       _setCurrentSource(null);
-      Get.rawSnackbar(message: '未找到可播放的视频地址');
+      Get.rawSnackbar(message: _emptyPlaybackMessage(resolved.issue));
       return;
     }
     final opened = await _openCandidate(
@@ -149,6 +149,16 @@ class PlayerControllerLogic extends GetxController
       generation: generation,
     );
     if (!opened && generation == _playGeneration) await _recoverPlayback();
+  }
+
+  String _emptyPlaybackMessage(PlaybackResolutionIssue issue) {
+    if (!kIsWeb) return '未找到可播放的视频地址';
+    return switch (issue) {
+      PlaybackResolutionIssue.cmsRequestFailed => '播放源请求失败，请稍后重试',
+      PlaybackResolutionIssue.cmsTitleNotFound => 'CMS中未找到匹配的影片资源',
+      PlaybackResolutionIssue.cmsEpisodeNotFound => 'CMS中未找到当前集的播放地址',
+      PlaybackResolutionIssue.none => '未找到可播放的视频地址',
+    };
   }
 
   Future<bool> _openCandidate(

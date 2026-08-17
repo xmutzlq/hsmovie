@@ -37,6 +37,10 @@ class CmsVideoApi {
 
   final Dio _dio;
   final List<CmsSourceConfig> sources;
+  final Map<String, String> _lastSearchErrors = {};
+
+  Map<String, String> get lastSearchErrors =>
+      Map<String, String>.unmodifiable(_lastSearchErrors);
 
   CmsVideoApi({Dio? dio, List<CmsSourceConfig>? sources})
     : sources = sources ?? (kIsWeb ? webSources : defaultSources),
@@ -52,6 +56,7 @@ class CmsVideoApi {
           );
 
   Future<List<CmsSearchResult>> searchAll(String keyword) async {
+    _lastSearchErrors.clear();
     final requests = sources.map((source) => search(source, keyword));
     final resultGroups = await Future.wait(requests);
     return resultGroups.expand((group) => group).toList();
@@ -79,15 +84,23 @@ class CmsVideoApi {
               mediaId: valueAsString(json['vod_id']),
               title: valueAsString(json['vod_name']),
               year: valueAsString(json['vod_year']),
+              aliases: _parseAliases(json['vod_sub']),
               detailData: kIsWeb ? json : null,
             );
           })
           .where((item) => item.mediaId.isNotEmpty && item.title.isNotEmpty)
           .toList();
-    } catch (_) {
+    } catch (error) {
+      _lastSearchErrors[source.id] = error.toString();
       return const [];
     }
   }
+
+  static List<String> _parseAliases(dynamic value) => valueAsString(value)
+      .split(RegExp(r'[/|]'))
+      .map((item) => item.trim())
+      .where((item) => item.isNotEmpty)
+      .toList(growable: false);
 
   Future<Map<String, dynamic>?> detail(CmsSearchResult result) async {
     if (kIsWeb && result.detailData != null) {

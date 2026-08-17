@@ -144,6 +144,27 @@ void main() {
 
       expect(PlaybackResolver.selectMatches(results, '九门', '2026'), isEmpty);
     });
+
+    test('accepts an exact CMS alias on web', () {
+      final results = [
+        const CmsSearchResult(
+          source: lzi,
+          mediaId: 'alias-match',
+          title: '老九门贰',
+          year: '2026',
+          aliases: ['九门'],
+        ),
+      ];
+
+      final matches = PlaybackResolver.selectMatches(
+        results,
+        '九门',
+        '2026',
+        allowAliases: true,
+      );
+
+      expect(matches.single.mediaId, 'alias-match');
+    });
   });
 
   group('episode parsing', () {
@@ -172,6 +193,19 @@ void main() {
       );
 
       expect(candidates.single.url, 'https://cdn.example.com/movie.m3u8');
+    });
+
+    test('web can fall back to episode position for non-numeric labels', () {
+      final candidates = PlaybackResolver.parseEpisodeCandidates(
+        lzi,
+        'lzm3u8',
+        r'上集$https://cdn.example.com/1.m3u8#下集$https://cdn.example.com/2.m3u8',
+        '第2集',
+        2,
+        allowPositionFallback: true,
+      );
+
+      expect(candidates.single.url, 'https://cdn.example.com/2.m3u8');
     });
   });
 
@@ -258,4 +292,27 @@ void main() {
 
     expect(candidates.single.url, 'https://download.example.com/1.mp4');
   });
+
+  test(
+    'reports a missing CMS title when no candidate can be resolved',
+    () async {
+      final resolver = PlaybackResolver(
+        cmsApi: FakeCmsVideoApi(searchResults: const [], details: const {}),
+      );
+
+      final resolved = await resolver.resolve(
+        const PlaybackRequest(
+          legacyMovieId: '1',
+          title: '不存在的影片',
+          year: '2026',
+          episodeLabel: '第1集',
+          episodeNumber: 1,
+          legacyUrl: '',
+        ),
+      );
+
+      expect(resolved.candidates, isEmpty);
+      expect(resolved.issue, PlaybackResolutionIssue.cmsTitleNotFound);
+    },
+  );
 }

@@ -19,6 +19,7 @@ class CmsSearchResult {
   final String mediaId;
   final String title;
   final String year;
+  final List<String> aliases;
   final Map<String, dynamic>? detailData;
 
   const CmsSearchResult({
@@ -26,8 +27,16 @@ class CmsSearchResult {
     required this.mediaId,
     required this.title,
     required this.year,
+    this.aliases = const [],
     this.detailData,
   });
+}
+
+enum PlaybackResolutionIssue {
+  none,
+  cmsRequestFailed,
+  cmsTitleNotFound,
+  cmsEpisodeNotFound,
 }
 
 class PlaybackRequest {
@@ -65,8 +74,13 @@ class PlaybackCandidate {
 class ResolvedPlayback {
   final PlaybackRequest request;
   final List<PlaybackCandidate> candidates;
+  final PlaybackResolutionIssue issue;
 
-  const ResolvedPlayback({required this.request, required this.candidates});
+  const ResolvedPlayback({
+    required this.request,
+    required this.candidates,
+    this.issue = PlaybackResolutionIssue.none,
+  });
 
   bool get fromCms =>
       candidates.any((candidate) => candidate.sourceId != 'legacy');
