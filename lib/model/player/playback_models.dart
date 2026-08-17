@@ -19,12 +19,14 @@ class CmsSearchResult {
   final String mediaId;
   final String title;
   final String year;
+  final Map<String, dynamic>? detailData;
 
   const CmsSearchResult({
     required this.source,
     required this.mediaId,
     required this.title,
     required this.year,
+    this.detailData,
   });
 }
 

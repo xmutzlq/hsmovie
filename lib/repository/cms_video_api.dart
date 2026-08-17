@@ -62,13 +62,11 @@ class CmsVideoApi {
     String keyword,
   ) async {
     try {
-      final response = await _dio
-          .get<dynamic>(
-            source.api,
-            queryParameters: {'ac': 'detail', 'wd': keyword, 'pg': 1},
-            options: Options(headers: source.headers),
-          )
-          .timeout(const Duration(seconds: 8));
+      final response = await _get(
+        source.api,
+        queryParameters: {'ac': 'detail', 'wd': keyword, 'pg': 1},
+        headers: source.headers,
+      );
       final root = decodeObject(response.data);
       final list = root?['list'];
       if (list is! List) return const [];
@@ -81,6 +79,7 @@ class CmsVideoApi {
               mediaId: valueAsString(json['vod_id']),
               title: valueAsString(json['vod_name']),
               year: valueAsString(json['vod_year']),
+              detailData: kIsWeb ? json : null,
             );
           })
           .where((item) => item.mediaId.isNotEmpty && item.title.isNotEmpty)
@@ -91,14 +90,15 @@ class CmsVideoApi {
   }
 
   Future<Map<String, dynamic>?> detail(CmsSearchResult result) async {
+    if (kIsWeb && result.detailData != null) {
+      return Map<String, dynamic>.from(result.detailData!);
+    }
     try {
-      final response = await _dio
-          .get<dynamic>(
-            result.source.api,
-            queryParameters: {'ac': 'detail', 'ids': result.mediaId},
-            options: Options(headers: result.source.headers),
-          )
-          .timeout(const Duration(seconds: 8));
+      final response = await _get(
+        result.source.api,
+        queryParameters: {'ac': 'detail', 'ids': result.mediaId},
+        headers: result.source.headers,
+      );
       final root = decodeObject(response.data);
       final list = root?['list'];
       if (list is! List || list.isEmpty || list.first is! Map) return null;
@@ -107,6 +107,34 @@ class CmsVideoApi {
       return null;
     }
   }
+
+  Future<Response<dynamic>> _get(
+    String url, {
+    required Map<String, dynamic> queryParameters,
+    required Map<String, String> headers,
+  }) async {
+    Future<Response<dynamic>> request() => _dio
+        .get<dynamic>(
+          url,
+          queryParameters: queryParameters,
+          options: Options(headers: headers),
+        )
+        .timeout(const Duration(seconds: 8));
+
+    try {
+      return await request();
+    } on DioException catch (error) {
+      if (!kIsWeb || !_isRetryable(error)) rethrow;
+      await Future<void>.delayed(const Duration(milliseconds: 300));
+      return request();
+    }
+  }
+
+  static bool _isRetryable(DioException error) =>
+      error.type == DioExceptionType.connectionError ||
+      error.type == DioExceptionType.connectionTimeout ||
+      error.type == DioExceptionType.receiveTimeout ||
+      error.type == DioExceptionType.unknown;
 
   static Map<String, dynamic>? decodeObject(dynamic value) {
     if (value is Map<String, dynamic>) return value;

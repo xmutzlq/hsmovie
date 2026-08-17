@@ -246,4 +246,16 @@ void main() {
       ]);
     },
   );
+
+  test('web fallback fields can be parsed as episode candidates', () {
+    final candidates = PlaybackResolver.parseEpisodeCandidates(
+      lzi,
+      'http',
+      r'第01集$https://download.example.com/1.mp4#第02集$https://download.example.com/2.mp4',
+      '第1集',
+      1,
+    );
+
+    expect(candidates.single.url, 'https://download.example.com/1.mp4');
+  });
 }

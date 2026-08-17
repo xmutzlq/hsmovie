@@ -56,6 +56,17 @@ class PlaybackResolver {
           request.episodeNumber,
         ),
       );
+      if (kIsWeb) {
+        candidates.addAll(
+          parseEpisodeCandidates(
+            matches[index].source,
+            CmsVideoApi.valueAsString(detail['vod_down_from']),
+            CmsVideoApi.valueAsString(detail['vod_down_url']),
+            request.episodeLabel,
+            request.episodeNumber,
+          ),
+        );
+      }
     }
     candidates.sort((a, b) {
       final aPriority =
