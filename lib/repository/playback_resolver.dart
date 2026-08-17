@@ -251,7 +251,6 @@ class PlaybackResolver {
     if (lowerPath.endsWith('.m3u8') || lowerPath.endsWith('.mp4')) {
       return PlaybackCandidate(sourceId: 'legacy', sourceName: '原线路', url: url);
     }
-    if (kIsWeb) return null;
     try {
       final response = await _legacyDio
           .get<String>(url)

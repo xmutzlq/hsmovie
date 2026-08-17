@@ -1,6 +1,9 @@
+import 'dart:typed_data';
+
 import 'package:ble_project/model/player/playback_models.dart';
 import 'package:ble_project/repository/cms_video_api.dart';
 import 'package:ble_project/repository/playback_resolver.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 const lzi = CmsSourceConfig(
@@ -31,6 +34,28 @@ class FakeCmsVideoApi extends CmsVideoApi {
   @override
   Future<Map<String, dynamic>?> detail(CmsSearchResult result) async =>
       details['${result.source.id}:${result.mediaId}'];
+}
+
+class StaticHtmlAdapter implements HttpClientAdapter {
+  final String html;
+
+  StaticHtmlAdapter(this.html);
+
+  @override
+  Future<ResponseBody> fetch(
+    RequestOptions options,
+    Stream<Uint8List>? requestStream,
+    Future<void>? cancelFuture,
+  ) async => ResponseBody.fromString(
+    html,
+    200,
+    headers: {
+      Headers.contentTypeHeader: ['text/html; charset=UTF-8'],
+    },
+  );
+
+  @override
+  void close({bool force = false}) {}
 }
 
 void main() {
@@ -315,4 +340,32 @@ void main() {
       expect(resolved.issue, PlaybackResolutionIssue.cmsTitleNotFound);
     },
   );
+
+  test('uses a media URL extracted from the detail-page fallback', () async {
+    final dio = Dio(BaseOptions(responseType: ResponseType.plain));
+    dio.httpClientAdapter = StaticHtmlAdapter(
+      "<script>video_url = 'https://cdn.example.com/fallback.m3u8';</script>",
+    );
+    final resolver = PlaybackResolver(
+      cmsApi: FakeCmsVideoApi(searchResults: const [], details: const {}),
+      legacyDio: dio,
+    );
+
+    final resolved = await resolver.resolve(
+      const PlaybackRequest(
+        legacyMovieId: '1',
+        title: '未收录影片',
+        year: '2026',
+        episodeLabel: '正片',
+        legacyUrl: 'https://player.example.com/?url=encrypted',
+      ),
+    );
+
+    expect(resolved.candidates.single.sourceId, 'legacy');
+    expect(
+      resolved.candidates.single.url,
+      'https://cdn.example.com/fallback.m3u8',
+    );
+    expect(resolved.issue, PlaybackResolutionIssue.none);
+  });
 }

@@ -48,6 +48,13 @@ class _MovieListViewState extends State<MovieListView> {
   ) {
     final width = MediaQuery.of(context).size.width;
     final layoutWidth = kIsWeb && width > 480 ? 480.0 : width;
+    final itemCount = snapshot.data!.length > 10 ? 10 : snapshot.data!.length;
+    final itemHeight = layoutWidth / 4;
+    final contentWidth =
+        itemCount * (itemHeight * 4 / 3 + 20) + 10 + leftPaddingControl;
+    final horizontalPadding = kIsWeb && contentWidth < width
+        ? (width - contentWidth) / 2
+        : 0.0;
     return Container(
       height: layoutWidth / 1.75,
       margin: const EdgeInsets.only(bottom: 10, top: 20),
@@ -56,8 +63,9 @@ class _MovieListViewState extends State<MovieListView> {
         child: ListView.builder(
           shrinkWrap: true,
           cacheExtent: 500,
+          padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
           scrollDirection: Axis.horizontal,
-          itemCount: snapshot.data!.length > 10 ? 10 : snapshot.data!.length,
+          itemCount: itemCount,
           itemBuilder: (BuildContext context, int index) => FrameSeparateWidget(
             index: index,
             placeHolder: Container(height: layoutWidth / 4 / 2),
@@ -72,7 +80,7 @@ class _MovieListViewState extends State<MovieListView> {
                 snapshot.data![index].vodName,
                 snapshot.data![index].vodPic,
                 snapshot.data![index].vodPic,
-                layoutWidth / 4,
+                itemHeight,
                 index == 0,
                 leftPaddingControl,
               ),
