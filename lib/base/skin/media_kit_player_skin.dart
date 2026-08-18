@@ -53,6 +53,14 @@ String _duration2String(Duration duration) {
       : "$twoDigitMinutes:$twoDigitSeconds";
 }
 
+bool _isNativeMobilePortrait(BuildContext context) {
+  final isNativeMobile = !kIsWeb &&
+      (defaultTargetPlatform == TargetPlatform.android ||
+          defaultTargetPlatform == TargetPlatform.iOS);
+  return isNativeMobile &&
+      MediaQuery.orientationOf(context) == Orientation.portrait;
+}
+
 class CustomMediaKitPanel extends StatefulWidget {
   final MediaKitPlayer player;
   final Size viewSize;
@@ -499,7 +507,8 @@ class _CustomMediaKitPanelState extends State<CustomMediaKitPanel>
           showConfig.lockBtn &&
           widget.player.value.fullScreen) {
         ws.add(_buildLockStateDetector());
-      } else if (_drawerState == true) {
+      } else if (_drawerState == true &&
+          !_isNativeMobilePortrait(context)) {
         ws.add(_buildPlayerListDrawer());
       } else {
         ws.add(
@@ -978,6 +987,7 @@ class _buildGestureDetectorState extends State<_buildGestureDetector> {
 
   // 控制器ui 底部
   Widget _buildBottomBar(BuildContext context) {
+    final hidePortraitActions = _isNativeMobilePortrait(context);
     // 计算进度时间
     double duration = _duration.inMilliseconds.toDouble();
     double currentValue = _seekPos > 0
@@ -1140,7 +1150,7 @@ class _buildGestureDetectorState extends State<_buildGestureDetector> {
                             ),
                           ),
                     // 剧集按钮
-                    showConfig.drawerBtn
+                    showConfig.drawerBtn && !hidePortraitActions
                         ? Ink(
                             padding: const EdgeInsets.all(5),
                             child: InkWell(
@@ -1161,7 +1171,7 @@ class _buildGestureDetectorState extends State<_buildGestureDetector> {
                           )
                         : Container(),
                     // 倍数按钮
-                    showConfig.speedBtn
+                    showConfig.speedBtn && !hidePortraitActions
                         ? Ink(
                             padding: const EdgeInsets.all(5),
                             child: InkWell(
@@ -1530,7 +1540,8 @@ class _buildGestureDetectorState extends State<_buildGestureDetector> {
   }
 
   // 播放器控制器 ui
-  Widget _buildGestureDetector() {
+  Widget _buildGestureDetector(BuildContext context) {
+    final hidePortraitActions = _isNativeMobilePortrait(context);
     return GestureDetector(
       onTap: _cancelAndRestartTimer,
       behavior: HitTestBehavior.opaque,
@@ -1581,7 +1592,7 @@ class _buildGestureDetectorState extends State<_buildGestureDetector> {
                   Positioned(
                     right: 35,
                     bottom: 0,
-                    child: !_hideSpeedStu
+                    child: !_hideSpeedStu && !hidePortraitActions
                         ? Container(
                             child: Padding(
                               padding: const EdgeInsets.all(10),
@@ -1629,6 +1640,6 @@ class _buildGestureDetectorState extends State<_buildGestureDetector> {
 
   @override
   Widget build(BuildContext context) {
-    return _buildGestureDetector();
+    return _buildGestureDetector(context);
   }
 }
