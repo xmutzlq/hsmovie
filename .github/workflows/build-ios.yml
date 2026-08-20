@@ -1,0 +1,148 @@
+name: Build iOS
+
+on:
+  push:
+    branches:
+      - app-ios-ci
+    paths:
+      - .github/workflows/build-ios.yml
+      - assets/**
+      - ios/**
+      - lib/**
+      - pubspec.lock
+      - pubspec.yaml
+      - res/**
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ios-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: iOS unsigned release
+    runs-on: macos-15
+    timeout-minutes: 45
+    env:
+      DEVELOPER_DIR: /Applications/Xcode_26.3.app/Contents/Developer
+
+    steps:
+      - name: Check out application source
+        uses: actions/checkout@v5
+
+      - name: Install Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 3.35.7
+          channel: stable
+          cache: true
+
+      - name: Prepare iOS project
+        run: |
+          set -euo pipefail
+
+          sed -i '' "s/# platform :ios, '9.0'/platform :ios, '13.0'/" ios/Podfile
+          sed -i '' \
+            's/IPHONEOS_DEPLOYMENT_TARGET = 9.0;/IPHONEOS_DEPLOYMENT_TARGET = 13.0;/g' \
+            ios/Runner.xcodeproj/project.pbxproj
+
+          /usr/libexec/PlistBuddy \
+            -c 'Set :CFBundleName 浮光掠影' \
+            ios/Runner/Info.plist
+          /usr/libexec/PlistBuddy \
+            -c 'Add :CFBundleDisplayName string 浮光掠影' \
+            ios/Runner/Info.plist
+
+          plutil -lint ios/Runner/Info.plist
+
+      - name: Resolve dependencies
+        run: |
+          set +e
+          flutter pub get --enforce-lockfile 2>&1 | tee pub-get-ios.log
+          PUB_EXIT=${PIPESTATUS[0]}
+
+          if [[ $PUB_EXIT -ne 0 ]]; then
+            SUMMARY="$(tail -n 120 pub-get-ios.log)"
+            SUMMARY="${SUMMARY//'%'/'%25'}"
+            SUMMARY="${SUMMARY//$'\r'/'%0D'}"
+            SUMMARY="${SUMMARY//$'\n'/'%0A'}"
+            echo "::error title=Dependency resolution failed::$SUMMARY"
+          fi
+
+          exit "$PUB_EXIT"
+
+      - name: Upload dependency log
+        if: always()
+        uses: actions/upload-artifact@v5
+        with:
+          name: hsmovie-ios-dependency-log
+          path: pub-get-ios.log
+          if-no-files-found: error
+          retention-days: 7
+
+      - name: Build unsigned release
+        run: |
+          set +e
+          flutter build ios --release --no-codesign --no-pub 2>&1 | tee build-ios.log
+          BUILD_EXIT=${PIPESTATUS[0]}
+
+          if [[ $BUILD_EXIT -ne 0 ]]; then
+            FIRST_ERRORS="$(grep -nE '(^|: )(Error|error):' build-ios.log | head -n 80 || true)"
+            printf -v SUMMARY 'First compiler errors:\n%s\n\nEnd of build log:\n%s' \
+              "$FIRST_ERRORS" "$(tail -n 80 build-ios.log)"
+            SUMMARY="${SUMMARY//'%'/'%25'}"
+            SUMMARY="${SUMMARY//$'\r'/'%0D'}"
+            SUMMARY="${SUMMARY//$'\n'/'%0A'}"
+            echo "::error title=iOS build failed::$SUMMARY"
+          fi
+
+          exit "$BUILD_EXIT"
+
+      - name: Upload build log
+        if: always()
+        uses: actions/upload-artifact@v5
+        with:
+          name: hsmovie-ios-build-log
+          path: build-ios.log
+          if-no-files-found: ignore
+          retention-days: 7
+
+      - name: Package unsigned IPA
+        run: |
+          set -euo pipefail
+          VERSION="$(awk '/^version:/ { print $2; exit }' pubspec.yaml)"
+          VERSION="${VERSION%%+*}"
+          APP_PATH='build/ios/iphoneos/Runner.app'
+
+          if [[ ! -d "$APP_PATH" ]]; then
+            echo 'No iOS Runner.app bundle was generated.' >&2
+            exit 1
+          fi
+
+          INFO_PLIST="$APP_PATH/Info.plist"
+          [[ "$(/usr/libexec/PlistBuddy -c 'Print :CFBundleName' "$INFO_PLIST")" == '浮光掠影' ]]
+          [[ "$(/usr/libexec/PlistBuddy -c 'Print :CFBundleDisplayName' "$INFO_PLIST")" == '浮光掠影' ]]
+          [[ -n "$(/usr/libexec/PlistBuddy -c 'Print :CFBundleIdentifier' "$INFO_PLIST")" ]]
+
+          mkdir -p dist/Payload
+          ditto "$APP_PATH" dist/Payload/Runner.app
+
+          ARCHIVE="hsmovie-${VERSION}-ios-unsigned.ipa"
+          (
+            cd dist
+            ditto -c -k --sequesterRsrc --keepParent Payload "$ARCHIVE"
+            shasum -a 256 "$ARCHIVE" > SHA256SUMS.txt
+          )
+
+      - name: Upload unsigned iOS package
+        uses: actions/upload-artifact@v5
+        with:
+          name: hsmovie-ios-unsigned
+          path: |
+            dist/hsmovie-*-ios-unsigned.ipa
+            dist/SHA256SUMS.txt
+          if-no-files-found: error
+          retention-days: 7
