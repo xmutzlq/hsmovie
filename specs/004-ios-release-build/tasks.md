@@ -7,5 +7,5 @@
 - [x] T005 打包未签名 IPA、SHA-256、依赖日志和构建日志。
 - [x] T006 根据首次 CI 错误移除已退休且缺失原生头文件的 Live2D 插件。
 - [x] T007 为旧 Objective-C Runner 增加 Swift 插件兼容链接配置。
-- [ ] T008 推送构建分支并等待 GitHub Actions 完成。
-- [ ] T009 记录最终 artifact、文件大小和 SHA-256。
+- [x] T008 推送构建分支并等待 GitHub Actions 完成。
+- [x] T009 记录最终 artifact、文件大小和 SHA-256。

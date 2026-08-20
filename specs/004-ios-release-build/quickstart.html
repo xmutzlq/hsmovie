@@ -40,12 +40,16 @@ SHA256SUMS.txt</code></pre>
 <pre><code class="language-powershell">Get-FileHash .\hsmovie-1.0.1-ios-unsigned.ipa -Algorithm SHA256</code></pre>
 <p>输出应与 <code>SHA256SUMS.txt</code> 一致。</p>
 <h2 id="安装限制">安装限制<a class="heading-link" href="#安装限制" aria-label="Link to this section">#</a></h2>
-<p>该 IPA 未进行 Apple 代码签名，不能保证直接安装到普通 iPhone。真机安装需要使用属于用户自己的合法证书和描述文件重新签名，或通过用户自行选择的兼容侧载方式处理。</p></main>
+<p>该 IPA 未进行 Apple 代码签名，不能保证直接安装到普通 iPhone。真机安装需要使用属于用户自己的合法证书和描述文件重新签名，或通过用户自行选择的兼容侧载方式处理。</p>
+<h2 id="已验证构建">已验证构建<a class="heading-link" href="#已验证构建" aria-label="Link to this section">#</a></h2>
+<div class="table-wrap"><table><thead><tr><th style="text-align:left">项目</th><th style="text-align:left">值</th></tr></thead><tbody><tr><td style="text-align:left">GitHub Actions 运行</td><td style="text-align:left"><code>32335806222</code>（Build iOS #3）</td></tr><tr><td style="text-align:left">构建结果</td><td style="text-align:left">成功</td></tr><tr><td style="text-align:left">源提交</td><td style="text-align:left"><code>638c730098b1cc985c95085a5572cb9ec0e531e5</code></td></tr><tr><td style="text-align:left">产物名称</td><td style="text-align:left"><code>hsmovie-ios-unsigned</code></td></tr><tr><td style="text-align:left">Artifact ID</td><td style="text-align:left"><code>9394666836</code></td></tr><tr><td style="text-align:left">Artifact ZIP 大小</td><td style="text-align:left"><code>18,107,108</code> bytes</td></tr><tr><td style="text-align:left">Artifact ZIP SHA-256</td><td style="text-align:left"><code>a9dd5f6cf22d1d4d4540d8f3283ba9895886deab0a1f0001766be8f14094f1df</code></td></tr><tr><td style="text-align:left">到期时间</td><td style="text-align:left"><code>2026-08-27 13:33</code>（Asia/Shanghai）</td></tr></tbody></table></div>
+<p>上述 SHA-256 是 GitHub artifact ZIP 的摘要。IPA 自身的 SHA-256 位于 artifact 内的 <code>SHA256SUMS.txt</code>。</p></main>
     <nav class="toc" aria-label="Table of contents"><h2>目录</h2><ul><li class="toc-level-2"><a href="#自动触发">自动触发</a></li>
 <li class="toc-level-2"><a href="#手动触发">手动触发</a></li>
 <li class="toc-level-2"><a href="#下载产物">下载产物</a></li>
 <li class="toc-level-2"><a href="#校验文件">校验文件</a></li>
-<li class="toc-level-2"><a href="#安装限制">安装限制</a></li></ul></nav>
+<li class="toc-level-2"><a href="#安装限制">安装限制</a></li>
+<li class="toc-level-2"><a href="#已验证构建">已验证构建</a></li></ul></nav>
   </div>
   <footer class="doc-footer">Generated from quickstart.md. Keep both files synchronized.</footer>
 </body>
