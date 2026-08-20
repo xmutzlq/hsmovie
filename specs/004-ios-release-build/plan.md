@@ -8,6 +8,8 @@
 
 首次 CI 构建确认历史 Live2D 插件缺少 `CubismFramework.hpp`，且该模块已按项目安全决策退休。构建分支同步移除 Live2D 直接依赖、资源声明和头像入口，同时保留静态头像显示。
 
+第二次 CI 构建进入链接阶段后暴露旧 Objective-C Runner 未链接 Swift compatibility libraries。Runner target 增加最小 Swift 编译单元，并为三个构建配置启用 Swift 5 和标准库嵌入。
+
 ## 产物设计
 
 编译得到的 `build/ios/iphoneos/Runner.app` 被复制到 `Payload/Runner.app`，再打包为：

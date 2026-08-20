@@ -25,6 +25,7 @@
 7. CI 必须同时发布 IPA、`SHA256SUMS.txt`、依赖日志和构建日志。
 8. CI 不得读取、生成或提交 Apple 签名秘密。
 9. 已退休的 Live2D 插件不得进入 iOS 依赖图；头像保持静态显示，不再打开 Live2D 弹窗。
+10. 旧 Objective-C Runner 必须包含 Swift 兼容编译单元，以正确链接当前插件所需的 Swift 标准库。
 
 ## 验收标准
 
