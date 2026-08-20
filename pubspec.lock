@@ -446,15 +446,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "6.0.0"
-  flutter_live2d_ffi:
-    dependency: "direct main"
-    description:
-      path: "."
-      ref: main
-      resolved-ref: ca4532b5e671099890ee066f2676f4734114b366
-      url: "https://github.com/xmutzlq/flutter_live2d_ffi.git"
-    source: git
-    version: "0.0.1"
   flutter_localizations:
     dependency: transitive
     description: flutter

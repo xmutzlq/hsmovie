@@ -24,6 +24,7 @@
 6. 产物必须符合 IPA 的 `Payload/Runner.app` 目录结构。
 7. CI 必须同时发布 IPA、`SHA256SUMS.txt`、依赖日志和构建日志。
 8. CI 不得读取、生成或提交 Apple 签名秘密。
+9. 已退休的 Live2D 插件不得进入 iOS 依赖图；头像保持静态显示，不再打开 Live2D 弹窗。
 
 ## 验收标准
 

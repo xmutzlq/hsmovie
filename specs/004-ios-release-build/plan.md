@@ -6,6 +6,8 @@
 
 构建前只在 CI 工作副本中将 iOS deployment target 调整为 13.0，并将 iOS 显示名称设置为“浮光掠影”。这些调整不影响其他平台代码路径。
 
+首次 CI 构建确认历史 Live2D 插件缺少 `CubismFramework.hpp`，且该模块已按项目安全决策退休。构建分支同步移除 Live2D 直接依赖、资源声明和头像入口，同时保留静态头像显示。
+
 ## 产物设计
 
 编译得到的 `build/ios/iphoneos/Runner.app` 被复制到 `Payload/Runner.app`，再打包为：
@@ -26,6 +28,7 @@ SHA256SUMS.txt
 
 - 工作流权限仅为 `contents: read`。
 - 不使用 Apple 证书、私钥、描述文件或仓库 secrets。
+- 不恢复已退休的 Live2D 原生框架或运行库。
 - 未签名 IPA 需要用户自己的合法 Apple 签名材料或兼容侧载方式才能安装到普通真机。
 - 不更改移动端业务逻辑，不合并 macOS 专用分支。
 

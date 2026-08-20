@@ -30,6 +30,7 @@ code{border:1px solid #d9e3e1;border-radius:3px;background:#edf4f2;padding:1px 5
 <h2 id="技术方案">技术方案<a class="heading-link" href="#技术方案" aria-label="Link to this section">#</a></h2>
 <p>在从 <code>version2.0@f62e6cf</code> 创建的 <code>app-ios-ci</code> 分支中增加独立 GitHub Actions 工作流。工作流使用 macOS 15、Xcode 26.3 和 Flutter 3.35.7，执行锁定依赖解析及 <code>flutter build ios --release --no-codesign</code>。</p>
 <p>构建前只在 CI 工作副本中将 iOS deployment target 调整为 13.0，并将 iOS 显示名称设置为“浮光掠影”。这些调整不影响其他平台代码路径。</p>
+<p>首次 CI 构建确认历史 Live2D 插件缺少 <code>CubismFramework.hpp</code>，且该模块已按项目安全决策退休。构建分支同步移除 Live2D 直接依赖、资源声明和头像入口，同时保留静态头像显示。</p>
 <h2 id="产物设计">产物设计<a class="heading-link" href="#产物设计" aria-label="Link to this section">#</a></h2>
 <p>编译得到的 <code>build/ios/iphoneos/Runner.app</code> 被复制到 <code>Payload/Runner.app</code>，再打包为：</p>
 <pre><code class="language-text">hsmovie-1.0.1-ios-unsigned.ipa</code></pre>
@@ -37,7 +38,7 @@ code{border:1px solid #d9e3e1;border-radius:3px;background:#edf4f2;padding:1px 5
 <pre><code class="language-text">SHA256SUMS.txt</code></pre>
 <p>依赖解析日志和 Xcode 构建日志作为独立 artifact 保留 7 天。</p>
 <h2 id="安全与限制">安全与限制<a class="heading-link" href="#安全与限制" aria-label="Link to this section">#</a></h2>
-<ul><li>工作流权限仅为 <code>contents: read</code>。</li><li>不使用 Apple 证书、私钥、描述文件或仓库 secrets。</li><li>未签名 IPA 需要用户自己的合法 Apple 签名材料或兼容侧载方式才能安装到普通真机。</li><li>不更改移动端业务逻辑，不合并 macOS 专用分支。</li></ul>
+<ul><li>工作流权限仅为 <code>contents: read</code>。</li><li>不使用 Apple 证书、私钥、描述文件或仓库 secrets。</li><li>不恢复已退休的 Live2D 原生框架或运行库。</li><li>未签名 IPA 需要用户自己的合法 Apple 签名材料或兼容侧载方式才能安装到普通真机。</li><li>不更改移动端业务逻辑，不合并 macOS 专用分支。</li></ul>
 <h2 id="验证方式">验证方式<a class="heading-link" href="#验证方式" aria-label="Link to this section">#</a></h2>
 <p>本任务只执行产物所必需的远程构建，不额外运行自动化测试、静态分析、截图或功能验收。CI 会校验 App bundle 存在、显示名称正确，并生成 SHA-256。</p></main>
     <nav class="toc" aria-label="Table of contents"><h2>目录</h2><ul><li class="toc-level-2"><a href="#技术方案">技术方案</a></li>

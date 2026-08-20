@@ -87,10 +87,6 @@ dependencies:
   # lifecycle
   lifecycle: ^0.10.0
   flutter_lifecycle_detector: ^0.0.8
-  flutter_live2d_ffi:
-    git:
-      url: https://github.com/xmutzlq/flutter_live2d_ffi.git
-      ref: main
 
 dependency_overrides:
   sqflite_android: 2.4.1 # 此处替换为你想要的版本号
@@ -120,7 +116,6 @@ flutter:
   - res/graphic/
   - assets/
   - assets/translations/
-  - assets/live2d/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

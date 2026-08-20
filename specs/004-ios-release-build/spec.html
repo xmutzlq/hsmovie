@@ -35,7 +35,7 @@ code{border:1px solid #d9e3e1;border-radius:3px;background:#edf4f2;padding:1px 5
 <h2 id="用户场景">用户场景<a class="heading-link" href="#用户场景" aria-label="Link to this section">#</a></h2>
 <p>作为项目维护者，我希望从 Windows 工作站触发远程 iOS 构建，获得一个可供后续重签名或侧载工具处理的 IPA，同时能够查看依赖解析和 Xcode 编译日志。</p>
 <h2 id="功能需求">功能需求<a class="heading-link" href="#功能需求" aria-label="Link to this section">#</a></h2>
-<ol><li>构建必须基于 <code>version2.0</code> 的已推送源代码，不包含 macOS 专用布局提交。</li><li>构建必须使用固定 Flutter 版本 <code>3.35.7</code> 和 macOS runner。</li><li>iOS 最低部署版本必须在构建期间设置为 iOS 13，以满足当前 Flutter 插件要求。</li><li>应用显示名称必须为“浮光掠影”。</li><li>构建必须使用 Release 模式并禁用代码签名。</li><li>产物必须符合 IPA 的 <code>Payload/Runner.app</code> 目录结构。</li><li>CI 必须同时发布 IPA、<code>SHA256SUMS.txt</code>、依赖日志和构建日志。</li><li>CI 不得读取、生成或提交 Apple 签名秘密。</li></ol>
+<ol><li>构建必须基于 <code>version2.0</code> 的已推送源代码，不包含 macOS 专用布局提交。</li><li>构建必须使用固定 Flutter 版本 <code>3.35.7</code> 和 macOS runner。</li><li>iOS 最低部署版本必须在构建期间设置为 iOS 13，以满足当前 Flutter 插件要求。</li><li>应用显示名称必须为“浮光掠影”。</li><li>构建必须使用 Release 模式并禁用代码签名。</li><li>产物必须符合 IPA 的 <code>Payload/Runner.app</code> 目录结构。</li><li>CI 必须同时发布 IPA、<code>SHA256SUMS.txt</code>、依赖日志和构建日志。</li><li>CI 不得读取、生成或提交 Apple 签名秘密。</li><li>已退休的 Live2D 插件不得进入 iOS 依赖图；头像保持静态显示，不再打开 Live2D 弹窗。</li></ol>
 <h2 id="验收标准">验收标准<a class="heading-link" href="#验收标准" aria-label="Link to this section">#</a></h2>
 <ul><li>GitHub Actions 的 iOS 构建任务成功结束。</li><li><code>hsmovie-ios-unsigned</code> artifact 包含 <code>hsmovie-1.0.1-ios-unsigned.ipa</code> 和 <code>SHA256SUMS.txt</code>。</li><li>编译后的 <code>Info.plist</code> 中 <code>CFBundleName</code> 与 <code>CFBundleDisplayName</code> 均为“浮光掠影”。</li><li>依赖和构建日志无论成功或失败都可下载。</li></ul>
 <h2 id="范围外事项">范围外事项<a class="heading-link" href="#范围外事项" aria-label="Link to this section">#</a></h2>
